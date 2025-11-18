@@ -1,4 +1,4 @@
-package luis.gestorfacturasempresa.Controlador;
+package Controlador;
 
 public class ControladorNuevo {
     

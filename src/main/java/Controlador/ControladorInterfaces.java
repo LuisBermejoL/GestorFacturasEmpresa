@@ -1,4 +1,4 @@
-package luis.gestorfacturasempresa.Controlador;
+package Controlador;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
