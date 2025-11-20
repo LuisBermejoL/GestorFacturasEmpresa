@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -24,9 +25,8 @@ public class ControladorInterfaces {
     @FXML
     private Button btnAbrir;
 
-    // Contenedor principal donde se cargará facturaEmpresa.fxml
     @FXML
-    private VBox contenedorNuevo;
+    private VBox contenedorNuevo;  // Este es el VBox clickable
 
     // Se ejecuta automáticamente después de cargar el FXML
     @FXML
@@ -40,6 +40,9 @@ public class ControladorInterfaces {
 
         // Efecto hover
         agregarEfectosHover();
+
+        // Llamar al formulario Nuevo
+        contenedorNuevo.setOnMouseClicked(event -> cargarFormularioEmpresa());
     }
 
     // Método "Nueva Empresa"
@@ -100,26 +103,22 @@ public class ControladorInterfaces {
     @FXML
     private void cargarFormularioEmpresa() {
         try {
-            // 1. Cargar FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("facturaEmpresa.fxml"));
+            // Cargar el FXML del formulario de empresa
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/facturaEmpresa.fxml"));
             Parent formulario = loader.load();
 
-            // 2. Obtener controlador y añadimos el nuevo formulario
-            ControladorNuevo controlador = loader.getController();
-            contenedorNuevo.getChildren().add(formulario);
+            // Limpiar el contenido anterior del área principal y cargar el nuevo
+            VBox contenidoPrincipal = (VBox) nuevoMenu.getParent(); // o usa un fx:id específico
+            contenidoPrincipal.getChildren().clear();
+            contenidoPrincipal.getChildren().add(formulario);
 
-            // 3. Crear nueva ventana
-            Stage stage = new Stage();
-            stage.setTitle("Nueva Empresa");
-            stage.setScene(new Scene(formulario, 450, 350));
-            stage.setMinWidth(400);
-            stage.setMinHeight(300);
-            stage.show();
+            // Opcional: hacer que ocupe todo el espacio
+            VBox.setVgrow(formulario, Priority.ALWAYS);
 
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("ERROR: No se pudo cargar facturaEmpresa.fxml");
-            System.out.println("Ruta intentada: " + getClass().getResource("facturaEmpresa.fxml"));
+            System.out.println("Ruta intentada: " + getClass().getResource("/fxml/facturaEmpresa.fxml"));
         }
     }
 }
