@@ -2,37 +2,38 @@ package luis.gestorfacturasempresa;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 /**
- * JavaFX App
+ * Clase principal de la aplicación JavaFX "Gestor de Facturas Empresa".
+ * Carga la interfaz principal definida en el archivo FXML y lanza la ventana.
  */
 public class App extends Application {
 
-    private static Scene scene;
-
     @Override
-    public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("facturaPrincipal"), 640, 480);
-        stage.setScene(scene);
-        stage.show();
-    }
+    public void start(Stage primaryStage) {
+        try {
+            // Carga el archivo FXML desde la carpeta de recursos
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("facturaPrincipal.fxml"));
 
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-    }
+            // Crea la escena con el contenido del FXML
+            Scene scene = new Scene(loader.load());
 
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+            // Configura la ventana principal
+            primaryStage.setTitle("Gestor de Facturas - Empresa");
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+
+        } catch (IOException e) {
+            System.err.println("Error al cargar la interfaz FXML:");
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
-
 }
