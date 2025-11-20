@@ -104,7 +104,7 @@ public class ControladorInterfaces {
     private void cargarFormularioEmpresa() {
         try {
             // Cargar el FXML del formulario de empresa
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/facturaEmpresa.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/luis/gestorfacturasempresa/facturaEmpresa.fxml"));
             Parent formulario = loader.load();
 
             // Limpiar el contenido anterior del área principal y cargar el nuevo
@@ -118,7 +118,7 @@ public class ControladorInterfaces {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("ERROR: No se pudo cargar facturaEmpresa.fxml");
-            System.out.println("Ruta intentada: " + getClass().getResource("/fxml/facturaEmpresa.fxml"));
+            System.out.println("Ruta intentada: " + getClass().getResource("/luis/gestorfacturasempresa/facturaEmpresa.fxml"));
         }
     }
 }
