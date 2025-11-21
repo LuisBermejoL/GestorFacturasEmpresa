@@ -1,20 +1,41 @@
 package Controlador;
 
-import Modelo.Usuario;
 import DAO.UsuarioDAO;
+import Modelo.Usuario;
+import java.util.List;
 
 /**
  *
  * @author luisb
  */
 public class UsuarioController {
-    private UsuarioDAO dao = new UsuarioDAO();
+    private final UsuarioDAO usuarioDAO;
 
-    public boolean login(String email, String password) {
-        return dao.autenticar(email, password);
+    public UsuarioController() {
+        this.usuarioDAO = new UsuarioDAO();
     }
 
-    public void registrar(Usuario u) {
-        dao.registrar(u);
+    public void añadirUsuario(Usuario u) {
+        usuarioDAO.añadir(u);
+    }
+
+    public void modificarUsuario(Usuario u) {
+        usuarioDAO.modificar(u);
+    }
+
+    public void borrarUsuarioPorId(int id) {
+        usuarioDAO.borrarPorId(id);
+    }
+
+    public Usuario consultarUsuarioPorId(int id) {
+        return usuarioDAO.consultarPorId(id);
+    }
+
+    public List<Usuario> consultarTodosUsuarios() {
+        return usuarioDAO.consultarTodos();
+    }
+
+    public boolean autenticarUsuario(String email, String password) {
+        return usuarioDAO.autenticar(email, password);
     }
 }
