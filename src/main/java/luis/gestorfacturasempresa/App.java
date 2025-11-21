@@ -24,7 +24,7 @@ public class App extends Application {
             // Configura la ventana principal
             primaryStage.setTitle("Gestor de Facturas - Empresa");
             primaryStage.setScene(scene);
-            primaryStage.setResizable(false);
+            primaryStage.setResizable(true);
             primaryStage.show();
 
         } catch (IOException e) {

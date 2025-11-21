@@ -1,13 +1,14 @@
 package Controlador;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -25,12 +26,16 @@ public class ControladorInterfaces {
     @FXML
     private Button btnAbrir;
 
+    // VBox clickables
     @FXML
-    private VBox contenedorNuevo;  // Este es el VBox clickable
+    private VBox contenedorNuevo;
+
+    @FXML
+    private VBox contenedorAbrir;
 
     // Se ejecuta automáticamente después de cargar el FXML
     @FXML
-    private void initialize() {
+    private void initialize() throws IOException {
         // Mostrar "Nuevo" por defecto al iniciar
         mostrarSeccionNuevo();
 
@@ -42,13 +47,23 @@ public class ControladorInterfaces {
         agregarEfectosHover();
 
         // Llamar al formulario Nuevo
-        contenedorNuevo.setOnMouseClicked(event -> cargarFormularioEmpresa());
-    }
+        contenedorNuevo.setOnMouseClicked(event -> {
+            try {
+                formularioNuevaEmpresa();
+            } catch (IOException ex) {
+                Logger.getLogger(ControladorInterfaces.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
 
-    // Método "Nueva Empresa"
-    @FXML
-    private void cargarInterfazEmpresa() {
-        cargarFormularioEmpresa();
+        // Llamar a la lista de Empresas
+        contenedorAbrir.setOnMouseClicked(event -> {
+            try {
+                formularioListaEmpresas();
+            } catch (IOException ex) {
+                Logger.getLogger(ControladorInterfaces.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+
     }
 
     private void mostrarSeccionNuevo() {
@@ -59,7 +74,7 @@ public class ControladorInterfaces {
         abrirMenu.setManaged(false);
 
         // Resaltar botón activo
-        btnNuevo.setStyle("-fx-background-color: #a02c12; -fx-text-fill: white; -fx-font-weight: bold;");
+        btnNuevo.setStyle("-fx-background-color: #6F9E11; -fx-text-fill: white; -fx-font-weight: bold;");
         btnAbrir.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
     }
 
@@ -71,7 +86,7 @@ public class ControladorInterfaces {
         nuevoMenu.setManaged(false);
 
         // Resaltar botón activo
-        btnAbrir.setStyle("-fx-background-color: #a02c12; -fx-text-fill: white; -fx-font-weight: bold;");
+        btnAbrir.setStyle("-fx-background-color: #6F9E11; -fx-text-fill: white; -fx-font-weight: bold;");
         btnNuevo.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
     }
 
@@ -79,7 +94,7 @@ public class ControladorInterfaces {
     private void agregarEfectosHover() {
         btnNuevo.setOnMouseEntered(e -> {
             if (!nuevoMenu.isVisible()) {
-                btnNuevo.setStyle("-fx-background-color: #d43f1b; -fx-text-fill: white;");
+                btnNuevo.setStyle("-fx-background-color: #96D41B; -fx-text-fill: white;");
             }
         });
         btnNuevo.setOnMouseExited(e -> {
@@ -90,7 +105,7 @@ public class ControladorInterfaces {
 
         btnAbrir.setOnMouseEntered(e -> {
             if (!abrirMenu.isVisible()) {
-                btnAbrir.setStyle("-fx-background-color: #d43f1b; -fx-text-fill: white;");
+                btnAbrir.setStyle("-fx-background-color: #96D41B; -fx-text-fill: white;");
             }
         });
         btnAbrir.setOnMouseExited(e -> {
@@ -101,24 +116,44 @@ public class ControladorInterfaces {
     }
 
     @FXML
-    private void cargarFormularioEmpresa() {
-        try {
-            // Cargar el FXML del formulario de empresa
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/luis/gestorfacturasempresa/facturaEmpresa.fxml"));
-            Parent formulario = loader.load();
+    private void formularioNuevaEmpresa() throws IOException {
+        // 1. Cargar FXML de nueva empresa
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/luis/gestorfacturasempresa/facturaEmpresa.fxml"));
+        Parent root = loader.load();
 
-            // Limpiar el contenido anterior del área principal y cargar el nuevo
-            VBox contenidoPrincipal = (VBox) nuevoMenu.getParent(); // o usa un fx:id específico
-            contenidoPrincipal.getChildren().clear();
-            contenidoPrincipal.getChildren().add(formulario);
+        // 2. Crear nueva ventana
+        Stage nuevoStage = new Stage();
+        nuevoStage.setTitle("Nueva Empresa");
+        nuevoStage.setScene(new Scene(root, 550, 350));
+        nuevoStage.setMinWidth(550);
+        nuevoStage.setMinHeight(350);
 
-            // Opcional: hacer que ocupe todo el espacio
-            VBox.setVgrow(formulario, Priority.ALWAYS);
+        // 3. Cerrar la ventana principal (facturaPrincipal)
+        Stage principalStage = (Stage) btnNuevo.getScene().getWindow();
+        principalStage.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERROR: No se pudo cargar facturaEmpresa.fxml");
-            System.out.println("Ruta intentada: " + getClass().getResource("/luis/gestorfacturasempresa/facturaEmpresa.fxml"));
-        }
+        // 4. Abrir ventana Nueva Empresa
+        nuevoStage.show();
+    }
+
+    @FXML
+    private void formularioListaEmpresas() throws IOException {
+        // 1. Cargar FXML de lista de empresas
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/luis/gestorfacturasempresa/listaEmpresas.fxml"));
+        Parent root = loader.load();
+
+        // 2. Crear nueva ventana
+        Stage listaStage = new Stage();
+        listaStage.setTitle("Lista de Empresas");
+        listaStage.setScene(new Scene(root, 600, 400));
+        listaStage.setMinWidth(600);
+        listaStage.setMinHeight(400);
+
+        // 3. Cerrar la ventana principal (facturaPrincipal)
+        Stage principalStage = (Stage) btnAbrir.getScene().getWindow();
+        principalStage.close();
+
+        // 4. Abrir ventana Nueva Empresa
+        listaStage.show();
     }
 }

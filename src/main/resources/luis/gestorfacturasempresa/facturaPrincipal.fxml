@@ -13,7 +13,7 @@
    <children>
       <HBox layoutX="75.0" layoutY="80.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane prefHeight="400.0" prefWidth="164.0" style="-fx-background-color: C93516;">
+            <AnchorPane prefHeight="400.0" prefWidth="164.0" style="-fx-background-color: A1EB63;">
                <children>
                   <VBox alignment="TOP_CENTER" minWidth="-Infinity" prefHeight="400.0" prefWidth="172.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
@@ -60,7 +60,8 @@
                         <AnchorPane fx:id="abrirMenu" maxWidth="1.7976931348623157E308" style="-fx-background-color: E6E6E6;" visible="false" VBox.vgrow="ALWAYS">
                            <children>
                               <Label layoutX="51.0" layoutY="39.0" style="-fx-font-size: 30px;" text="Abrir" />
-                              <VBox layoutX="67.0" layoutY="97.0">
+                              <!-- SELECCIONAR ABRIR -->
+                              <VBox fx:id="contenedorAbrir" layoutX="67.0" layoutY="97.0" style="-fx-cursor: hand;">
                                  <children>
                                     <ImageView fitHeight="79.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
