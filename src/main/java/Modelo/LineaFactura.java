@@ -1,21 +1,52 @@
 package Modelo;
 
 /**
- *
+ * Clase que representa una línea dentro de una factura.
+ * Cada línea está asociada a un producto y a una factura concreta,
+ * incluyendo cantidad, precio unitario y posibles descuentos.
+ * 
+ * En la base de datos corresponde a la tabla factura_producto.
+ * 
  * @author luisb
  */
 public class LineaFactura {
+
+    // Identificador único de la línea (clave primaria en la BD)
     private long id;
+
+    // ID de la factura a la que pertenece esta línea (clave foránea)
     private long facturaId;
+
+    // ID del producto asociado a esta línea (clave foránea)
     private long productoId;
+
+    // Cantidad de unidades del producto en la línea
     private double cantidad;
+
+    // Precio unitario del producto en esta factura
     private double precioUnitario;
+
+    // Descuento aplicado a esta línea (en valor monetario, no porcentaje)
     private double descuento;
 
+    /**
+     * Constructor vacío necesario para frameworks, serialización y formularios JavaFX.
+     */
     public LineaFactura() {
     }
 
-    public LineaFactura(long id, long facturaId, long productoId, double cantidad, double precioUnitario, double descuento) {
+    /**
+     * Constructor completo para inicializar todos los campos de la línea de factura.
+     * 
+     * @param id             Identificador único de la línea
+     * @param facturaId      ID de la factura asociada
+     * @param productoId     ID del producto asociado
+     * @param cantidad       Cantidad de producto
+     * @param precioUnitario Precio unitario del producto
+     * @param descuento      Descuento aplicado
+     */
+    public LineaFactura(long id, long facturaId, long productoId,
+                        double cantidad, double precioUnitario, double descuento) {
         this.id = id;
         this.facturaId = facturaId;
         this.productoId = productoId;
@@ -23,6 +54,8 @@ public class LineaFactura {
         this.precioUnitario = precioUnitario;
         this.descuento = descuento;
     }
+
+    // Getters y setters para todos los atributos
 
     public long getId() {
         return id;
@@ -70,5 +103,15 @@ public class LineaFactura {
 
     public void setDescuento(double descuento) {
         this.descuento = descuento;
+    }
+
+    /**
+     * Método auxiliar que calcula el total de la línea de factura.
+     * Fórmula: (cantidad * precioUnitario) - descuento
+     * 
+     * @return Total de la línea después de aplicar el descuento
+     */
+    public double getTotalLinea() {
+        return (cantidad * precioUnitario) - descuento;
     }
 }

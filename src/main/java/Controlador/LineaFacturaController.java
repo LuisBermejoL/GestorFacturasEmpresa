@@ -5,41 +5,84 @@ import Modelo.LineaFactura;
 import java.util.List;
 
 /**
+ * Controlador para la entidad LineaFactura.
+ * Gestiona las líneas de factura y delega en LineaFacturaDAO
+ * las operaciones CRUD y consultas por factura.
  *
  * @author luisb
  */
 public class LineaFacturaController {
-    private final LineaFacturaDAO lineaFacturaDAO;
+    private final LineaFacturaDAO lineaFacturaDAO = new LineaFacturaDAO();
 
-    public LineaFacturaController() {
-        this.lineaFacturaDAO = new LineaFacturaDAO();
+    /**
+     * Añadir una nueva línea de factura.
+     *
+     * @param lineaFactura Objeto LineaFactura con los datos a insertar
+     */
+    public void añadir(LineaFactura lineaFactura) {
+        // Delegamos en el DAO la inserción de la línea
+        lineaFacturaDAO.añadir(lineaFactura);
     }
 
-    public void añadirLineaFactura(LineaFactura lf) {
-        lineaFacturaDAO.añadir(lf);
+    /**
+     * Modificar una línea de factura existente.
+     *
+     * @param lineaFactura Objeto LineaFactura con los datos actualizados
+     */
+    public void modificar(LineaFactura lineaFactura) {
+        // Delegamos en el DAO la actualización
+        lineaFacturaDAO.modificar(lineaFactura);
     }
 
-    public void modificarLineaFactura(LineaFactura lf) {
-        lineaFacturaDAO.modificar(lf);
-    }
-
-    public void borrarLineaFacturaPorId(long id) {
+    /**
+     * Borrar una línea de factura por su ID.
+     *
+     * @param id Identificador único de la línea de factura
+     */
+    public void borrarPorId(long id) {
+        // Delegamos en el DAO el borrado por ID
         lineaFacturaDAO.borrarPorId(id);
     }
 
-    public LineaFactura consultarLineaFacturaPorId(long id) {
+    /**
+     * Consultar una línea de factura por su ID.
+     *
+     * @param id Identificador único de la línea de factura
+     * @return LineaFactura encontrada o null si no existe
+     */
+    public LineaFactura consultarPorId(long id) {
+        // Delegamos en el DAO la consulta por ID
         return lineaFacturaDAO.consultarPorId(id);
     }
 
-    public List<LineaFactura> consultarTodasLineasFactura() {
+    /**
+     * Consultar todas las líneas de factura registradas.
+     *
+     * @return Lista de objetos LineaFactura
+     */
+    public List<LineaFactura> consultarTodos() {
+        // Delegamos en el DAO la consulta de todas las líneas
         return lineaFacturaDAO.consultarTodos();
     }
 
-    public List<LineaFactura> consultarLineasPorFacturaId(long facturaId) {
+    /**
+     * Consultar todas las líneas asociadas a una factura concreta.
+     *
+     * @param facturaId Identificador único de la factura
+     * @return Lista de objetos LineaFactura asociados a la factura
+     */
+    public List<LineaFactura> consultarPorFacturaId(long facturaId) {
+        // Delegamos en el DAO la consulta por facturaId
         return lineaFacturaDAO.consultarPorFacturaId(facturaId);
     }
 
-    public void borrarLineasPorFacturaId(long facturaId) {
+    /**
+     * Borrar todas las líneas asociadas a una factura concreta.
+     *
+     * @param facturaId Identificador único de la factura
+     */
+    public void borrarPorFacturaId(long facturaId) {
+        // Delegamos en el DAO el borrado de líneas por facturaId
         lineaFacturaDAO.borrarPorFacturaId(facturaId);
     }
 }

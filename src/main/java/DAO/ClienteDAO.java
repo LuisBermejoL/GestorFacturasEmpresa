@@ -7,19 +7,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * DAO (Data Access Object) para la entidad Cliente.
+ * Un cliente se almacena en dos tablas:
+ *   - entidad: datos comunes (nombre, NIF, email, teléfono, empresa_id)
+ *   - clientes: datos específicos de cliente (id_entidad, código)
+ * 
  * @author luisb
  */
 public class ClienteDAO {
 
+    // === CREAR ===
+    /**
+     * Inserta un nuevo cliente en la base de datos.
+     * Primero crea la entidad asociada y luego el registro en clientes.
+     * 
+     * @param c         Objeto Cliente con los datos
+     * @param empresaId ID de la empresa a la que pertenece el cliente
+     */
     public void añadir(Cliente c, long empresaId) {
         String sqlEntidad = "INSERT INTO entidad (empresa_id, nombre, nif, email, telefono) VALUES (?, ?, ?, ?, ?)";
         String sqlCliente = "INSERT INTO clientes (id_entidad, codigo) VALUES (?, ?)";
 
         try (Connection conn = ConexionBD.get()) {
-            conn.setAutoCommit(false);
+            conn.setAutoCommit(false); // Iniciamos transacción
 
             try (PreparedStatement stmtEntidad = conn.prepareStatement(sqlEntidad, Statement.RETURN_GENERATED_KEYS)) {
+                // Insertar datos comunes en entidad
                 stmtEntidad.setLong(1, empresaId);
                 stmtEntidad.setString(2, c.getNombre());
                 stmtEntidad.setString(3, c.getNif());
@@ -27,9 +40,12 @@ public class ClienteDAO {
                 stmtEntidad.setString(5, c.getTelefono());
                 stmtEntidad.executeUpdate();
 
+                // Obtener el ID generado para la entidad
                 ResultSet rs = stmtEntidad.getGeneratedKeys();
                 if (rs.next()) {
                     long idEntidad = rs.getLong(1);
+
+                    // Insertar datos específicos en clientes
                     try (PreparedStatement stmtCliente = conn.prepareStatement(sqlCliente)) {
                         stmtCliente.setLong(1, idEntidad);
                         stmtCliente.setInt(2, c.getCodigo());
@@ -37,9 +53,9 @@ public class ClienteDAO {
                     }
                 }
 
-                conn.commit();
+                conn.commit(); // Confirmar transacción
             } catch (SQLException e) {
-                conn.rollback();
+                conn.rollback(); // Revertir si algo falla
                 throw e;
             }
 
@@ -48,6 +64,13 @@ public class ClienteDAO {
         }
     }
 
+    // === ACTUALIZAR ===
+    /**
+     * Modifica los datos de un cliente existente.
+     * Actualiza tanto la tabla entidad como la tabla clientes.
+     * 
+     * @param c Objeto Cliente con los datos actualizados
+     */
     public void modificar(Cliente c) {
         String sqlEntidad = "UPDATE entidad SET nombre=?, nif=?, email=?, telefono=? WHERE id=?";
         String sqlCliente = "UPDATE clientes SET codigo=? WHERE id_entidad=?";
@@ -76,9 +99,17 @@ public class ClienteDAO {
         }
     }
 
+    // === BORRAR ===
+    /**
+     * Elimina un cliente por su ID de entidad.
+     * 
+     * @param idEntidad Identificador único de la entidad asociada al cliente
+     */
     public void borrarPorId(long idEntidad) {
         String sql = "DELETE FROM entidad WHERE id=?";
-        try (Connection conn = ConexionBD.get(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.get();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setLong(1, idEntidad);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -86,9 +117,19 @@ public class ClienteDAO {
         }
     }
 
+    // === LEER UNO ===
+    /**
+     * Consulta un cliente por su código.
+     * 
+     * @param codigo Código único del cliente
+     * @return Cliente encontrado o null si no existe
+     */
     public Cliente consultarPorCodigo(int codigo) {
-        String sql = "SELECT e.id, e.nombre, e.nif, e.email, e.telefono, c.codigo FROM entidad e JOIN clientes c ON e.id = c.id_entidad WHERE c.codigo=?";
-        try (Connection conn = ConexionBD.get(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "SELECT e.id, e.nombre, e.nif, e.email, e.telefono, c.codigo " +
+                     "FROM entidad e JOIN clientes c ON e.id = c.id_entidad WHERE c.codigo=?";
+        try (Connection conn = ConexionBD.get();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, codigo);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -107,10 +148,20 @@ public class ClienteDAO {
         return null;
     }
 
+    // === LEER TODOS ===
+    /**
+     * Consulta todos los clientes registrados en la base de datos.
+     * 
+     * @return Lista de objetos Cliente
+     */
     public List<Cliente> consultarTodos() {
         List<Cliente> lista = new ArrayList<>();
-        String sql = "SELECT e.id, e.nombre, e.nif, e.email, e.telefono, c.codigo FROM entidad e JOIN clientes c ON e.id = c.id_entidad";
-        try (Connection conn = ConexionBD.get(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+        String sql = "SELECT e.id, e.nombre, e.nif, e.email, e.telefono, c.codigo " +
+                     "FROM entidad e JOIN clientes c ON e.id = c.id_entidad";
+        try (Connection conn = ConexionBD.get();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
             while (rs.next()) {
                 Cliente c = new Cliente();
                 c.setId(rs.getLong("id"));
