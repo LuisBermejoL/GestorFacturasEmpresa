@@ -16,7 +16,7 @@ public class App extends Application {
     public void start(Stage primaryStage) {
         try {
             // Carga el archivo FXML desde la carpeta de recursos
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("facturaPrincipal.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("inicio.fxml"));
 
             // Crea la escena con el contenido del FXML
             Scene scene = new Scene(loader.load());

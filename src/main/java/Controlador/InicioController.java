@@ -12,7 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class ControladorInterfaces {
+public class InicioController {
 
     // Paneles de contenido
     @FXML
@@ -46,21 +46,21 @@ public class ControladorInterfaces {
         // Efecto hover
         agregarEfectosHover();
 
-        // Llamar al formulario Nuevo
+        // Llamar a Nueva Empresa (Formulario)
         contenedorNuevo.setOnMouseClicked(event -> {
             try {
-                formularioNuevaEmpresa();
+                nuevaEmpresa();
             } catch (IOException ex) {
-                Logger.getLogger(ControladorInterfaces.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(InicioController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
 
-        // Llamar a la lista de Empresas
+        // Llamar a Abrir Empresa (Lista de Empresas)
         contenedorAbrir.setOnMouseClicked(event -> {
             try {
-                formularioListaEmpresas();
+                abrirEmpresa();
             } catch (IOException ex) {
-                Logger.getLogger(ControladorInterfaces.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(InicioController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
 
@@ -116,17 +116,18 @@ public class ControladorInterfaces {
     }
 
     @FXML
-    private void formularioNuevaEmpresa() throws IOException {
+    private void nuevaEmpresa() throws IOException {
         // 1. Cargar FXML de nueva empresa
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/luis/gestorfacturasempresa/facturaEmpresa.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/luis/gestorfacturasempresa/nuevaEmpresa.fxml"));
         Parent root = loader.load();
 
         // 2. Crear nueva ventana
         Stage nuevoStage = new Stage();
         nuevoStage.setTitle("Nueva Empresa");
-        nuevoStage.setScene(new Scene(root, 550, 350));
-        nuevoStage.setMinWidth(550);
-        nuevoStage.setMinHeight(350);
+        nuevoStage.setScene(new Scene(root, 465, 480));
+        nuevoStage.setMinWidth(465);
+        nuevoStage.setMinHeight(480);
+        nuevoStage.centerOnScreen();
 
         // 3. Cerrar la ventana principal (facturaPrincipal)
         Stage principalStage = (Stage) btnNuevo.getScene().getWindow();
@@ -137,23 +138,24 @@ public class ControladorInterfaces {
     }
 
     @FXML
-    private void formularioListaEmpresas() throws IOException {
+    private void abrirEmpresa() throws IOException {
         // 1. Cargar FXML de lista de empresas
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/luis/gestorfacturasempresa/listaEmpresas.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/luis/gestorfacturasempresa/abrirListaEmpresas.fxml"));
         Parent root = loader.load();
 
         // 2. Crear nueva ventana
-        Stage listaStage = new Stage();
-        listaStage.setTitle("Lista de Empresas");
-        listaStage.setScene(new Scene(root, 600, 400));
-        listaStage.setMinWidth(600);
-        listaStage.setMinHeight(400);
+        Stage abrirStage = new Stage();
+        abrirStage.setTitle("Lista de Empresas");
+        abrirStage.setScene(new Scene(root, 600, 450));
+        abrirStage.setMinWidth(600);
+        abrirStage.setMinHeight(500);
 
         // 3. Cerrar la ventana principal (facturaPrincipal)
         Stage principalStage = (Stage) btnAbrir.getScene().getWindow();
         principalStage.close();
 
         // 4. Abrir ventana Nueva Empresa
-        listaStage.show();
+        abrirStage.show();
     }
+
 }

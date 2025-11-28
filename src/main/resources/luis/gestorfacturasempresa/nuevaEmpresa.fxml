@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="455.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.NuevaEmpresaController">
+   <children>
+      <Line endX="440.0" endY="40.0" fill="#00000048" startX="15.0" startY="40.0" stroke="#53424230" />
+      <VBox layoutX="215.0" layoutY="68.0" prefHeight="262.0" prefWidth="490.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane prefHeight="40.0">
+               <children>
+                  <ImageView fx:id="retroceder" fitHeight="47.0" fitWidth="31.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../../retroceder.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="186.0" layoutY="14.0" text="Nueva Empresa" />
+                  <ImageView fitHeight="47.0" fitWidth="31.0" layoutX="410.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../empresa.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+        <AnchorPane prefHeight="370.0" prefWidth="455.0">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="338.4" prefWidth="473.6" spacing="6.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <VBox fx:id="Contacto" alignment="CENTER_LEFT" spacing="6.0">
+                           <children>
+                              <Label text="Contacto:" />
+                              <HBox alignment="CENTER_LEFT" prefWidth="266.0" spacing="10.0">
+                                 <children>
+                                    <Label prefWidth="60.0" text="Nombre" />
+                                    <TextField prefWidth="320.0" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label prefWidth="60.0" text="NIF" />
+                                    <TextField prefWidth="120.0" />
+                                    <Label prefWidth="59.0" text="Teléfono" />
+                                    <TextField prefWidth="120.0" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label prefWidth="60.0" text="Correo" />
+                                    <TextField prefWidth="250.0" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label prefWidth="60.0" text="Web">
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <TextField prefWidth="250.0" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label prefWidth="60.0" text="D. Fiscal">
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <TextField prefWidth="320.0" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox fx:id="Localizacion" alignment="CENTER_LEFT" spacing="6.0">
+                           <children>
+                              <Label text="Localización:" />
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label prefWidth="60.0" text="Dirección" />
+                                    <TextField prefWidth="320.0" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label prefWidth="60.0" text="País">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Label>
+                                    <TextField prefWidth="250.0" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label prefWidth="60.0" text="Ciudad" />
+                                    <TextField prefWidth="250.0" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label prefWidth="60.0" text="Provincia" />
+                                    <TextField prefWidth="250.0" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label prefWidth="60.0" text="C.P." />
+                                    <TextField prefWidth="149.0" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets left="20.0" top="10.0" />
+               </padding>
+            </AnchorPane>
+            <AnchorPane prefHeight="65.0" prefWidth="455.0">
+               <children>
+                  <Button layoutX="188.0" layoutY="15.0" mnemonicParsing="false" prefWidth="80.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Aceptar" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
