@@ -124,9 +124,9 @@ public class InicioController {
         // 2. Crear nueva ventana
         Stage nuevoStage = new Stage();
         nuevoStage.setTitle("Nueva Empresa");
-        nuevoStage.setScene(new Scene(root, 465, 480));
+        nuevoStage.setScene(new Scene(root, 465, 510));
         nuevoStage.setMinWidth(465);
-        nuevoStage.setMinHeight(480);
+        nuevoStage.setMinHeight(510);
         nuevoStage.centerOnScreen();
 
         // 3. Cerrar la ventana principal (facturaPrincipal)
