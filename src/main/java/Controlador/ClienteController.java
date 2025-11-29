@@ -20,9 +20,10 @@ public class ClienteController {
      *
      * @param c         Objeto Cliente con los datos a insertar
      * @param empresaId ID de la empresa a la que pertenece el cliente
+     * @return idEntidad generado en la tabla entidad
      */
-    public void añadir(Cliente c, long empresaId) {
-        clienteDAO.añadir(c, empresaId);
+    public long añadir(Cliente c, long empresaId) {
+        return clienteDAO.añadir(c, empresaId);
     }
 
     // === ACTUALIZAR ===

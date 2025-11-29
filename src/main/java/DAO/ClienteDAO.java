@@ -22,15 +22,16 @@ public class ClienteDAO {
     /**
      * Inserta un nuevo cliente en la base de datos.
      * Primero crea la entidad asociada y luego el registro en clientes.
+     * Devuelve el id generado para la entidad.
      *
      * @param c         Objeto Cliente con los datos
      * @param empresaId ID de la empresa a la que pertenece el cliente
+     * @return idEntidad generado en la tabla entidad, o -1 si falla
      */
-    public void añadir(Cliente c, long empresaId) {
-        // SQL para insertar en entidad
+    public long añadir(Cliente c, long empresaId) {
         String sqlEntidad = "INSERT INTO entidad (empresa_id, nombre, nif, email, telefono) VALUES (?, ?, ?, ?, ?)";
-        // SQL para insertar en clientes
         String sqlCliente = "INSERT INTO clientes (id_entidad, codigo) VALUES (?, ?)";
+        long idEntidad = -1;
 
         try (Connection conn = ConexionBD.get()) {
             conn.setAutoCommit(false); // Iniciamos transacción manual
@@ -47,7 +48,7 @@ public class ClienteDAO {
                 // Obtener el ID generado para la entidad
                 ResultSet rs = stmtEntidad.getGeneratedKeys();
                 if (rs.next()) {
-                    long idEntidad = rs.getLong(1);
+                    idEntidad = rs.getLong(1);
 
                     // Insertar datos específicos en clientes
                     try (PreparedStatement stmtCliente = conn.prepareStatement(sqlCliente)) {
@@ -56,6 +57,7 @@ public class ClienteDAO {
                         stmtCliente.executeUpdate();
                     }
                 }
+                rs.close();
 
                 conn.commit(); // Confirmar transacción
             } catch (SQLException e) {
@@ -66,6 +68,7 @@ public class ClienteDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return idEntidad;
     }
 
     // === ACTUALIZAR ===
