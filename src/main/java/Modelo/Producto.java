@@ -2,15 +2,20 @@ package Modelo;
 
 /**
  * Clase que representa un producto o artículo en el sistema.
- * Está vinculada a una empresa y puede tener un proveedor habitual.
+ * Está vinculado a una empresa y puede tener un proveedor habitual.
  * Incluye información comercial, fiscal y de stock.
- * 
+ *
+ * En la base de datos corresponde a la tabla 'producto'.
+ *
  * @author luisb
  */
 public class Producto {
 
     // Identificador único del producto (clave primaria en la BD)
     private long id;
+
+    // ID de la empresa a la que pertenece el producto (clave foránea en la BD)
+    private long empresaId;
 
     // Código del producto (máximo 13 caracteres, único por empresa)
     private String codigo;
@@ -46,8 +51,9 @@ public class Producto {
 
     /**
      * Constructor completo para inicializar todos los campos del producto.
-     * 
+     *
      * @param id                  ID único del producto
+     * @param empresaId           ID de la empresa propietaria
      * @param codigo              Código del producto
      * @param descripcion         Descripción general
      * @param referenciaProveedor Código de referencia del proveedor
@@ -57,10 +63,11 @@ public class Producto {
      * @param precioVenta         Precio de venta
      * @param stock               Stock actual
      */
-    public Producto(long id, String codigo, String descripcion, String referenciaProveedor,
+    public Producto(long id, long empresaId, String codigo, String descripcion, String referenciaProveedor,
                     Long proveedorId, int tipoIVAId, double precioCoste,
                     double precioVenta, double stock) {
         this.id = id;
+        this.empresaId = empresaId;
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.referenciaProveedor = referenciaProveedor;
@@ -71,7 +78,7 @@ public class Producto {
         this.stock = stock;
     }
 
-    // Getters y setters para todos los atributos
+    // === Getters y setters para todos los atributos ===
 
     public long getId() {
         return id;
@@ -79,6 +86,14 @@ public class Producto {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getEmpresaId() {
+        return empresaId;
+    }
+
+    public void setEmpresaId(long empresaId) {
+        this.empresaId = empresaId;
     }
 
     public String getCodigo() {

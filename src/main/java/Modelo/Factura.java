@@ -16,6 +16,9 @@ public class Factura {
 
     // Identificador único de la factura (clave primaria en la BD)
     private long id;
+    
+    // Identificador único de la empresa
+    private long empresaId;
 
     // Tipo de factura: 'V' = Venta, 'C' = Compra
     private char tipo;
@@ -57,6 +60,7 @@ public class Factura {
      * Constructor completo para inicializar todos los campos de la factura.
      * 
      * @param id             Identificador único de la factura
+     * @param empresaId      Identificador único de la empresa
      * @param tipo           Tipo de factura ('V' = Venta, 'C' = Compra)
      * @param numero         Número de factura (único por empresa)
      * @param fechaEmision   Fecha de emisión de la factura
@@ -68,10 +72,11 @@ public class Factura {
      * @param estado         Estado de la factura (ej. PENDIENTE, PAGADA, ANULADA)
      * @param observaciones  Observaciones adicionales
      */
-    public Factura(long id, char tipo, String numero, Date fechaEmision, long entidadId,
+    public Factura(long id, long empresaId, char tipo, String numero, Date fechaEmision, long entidadId,
                    String concepto, double baseImponible, double ivaTotal,
                    double totalFactura, String estado, String observaciones) {
         this.id = id;
+        this.empresaId = empresaId;
         this.tipo = tipo;
         this.numero = numero;
         this.fechaEmision = fechaEmision;
@@ -88,7 +93,10 @@ public class Factura {
 
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
-
+    
+    public long getEmpresaId() { return empresaId; }
+    public void setEmpresaId(long empresaId) { this.empresaId = empresaId; }
+    
     public char getTipo() { return tipo; }
     public void setTipo(char tipo) { this.tipo = tipo; }
 

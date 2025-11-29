@@ -14,6 +14,7 @@ import java.util.List;
 public class ProductoController {
     private final ProductoDAO productoDAO = new ProductoDAO();
 
+    // === CREAR ===
     /**
      * Añadir un nuevo producto vinculado a una empresa.
      *
@@ -25,44 +26,51 @@ public class ProductoController {
         productoDAO.añadir(producto, empresaId);
     }
 
+    // === ACTUALIZAR ===
     /**
      * Modificar los datos de un producto existente.
      *
      * @param producto Objeto Producto con los datos actualizados
      */
     public void modificar(Producto producto) {
-        // Delegamos en el DAO la actualización por código del producto
+        // Delegamos en el DAO la actualización por código y empresa
         productoDAO.modificar(producto);
     }
 
+    // === BORRAR ===
     /**
-     * Borrar un producto por su código.
+     * Borrar un producto por su código dentro de una empresa.
      *
-     * @param codigo Código único del producto
+     * @param empresaId ID de la empresa
+     * @param codigo    Código único del producto
      */
-    public void borrarPorCodigo(String codigo) {
-        // Delegamos en el DAO el borrado por código
-        productoDAO.borrarPorCodigo(codigo);
+    public void borrarPorCodigo(long empresaId, String codigo) {
+        // Delegamos en el DAO el borrado por código y empresa
+        productoDAO.borrarPorCodigo(empresaId, codigo);
     }
 
+    // === LEER UNO ===
     /**
-     * Consultar un producto por su código.
+     * Consultar un producto por su código dentro de una empresa.
      *
-     * @param codigo Código único del producto
+     * @param empresaId ID de la empresa
+     * @param codigo    Código único del producto
      * @return Producto encontrado o null si no existe
      */
-    public Producto consultarPorCodigo(String codigo) {
-        // Delegamos en el DAO la consulta por código
-        return productoDAO.consultarPorCodigo(codigo);
+    public Producto consultarPorCodigo(long empresaId, String codigo) {
+        // Delegamos en el DAO la consulta por código y empresa
+        return productoDAO.consultarPorCodigo(empresaId, codigo);
     }
 
+    // === LEER TODOS ===
     /**
-     * Consultar todos los productos registrados.
+     * Consultar todos los productos registrados en una empresa.
      *
+     * @param empresaId ID de la empresa
      * @return Lista de objetos Producto
      */
-    public List<Producto> consultarTodos() {
-        // Delegamos en el DAO la consulta de todos los productos
-        return productoDAO.consultarTodos();
+    public List<Producto> consultarTodos(long empresaId) {
+        // Delegamos en el DAO la consulta de todos los productos de la empresa
+        return productoDAO.consultarTodos(empresaId);
     }
 }

@@ -10,11 +10,12 @@ import java.util.List;
 
 /**
  * DAO (Data Access Object) para la entidad Factura.
- * Contiene métodos CRUD (Leer, Actualizar, Borrar) y un único método de creación
- * que inserta la factura junto con sus líneas en una sola transacción.
- * 
- * En la base de datos corresponde a la tabla 'facturas'.
- * 
+ * Gestiona operaciones CRUD y la inserción de facturas con sus líneas
+ * en una sola transacción.
+ *
+ * En la base de datos corresponde a las tablas 'factura' y 'factura_producto'.
+ * Todas las consultas están filtradas por empresa_id para respetar el modelo multiempresa.
+ *
  * @author luisb
  */
 public class FacturaDAO {
@@ -22,55 +23,58 @@ public class FacturaDAO {
     // === CREAR (Factura + Líneas) ===
     /**
      * Inserta una factura junto con todas sus líneas en una sola transacción.
-     * 
-     * @param f       Objeto Factura con los datos de la cabecera
+     * Se asegura de vincular la factura a la empresa activa mediante empresa_id.
+     *
+     * @param f       Objeto Factura con los datos de cabecera
      * @param lineas  Lista de objetos LineaFactura con los detalles de la factura
      */
     public void añadir(Factura f, List<LineaFactura> lineas) {
-        // SQL para insertar la cabecera de la factura
-        String sqlFactura = "INSERT INTO facturas (tipo, numero, fecha_emision, entidad_id, concepto, base_imponible, iva_total, total_factura, estado, observaciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        // SQL para insertar las líneas de la factura
-        String sqlLinea = "INSERT INTO lineas_factura (factura_id, producto_id, cantidad, precio_unitario, descuento) VALUES (?, ?, ?, ?, ?)";
+        // SQL para insertar cabecera de factura
+        String sqlFactura = "INSERT INTO factura (empresa_id, tipo, numero, fecha_emision, entidad_id, concepto, base_imponible, iva_total, total_factura, estado, observaciones) " +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // SQL para insertar líneas de factura
+        String sqlLinea = "INSERT INTO factura_producto (factura_id, producto_id, cantidad, precio_unitario, descuento) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionBD.get()) {
             conn.setAutoCommit(false); // Iniciamos transacción manual
 
             try (PreparedStatement stmtFactura = conn.prepareStatement(sqlFactura, Statement.RETURN_GENERATED_KEYS)) {
-                // Insertar cabecera de la factura
-                stmtFactura.setString(1, String.valueOf(f.getTipo())); // char convertido a String
-                stmtFactura.setString(2, f.getNumero());
-                stmtFactura.setDate(3, f.getFechaEmision());
-                stmtFactura.setLong(4, f.getEntidadId());
-                stmtFactura.setString(5, f.getConcepto());
-                stmtFactura.setDouble(6, f.getBaseImponible());
-                stmtFactura.setDouble(7, f.getIvaTotal());
-                stmtFactura.setDouble(8, f.getTotalFactura());
-                stmtFactura.setString(9, f.getEstado());
-                stmtFactura.setString(10, f.getObservaciones());
+                // Insertar cabecera de factura
+                stmtFactura.setLong(1, f.getEmpresaId()); // empresa_id
+                stmtFactura.setString(2, String.valueOf(f.getTipo())); // tipo (V/C)
+                stmtFactura.setString(3, f.getNumero()); // número único por empresa
+                stmtFactura.setDate(4, f.getFechaEmision()); // fecha emisión
+                stmtFactura.setLong(5, f.getEntidadId()); // cliente/proveedor asociado
+                stmtFactura.setString(6, f.getConcepto()); // concepto
+                stmtFactura.setDouble(7, f.getBaseImponible()); // base imponible
+                stmtFactura.setDouble(8, f.getIvaTotal()); // total IVA
+                stmtFactura.setDouble(9, f.getTotalFactura()); // total factura
+                stmtFactura.setString(10, f.getEstado()); // estado (PENDIENTE, PAGADA, etc.)
+                stmtFactura.setString(11, f.getObservaciones()); // observaciones
                 stmtFactura.executeUpdate();
 
-                // Obtener el ID generado para la factura
+                // Obtener ID generado para la factura
                 ResultSet rs = stmtFactura.getGeneratedKeys();
                 if (rs.next()) {
                     long facturaId = rs.getLong(1);
 
-                    // Insertar todas las líneas asociadas a la factura
+                    // Insertar todas las líneas asociadas
                     try (PreparedStatement stmtLinea = conn.prepareStatement(sqlLinea)) {
                         for (LineaFactura lf : lineas) {
-                            stmtLinea.setLong(1, facturaId);              // ID de la factura recién creada
-                            stmtLinea.setLong(2, lf.getProductoId());     // Producto asociado
-                            stmtLinea.setDouble(3, lf.getCantidad());     // Cantidad
-                            stmtLinea.setDouble(4, lf.getPrecioUnitario());// Precio unitario
-                            stmtLinea.setDouble(5, lf.getDescuento());    // Descuento aplicado
-                            stmtLinea.addBatch();                         // Añadir al lote
+                            stmtLinea.setLong(1, facturaId); // factura_id
+                            stmtLinea.setLong(2, lf.getProductoId()); // producto_id
+                            stmtLinea.setDouble(3, lf.getCantidad()); // cantidad
+                            stmtLinea.setDouble(4, lf.getPrecioUnitario()); // precio unitario
+                            stmtLinea.setDouble(5, lf.getDescuento()); // descuento
+                            stmtLinea.addBatch(); // añadir al lote
                         }
-                        stmtLinea.executeBatch(); // Ejecutar todas las inserciones de líneas
+                        stmtLinea.executeBatch(); // ejecutar todas las inserciones
                     }
                 }
 
-                conn.commit(); // Confirmar transacción
+                conn.commit(); // confirmar transacción
             } catch (SQLException e) {
-                conn.rollback(); // Revertir si algo falla
+                conn.rollback(); // revertir si algo falla
                 throw e;
             }
         } catch (SQLException e) {
@@ -80,21 +84,25 @@ public class FacturaDAO {
 
     // === LEER TODOS ===
     /**
-     * Consulta todas las facturas de la base de datos.
-     * 
-     * @return Lista de objetos Factura
+     * Consulta todas las facturas de una empresa.
+     *
+     * @param empresaId ID de la empresa
+     * @return Lista de facturas de esa empresa
      */
-    public List<Factura> consultarTodos() {
+    public List<Factura> consultarTodos(long empresaId) {
         List<Factura> lista = new ArrayList<>();
-        String sql = "SELECT * FROM facturas";
+        String sql = "SELECT * FROM factura WHERE empresa_id=?";
 
         try (Connection conn = ConexionBD.get();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, empresaId);
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Factura f = new Factura();
                 f.setId(rs.getLong("id"));
+                f.setEmpresaId(rs.getLong("empresa_id"));
                 f.setTipo(rs.getString("tipo").charAt(0));
                 f.setNumero(rs.getString("numero"));
                 f.setFechaEmision(rs.getDate("fecha_emision"));
@@ -110,27 +118,30 @@ public class FacturaDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return lista;
     }
 
     // === LEER UNO ===
     /**
-     * Consulta una factura por su ID.
-     * 
-     * @param id Identificador único de la factura
+     * Consulta una factura por su ID dentro de una empresa.
+     *
+     * @param empresaId ID de la empresa
+     * @param id        ID de la factura
      * @return Factura encontrada o null si no existe
      */
-    public Factura consultarPorId(long id) {
-        String sql = "SELECT * FROM facturas WHERE id=?";
+    public Factura consultarPorId(long empresaId, long id) {
+        String sql = "SELECT * FROM factura WHERE empresa_id=? AND id=?";
         try (Connection conn = ConexionBD.get();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setLong(1, id);
+            stmt.setLong(1, empresaId);
+            stmt.setLong(2, id);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
                 Factura f = new Factura();
                 f.setId(rs.getLong("id"));
+                f.setEmpresaId(rs.getLong("empresa_id"));
                 f.setTipo(rs.getString("tipo").charAt(0));
                 f.setNumero(rs.getString("numero"));
                 f.setFechaEmision(rs.getDate("fecha_emision"));
@@ -152,11 +163,13 @@ public class FacturaDAO {
     // === ACTUALIZAR ===
     /**
      * Modifica los datos de una factura existente.
-     * 
+     * Se asegura de que la factura pertenece a la empresa indicada.
+     *
      * @param f Objeto Factura con los datos actualizados
      */
     public void modificar(Factura f) {
-        String sql = "UPDATE facturas SET tipo=?, numero=?, fecha_emision=?, entidad_id=?, concepto=?, base_imponible=?, iva_total=?, total_factura=?, estado=?, observaciones=? WHERE id=?";
+        String sql = "UPDATE factura SET tipo=?, numero=?, fecha_emision=?, entidad_id=?, concepto=?, base_imponible=?, iva_total=?, total_factura=?, estado=?, observaciones=? " +
+                     "WHERE id=? AND empresa_id=?";
         try (Connection conn = ConexionBD.get();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -171,6 +184,7 @@ public class FacturaDAO {
             stmt.setString(9, f.getEstado());
             stmt.setString(10, f.getObservaciones());
             stmt.setLong(11, f.getId());
+            stmt.setLong(12, f.getEmpresaId());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -180,16 +194,18 @@ public class FacturaDAO {
 
     // === BORRAR ===
     /**
-     * Elimina una factura por su ID.
-     * 
-     * @param id Identificador único de la factura
+     * Elimina una factura por su ID dentro de una empresa.
+     *
+     * @param empresaId ID de la empresa
+     * @param id        ID de la factura
      */
-    public void borrarPorId(long id) {
-        String sql = "DELETE FROM facturas WHERE id=?";
+    public void borrarPorId(long empresaId, long id) {
+        String sql = "DELETE FROM factura WHERE id=? AND empresa_id=?";
         try (Connection conn = ConexionBD.get();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
+            stmt.setLong(2, empresaId);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

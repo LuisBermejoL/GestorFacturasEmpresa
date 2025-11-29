@@ -14,6 +14,7 @@ import java.util.List;
 public class LineaFacturaController {
     private final LineaFacturaDAO lineaFacturaDAO = new LineaFacturaDAO();
 
+    // === CREAR ===
     /**
      * Añadir una nueva línea de factura.
      *
@@ -24,6 +25,7 @@ public class LineaFacturaController {
         lineaFacturaDAO.añadir(lineaFactura);
     }
 
+    // === ACTUALIZAR ===
     /**
      * Modificar una línea de factura existente.
      *
@@ -34,6 +36,7 @@ public class LineaFacturaController {
         lineaFacturaDAO.modificar(lineaFactura);
     }
 
+    // === BORRAR ===
     /**
      * Borrar una línea de factura por su ID.
      *
@@ -44,27 +47,33 @@ public class LineaFacturaController {
         lineaFacturaDAO.borrarPorId(id);
     }
 
+    // === LEER UNO ===
     /**
-     * Consultar una línea de factura por su ID.
+     * Consultar una línea de factura por su ID dentro de una empresa.
      *
-     * @param id Identificador único de la línea de factura
+     * @param empresaId ID de la empresa
+     * @param id        Identificador único de la línea de factura
      * @return LineaFactura encontrada o null si no existe
      */
-    public LineaFactura consultarPorId(long id) {
-        // Delegamos en el DAO la consulta por ID
-        return lineaFacturaDAO.consultarPorId(id);
+    public LineaFactura consultarPorId(long empresaId, long id) {
+        // Delegamos en el DAO la consulta por empresa e ID
+        return lineaFacturaDAO.consultarPorId(empresaId, id);
     }
 
+    // === LEER TODOS ===
     /**
-     * Consultar todas las líneas de factura registradas.
+     * Consultar todas las líneas de una factura dentro de una empresa.
      *
+     * @param empresaId ID de la empresa
+     * @param facturaId ID de la factura
      * @return Lista de objetos LineaFactura
      */
-    public List<LineaFactura> consultarTodos() {
-        // Delegamos en el DAO la consulta de todas las líneas
-        return lineaFacturaDAO.consultarTodos();
+    public List<LineaFactura> consultarTodos(long empresaId, long facturaId) {
+        // Delegamos en el DAO la consulta de todas las líneas de una factura
+        return lineaFacturaDAO.consultarTodos(empresaId, facturaId);
     }
 
+    // === UTILIDADES ===
     /**
      * Consultar todas las líneas asociadas a una factura concreta.
      *

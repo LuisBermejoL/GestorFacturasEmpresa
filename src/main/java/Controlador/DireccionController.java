@@ -14,6 +14,7 @@ import java.util.List;
 public class DireccionController {
     private final DireccionDAO direccionDAO = new DireccionDAO();
 
+    // === CREAR ===
     /**
      * Añadir una nueva dirección.
      *
@@ -24,6 +25,7 @@ public class DireccionController {
         direccionDAO.añadir(direccion);
     }
 
+    // === ACTUALIZAR ===
     /**
      * Modificar una dirección existente.
      *
@@ -34,6 +36,7 @@ public class DireccionController {
         direccionDAO.modificar(direccion);
     }
 
+    // === BORRAR ===
     /**
      * Borrar una dirección por su ID.
      *
@@ -44,24 +47,28 @@ public class DireccionController {
         direccionDAO.borrarPorId(id);
     }
 
+    // === LEER UNO ===
     /**
-     * Consultar una dirección por su ID.
+     * Consultar una dirección por su ID dentro de una empresa.
      *
-     * @param id Identificador único de la dirección
+     * @param empresaId ID de la empresa
+     * @param id        Identificador único de la dirección
      * @return Direccion encontrada o null si no existe
      */
-    public Direccion consultarPorId(long id) {
-        // Delegamos en el DAO la consulta por ID
-        return direccionDAO.consultarPorId(id);
+    public Direccion consultarPorId(long empresaId, long id) {
+        // Delegamos en el DAO la consulta por empresa e ID
+        return direccionDAO.consultarPorId(empresaId, id);
     }
 
+    // === LEER TODOS ===
     /**
-     * Consultar todas las direcciones registradas.
+     * Consultar todas las direcciones registradas en una empresa.
      *
+     * @param empresaId ID de la empresa
      * @return Lista de objetos Direccion
      */
-    public List<Direccion> consultarTodos() {
-        // Delegamos en el DAO la consulta de todas las direcciones
-        return direccionDAO.consultarTodos();
+    public List<Direccion> consultarTodos(long empresaId) {
+        // Delegamos en el DAO la consulta de todas las direcciones de la empresa
+        return direccionDAO.consultarTodos(empresaId);
     }
 }

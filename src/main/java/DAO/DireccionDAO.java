@@ -9,9 +9,10 @@ import java.util.List;
 /**
  * DAO (Data Access Object) para la entidad Direccion.
  * Contiene métodos CRUD (Crear, Leer, Actualizar, Borrar).
- * 
- * En la base de datos corresponde a la tabla 'direcciones'.
- * 
+ *
+ * En la base de datos corresponde a la tabla 'direccion'.
+ * Todas las consultas están filtradas por empresa_id para respetar el modelo multiempresa.
+ *
  * @author luisb
  */
 public class DireccionDAO {
@@ -19,11 +20,11 @@ public class DireccionDAO {
     // === CREAR ===
     /**
      * Inserta una nueva dirección en la base de datos.
-     * 
+     *
      * @param d Objeto Direccion con los datos a insertar
      */
     public void añadir(Direccion d) {
-        String sql = "INSERT INTO direcciones (entidad_id, etiqueta, direccion, cp, ciudad, provincia, pais) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO direccion (entidad_id, etiqueta, direccion, cp, ciudad, provincia, pais) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConexionBD.get();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -43,17 +44,22 @@ public class DireccionDAO {
 
     // === LEER TODOS ===
     /**
-     * Consulta todas las direcciones registradas en la base de datos.
-     * 
+     * Consulta todas las direcciones registradas en una empresa.
+     *
+     * @param empresaId ID de la empresa
      * @return Lista de objetos Direccion
      */
-    public List<Direccion> consultarTodos() {
+    public List<Direccion> consultarTodos(long empresaId) {
         List<Direccion> lista = new ArrayList<>();
-        String sql = "SELECT * FROM direcciones";
+        String sql = "SELECT d.* FROM direccion d " +
+                     "JOIN entidad e ON d.entidad_id = e.id " +
+                     "WHERE e.empresa_id=?";
 
         try (Connection conn = ConexionBD.get();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, empresaId);
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Direccion d = new Direccion();
@@ -76,18 +82,23 @@ public class DireccionDAO {
 
     // === LEER UNO ===
     /**
-     * Consulta una dirección por su ID.
-     * 
-     * @param id Identificador único de la dirección
+     * Consulta una dirección por su ID dentro de una empresa.
+     *
+     * @param empresaId ID de la empresa
+     * @param id        Identificador único de la dirección
      * @return Direccion encontrada o null si no existe
      */
-    public Direccion consultarPorId(long id) {
-        String sql = "SELECT * FROM direcciones WHERE id=?";
+    public Direccion consultarPorId(long empresaId, long id) {
+        String sql = "SELECT d.* FROM direccion d " +
+                     "JOIN entidad e ON d.entidad_id = e.id " +
+                     "WHERE e.empresa_id=? AND d.id=?";
         try (Connection conn = ConexionBD.get();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setLong(1, id);
+            stmt.setLong(1, empresaId);
+            stmt.setLong(2, id);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
                 Direccion d = new Direccion();
                 d.setId(rs.getLong("id"));
@@ -109,11 +120,11 @@ public class DireccionDAO {
     // === ACTUALIZAR ===
     /**
      * Modifica los datos de una dirección existente.
-     * 
+     *
      * @param d Objeto Direccion con los datos actualizados
      */
     public void modificar(Direccion d) {
-        String sql = "UPDATE direcciones SET entidad_id=?, etiqueta=?, direccion=?, cp=?, ciudad=?, provincia=?, pais=? WHERE id=?";
+        String sql = "UPDATE direccion SET entidad_id=?, etiqueta=?, direccion=?, cp=?, ciudad=?, provincia=?, pais=? WHERE id=?";
         try (Connection conn = ConexionBD.get();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -135,11 +146,11 @@ public class DireccionDAO {
     // === BORRAR ===
     /**
      * Elimina una dirección por su ID.
-     * 
+     *
      * @param id Identificador único de la dirección
      */
     public void borrarPorId(long id) {
-        String sql = "DELETE FROM direcciones WHERE id=?";
+        String sql = "DELETE FROM direccion WHERE id=?";
         try (Connection conn = ConexionBD.get();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 

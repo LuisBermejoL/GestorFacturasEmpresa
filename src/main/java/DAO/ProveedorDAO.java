@@ -10,9 +10,10 @@ import java.util.List;
 /**
  * DAO (Data Access Object) para la entidad Proveedor.
  * Contiene métodos CRUD (Crear, Leer, Actualizar, Borrar).
- * 
+ *
  * En la base de datos, cada proveedor está vinculado a una entidad mediante id_entidad.
- * 
+ * Todas las consultas están filtradas por empresa_id para respetar el modelo multiempresa.
+ *
  * @author luisb
  */
 public class ProveedorDAO {
@@ -21,7 +22,7 @@ public class ProveedorDAO {
     /**
      * Inserta un nuevo proveedor en la base de datos.
      * Primero se inserta en la tabla 'entidad' y luego en 'proveedores'.
-     * 
+     *
      * @param p          Objeto Proveedor con los datos a insertar
      * @param empresaId  ID de la empresa a la que pertenece el proveedor
      */
@@ -69,7 +70,7 @@ public class ProveedorDAO {
     /**
      * Modifica los datos de un proveedor existente.
      * Actualiza tanto la tabla 'entidad' como 'proveedores'.
-     * 
+     *
      * @param p Objeto Proveedor con los datos actualizados
      */
     public void modificar(Proveedor p) {
@@ -79,6 +80,7 @@ public class ProveedorDAO {
         try (Connection conn = ConexionBD.get()) {
             conn.setAutoCommit(false);
 
+            // Actualizar datos comunes en entidad
             try (PreparedStatement stmtEntidad = conn.prepareStatement(sqlEntidad)) {
                 stmtEntidad.setString(1, p.getNombre());
                 stmtEntidad.setString(2, p.getNif());
@@ -88,6 +90,7 @@ public class ProveedorDAO {
                 stmtEntidad.executeUpdate();
             }
 
+            // Actualizar datos específicos en proveedores
             try (PreparedStatement stmtProveedor = conn.prepareStatement(sqlProveedor)) {
                 stmtProveedor.setInt(1, p.getCodigo());
                 stmtProveedor.setLong(2, p.getId());
@@ -103,7 +106,7 @@ public class ProveedorDAO {
     // === BORRAR ===
     /**
      * Elimina un proveedor por su ID de entidad.
-     * 
+     *
      * @param idEntidad Identificador único de la entidad asociada al proveedor
      */
     public void borrarPorId(long idEntidad) {
@@ -119,17 +122,20 @@ public class ProveedorDAO {
 
     // === LEER UNO ===
     /**
-     * Consulta un proveedor por su código.
-     * 
-     * @param codigo Código único del proveedor
+     * Consulta un proveedor por su código dentro de una empresa.
+     *
+     * @param empresaId ID de la empresa
+     * @param codigo    Código único del proveedor
      * @return Proveedor encontrado o null si no existe
      */
-    public Proveedor consultarPorCodigo(int codigo) {
+    public Proveedor consultarPorCodigo(long empresaId, int codigo) {
         String sql = "SELECT e.id, e.nombre, e.nif, e.email, e.telefono, p.codigo " +
-                     "FROM entidad e JOIN proveedores p ON e.id = p.id_entidad WHERE p.codigo=?";
+                     "FROM entidad e JOIN proveedores p ON e.id = p.id_entidad " +
+                     "WHERE e.empresa_id=? AND p.codigo=?";
         try (Connection conn = ConexionBD.get();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, codigo);
+            stmt.setLong(1, empresaId);
+            stmt.setInt(2, codigo);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 Proveedor p = new Proveedor();
@@ -149,17 +155,20 @@ public class ProveedorDAO {
 
     // === LEER TODOS ===
     /**
-     * Consulta todos los proveedores de la base de datos.
-     * 
+     * Consulta todos los proveedores de una empresa.
+     *
+     * @param empresaId ID de la empresa
      * @return Lista de objetos Proveedor
      */
-    public List<Proveedor> consultarTodos() {
+    public List<Proveedor> consultarTodos(long empresaId) {
         List<Proveedor> lista = new ArrayList<>();
         String sql = "SELECT e.id, e.nombre, e.nif, e.email, e.telefono, p.codigo " +
-                     "FROM entidad e JOIN proveedores p ON e.id = p.id_entidad";
+                     "FROM entidad e JOIN proveedores p ON e.id = p.id_entidad " +
+                     "WHERE e.empresa_id=?";
         try (Connection conn = ConexionBD.get();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, empresaId);
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Proveedor p = new Proveedor();
                 p.setId(rs.getLong("id"));
