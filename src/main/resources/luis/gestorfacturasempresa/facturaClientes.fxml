@@ -8,6 +8,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -15,7 +17,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="513.0" prefWidth="609.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.FacturaClientesController">
+<AnchorPane prefHeight="683.0" prefWidth="1153.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.FacturaClientesController">
 
     <children>
         <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -35,7 +37,7 @@
             </AnchorPane>
 
             <!-- Contenido en pestañas -->
-            <TabPane fx:id="MenuCliente" prefHeight="500.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="MenuCliente" tabClosingPolicy="UNAVAILABLE">
                 <tabs>
 
                     <!-- Pestaña Cliente -->
@@ -43,7 +45,7 @@
                         <content>
                             <AnchorPane>
                                 <children>
-                                    <HBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <HBox alignment="CENTER" prefHeight="472.0" prefWidth="599.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="556.0" AnchorPane.topAnchor="0.0">
 
                                         <children>
                                             <!-- Icono cliente (opcional) -->
@@ -104,7 +106,7 @@
 
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
-                                                                        <Label prefWidth="100.0" text="Tipo" />
+                                                                        <Label prefHeight="17.0" prefWidth="81.0" text="Tipo" />
                                                                         <ComboBox fx:id="comboClienteDireccion" prefWidth="150.0" promptText="Selecciona tipo">
                                                                             <items>
                                                                                 <FXCollections fx:factory="observableArrayList">
@@ -120,7 +122,7 @@
 
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
-                                                                        <Label prefWidth="100.0" text="Dirección" />
+                                                                        <Label prefHeight="17.0" prefWidth="81.0" text="Dirección" />
                                                                         <TextField fx:id="txtClienteDireccion" prefWidth="300.0" />
                                                                     </children>
                                                                     <VBox.margin><Insets left="20.0" /></VBox.margin>
@@ -128,7 +130,7 @@
 
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
-                                                                        <Label prefWidth="100.0" text="CP" />
+                                                                        <Label prefHeight="17.0" prefWidth="81.0" text="CP" />
                                                                         <TextField fx:id="txtClienteCp" prefWidth="100.0" />
                                                                     </children>
                                                                     <VBox.margin><Insets left="20.0" /></VBox.margin>
@@ -136,7 +138,7 @@
 
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
-                                                                        <Label prefWidth="100.0" text="Ciudad" />
+                                                                        <Label prefHeight="17.0" prefWidth="80.0" text="Ciudad" />
                                                                         <TextField fx:id="txtClienteCiudad" prefWidth="200.0" />
                                                                     </children>
                                                                     <VBox.margin><Insets left="20.0" /></VBox.margin>
@@ -144,7 +146,7 @@
 
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
-                                                                        <Label prefWidth="100.0" text="Provincia" />
+                                                                        <Label prefHeight="17.0" prefWidth="80.0" text="Provincia" />
                                                                         <TextField fx:id="txtClienteProvincia" prefWidth="200.0" />
                                                                     </children>
                                                                     <VBox.margin><Insets left="20.0" /></VBox.margin>
@@ -152,7 +154,7 @@
 
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
-                                                                        <Label prefWidth="100.0" text="País" />
+                                                                        <Label prefHeight="17.0" prefWidth="80.0" text="País" />
                                                                         <TextField fx:id="txtClientePais" prefWidth="200.0" />
                                                                     </children>
                                                                     <VBox.margin><Insets left="20.0" /></VBox.margin>
@@ -165,6 +167,22 @@
                                             </AnchorPane>
                                         </children>
                                     </HBox>
+
+                                    <!-- Tabla cliente a la derecha -->
+                                    <TableView fx:id="tablaClientes" layoutX="599.0" prefHeight="472.0" prefWidth="556.0" style="-fx-background-color: #6F9E11;">
+                                        <columns>
+                                            <TableColumn fx:id="colClienteNombre" prefWidth="75.0" text="Nombre" />
+                                            <TableColumn fx:id="colClienteNif" prefWidth="75.0" text="NIF" />
+                                            <TableColumn fx:id="colClienteCorreo" prefWidth="75.0" text="Correo" />
+                                            <TableColumn fx:id="colClienteTelefono" prefWidth="75.0" text="Teléfono" />
+                                            <TableColumn fx:id="colClienteDireccion" prefWidth="75.0" text="Dirección" />
+                                            <TableColumn fx:id="colClienteCiudad" prefWidth="75.0" text="Ciudad" />
+                                            <TableColumn fx:id="colClienteCp" prefWidth="75.0" text="CP" />
+                                        </columns>
+                                        <columnResizePolicy>
+                                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                        </columnResizePolicy>
+                                    </TableView>
                                 </children>
                             </AnchorPane>
                         </content>
@@ -179,16 +197,13 @@
                     <!-- Pestaña Proveedor -->
                     <Tab text="Proveedor">
                         <content>
-                            <AnchorPane>
+                            <AnchorPane prefHeight="471.0" prefWidth="939.0">
                                 <children>
-                                    <HBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-
+                                    <HBox alignment="CENTER" prefHeight="472.0" prefWidth="600.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="555.0" AnchorPane.topAnchor="0.0">
                                         <children>
                                             <!-- Icono proveedor (opcional) -->
                                             <ImageView fitHeight="165.0" fitWidth="135.0" pickOnBounds="true" preserveRatio="true">
-                                                <image>
-                                                    <Image url="@../../proveedor.png" />
-                                                </image>
+                                                <image><Image url="@../../proveedor.png" /></image>
                                             </ImageView>
 
                                             <!-- Bloques proveedor -->
@@ -242,7 +257,7 @@
 
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
-                                                                        <Label prefWidth="100.0" text="Tipo" />
+                                                                        <Label prefHeight="17.0" prefWidth="80.0" text="Tipo" />
                                                                         <ComboBox fx:id="comboProveedorDireccion" prefWidth="150.0" promptText="Selecciona tipo">
                                                                             <items>
                                                                                 <FXCollections fx:factory="observableArrayList">
@@ -258,7 +273,7 @@
 
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
-                                                                        <Label prefWidth="100.0" text="Dirección" />
+                                                                        <Label prefHeight="17.0" prefWidth="80.0" text="Dirección" />
                                                                         <TextField fx:id="txtProveedorDireccion" prefWidth="300.0" />
                                                                     </children>
                                                                     <VBox.margin><Insets left="20.0" /></VBox.margin>
@@ -266,7 +281,7 @@
 
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
-                                                                        <Label prefWidth="100.0" text="CP" />
+                                                                        <Label prefHeight="17.0" prefWidth="80.0" text="CP" />
                                                                         <TextField fx:id="txtProveedorCp" prefWidth="100.0" />
                                                                     </children>
                                                                     <VBox.margin><Insets left="20.0" /></VBox.margin>
@@ -274,7 +289,7 @@
 
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
-                                                                        <Label prefWidth="100.0" text="Ciudad" />
+                                                                        <Label prefHeight="17.0" prefWidth="80.0" text="Ciudad" />
                                                                         <TextField fx:id="txtProveedorCiudad" prefWidth="200.0" />
                                                                     </children>
                                                                     <VBox.margin><Insets left="20.0" /></VBox.margin>
@@ -282,7 +297,7 @@
 
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
-                                                                        <Label prefWidth="100.0" text="Provincia" />
+                                                                        <Label prefHeight="17.0" prefWidth="80.0" text="Provincia" />
                                                                         <TextField fx:id="txtProveedorProvincia" prefWidth="200.0" />
                                                                     </children>
                                                                     <VBox.margin><Insets left="20.0" /></VBox.margin>
@@ -290,7 +305,7 @@
 
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
-                                                                        <Label prefWidth="100.0" text="País" />
+                                                                        <Label prefHeight="17.0" prefWidth="80.0" text="País" />
                                                                         <TextField fx:id="txtProveedorPais" prefWidth="200.0" />
                                                                     </children>
                                                                     <VBox.margin><Insets left="20.0" /></VBox.margin>
@@ -303,6 +318,22 @@
                                             </AnchorPane>
                                         </children>
                                     </HBox>
+
+                                    <!-- Tabla proveedor a la derecha -->
+                                    <TableView fx:id="tablaProveedores" layoutX="599.0" prefHeight="472.0" prefWidth="556.0" style="-fx-background-color: #6F9E11;">
+                                        <columns>
+                                            <TableColumn fx:id="colProveedorNombre" prefWidth="75.0" text="Nombre" />
+                                            <TableColumn fx:id="colProveedorNif" prefWidth="75.0" text="NIF" />
+                                            <TableColumn fx:id="colProveedorCorreo" prefWidth="75.0" text="Correo" />
+                                            <TableColumn fx:id="colProveedorTelefono" prefWidth="75.0" text="Teléfono" />
+                                            <TableColumn fx:id="colProveedorDireccion" prefWidth="75.0" text="Dirección" />
+                                            <TableColumn fx:id="colProveedorCiudad" prefWidth="75.0" text="Ciudad" />
+                                            <TableColumn fx:id="colProveedorCp" prefWidth="75.0" text="CP" />
+                                        </columns>
+                                        <columnResizePolicy>
+                                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                        </columnResizePolicy>
+                                    </TableView>
                                 </children>
                             </AnchorPane>
                         </content>
@@ -319,14 +350,11 @@
                         <content>
                             <AnchorPane>
                                 <children>
-                                    <HBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-
+                                    <HBox alignment="CENTER" prefHeight="472.0" prefWidth="598.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="555.0" AnchorPane.topAnchor="0.0">
                                         <children>
                                             <!-- Icono producto (opcional) -->
                                             <ImageView fitHeight="145.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true">
-                                                <image>
-                                                    <Image url="@../../producto.png" />
-                                                </image>
+                                                <image><Image url="@../../producto.png" /></image>
                                             </ImageView>
 
                                             <!-- Bloques producto -->
@@ -371,15 +399,15 @@
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
                                                                         <Label prefHeight="17.0" prefWidth="80.0" text="Precio Coste" />
-                                                                        <TextField fx:id="txtProductoPrecioCoste" prefHeight="25.0" prefWidth="101.0" />
+                                                                        <TextField fx:id="txtProductoPrecioCoste" prefWidth="120.0" />
                                                                     </children>
                                                                     <VBox.margin><Insets left="20.0" /></VBox.margin>
                                                                 </HBox>
 
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
-                                                                        <Label prefHeight="17.0" prefWidth="81.0" text="Precio Venta" />
-                                                                        <TextField fx:id="txtProductoPrecioVenta" prefHeight="25.0" prefWidth="101.0" />
+                                                                        <Label prefHeight="17.0" prefWidth="80.0" text="Precio Venta" />
+                                                                        <TextField fx:id="txtProductoPrecioVenta" prefWidth="120.0" />
                                                                     </children>
                                                                     <VBox.margin><Insets left="20.0" /></VBox.margin>
                                                                 </HBox>
@@ -387,7 +415,7 @@
                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                     <children>
                                                                         <Label prefWidth="80.0" text="Stock" />
-                                                                        <TextField fx:id="txtProductoStock" prefWidth="102.0" />
+                                                                        <TextField fx:id="txtProductoStock" prefWidth="100.0" />
                                                                     </children>
                                                                     <VBox.margin><Insets left="20.0" /></VBox.margin>
                                                                 </HBox>
@@ -398,6 +426,22 @@
                                             </AnchorPane>
                                         </children>
                                     </HBox>
+
+                                    <!-- Tabla producto a la derecha -->
+                                    <TableView fx:id="tablaProductos" layoutX="597.0" prefHeight="472.0" prefWidth="556.0" style="-fx-background-color: #6F9E11;">
+                                        <columns>
+                                            <TableColumn fx:id="colProductoCodigo" prefWidth="75.0" text="Código" />
+                                            <TableColumn fx:id="colProductoDescripcion" prefWidth="75.0" text="Descripción" />
+                                            <TableColumn fx:id="colProductoReferencia" prefWidth="75.0" text="Referencia" />
+                                            <TableColumn fx:id="colProductoIva" prefWidth="75.0" text="IVA" />
+                                            <TableColumn fx:id="colProductoPrecioCoste" prefWidth="75.0" text="Precio Coste" />
+                                            <TableColumn fx:id="colProductoPrecioVenta" prefWidth="75.0" text="Precio Venta" />
+                                            <TableColumn fx:id="colProductoStock" prefWidth="75.0" text="Stock" />
+                                        </columns>
+                                        <columnResizePolicy>
+                                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                        </columnResizePolicy>
+                                    </TableView>
                                 </children>
                             </AnchorPane>
                         </content>
@@ -414,14 +458,11 @@
                         <content>
                             <AnchorPane>
                                 <children>
-                                    <HBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-
+                                    <HBox alignment="CENTER" prefHeight="472.0" prefWidth="585.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="568.0" AnchorPane.topAnchor="0.0">
                                         <children>
                                             <!-- Icono facturas (opcional) -->
                                             <ImageView fitHeight="241.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
-                                                <image>
-                                                    <Image url="@../../facturas.png" />
-                                                </image>
+                                                <image><Image url="@../../facturas.png" /></image>
                                             </ImageView>
 
                                             <!-- Bloque facturas -->
@@ -520,6 +561,21 @@
                                             </AnchorPane>
                                         </children>
                                     </HBox>
+
+                                    <!-- Tabla facturas a la derecha -->
+                                    <TableView fx:id="tablaFacturas" layoutX="584.0" prefHeight="472.0" prefWidth="569.0" style="-fx-background-color: #6F9E11;">
+                                        <columns>
+                                            <TableColumn fx:id="colFacturaTipo" prefWidth="75.0" text="Tipo" />
+                                            <TableColumn fx:id="colFacturaNumero" prefWidth="75.0" text="Núm. Factura" />
+                                            <TableColumn fx:id="colFacturaFecha" prefWidth="104.0" text="Fecha de emisión" />
+                                            <TableColumn fx:id="colFacturaIvaTotal" prefWidth="85.0" text="IVA Total" />
+                                            <TableColumn fx:id="colFacturaTotal" prefWidth="75.0" text="Total Factura" />
+                                            <TableColumn fx:id="colFacturaEstado" prefWidth="75.0" text="Estado" />
+                                        </columns>
+                                        <columnResizePolicy>
+                                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                        </columnResizePolicy>
+                                    </TableView>
                                 </children>
                             </AnchorPane>
                         </content>
@@ -530,13 +586,20 @@
                             </ImageView>
                         </graphic>
                     </Tab>
+
                 </tabs>
             </TabPane>
 
             <!-- Botón inferior -->
-            <AnchorPane>
+            <AnchorPane prefHeight="60.0" prefWidth="609.0">
                 <children>
-                    <Button layoutX="222.0" layoutY="1.0" prefHeight="23.0" prefWidth="166.0" style="-fx-background-color: A1EB63;" text="Añadir" />
+                    <Button fx:id="btnAñadir" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" onAction="#handleAñadir" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Añadir" />
+
+                    <Button fx:id="btnModificar" layoutX="165.0" layoutY="16.0" mnemonicParsing="false" onAction="#handleModificar" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Modificar" />
+
+                    <Button fx:id="btnConsultar" layoutX="319.0" layoutY="16.0" mnemonicParsing="false" onAction="#handleConsultar" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Consultar" />
+
+                    <Button fx:id="btnEliminar" layoutX="472.0" layoutY="16.0" mnemonicParsing="false" onAction="#handleEliminar" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Eliminar" />
                 </children>
                 <VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin>
             </AnchorPane>

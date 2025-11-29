@@ -26,15 +26,15 @@ public class ProveedorDAO {
      * @param p          Objeto Proveedor con los datos a insertar
      * @param empresaId  ID de la empresa a la que pertenece el proveedor
      */
-    public void añadir(Proveedor p, long empresaId) {
+    public long añadir(Proveedor p, long empresaId) {
         String sqlEntidad = "INSERT INTO entidad (empresa_id, nombre, nif, email, telefono) VALUES (?, ?, ?, ?, ?)";
         String sqlProveedor = "INSERT INTO proveedores (id_entidad, codigo) VALUES (?, ?)";
+        long idEntidad = -1;
 
         try (Connection conn = ConexionBD.get()) {
-            conn.setAutoCommit(false); // Inicia transacción
+            conn.setAutoCommit(false);
 
             try (PreparedStatement stmtEntidad = conn.prepareStatement(sqlEntidad, Statement.RETURN_GENERATED_KEYS)) {
-                // Insertar en entidad
                 stmtEntidad.setLong(1, empresaId);
                 stmtEntidad.setString(2, p.getNombre());
                 stmtEntidad.setString(3, p.getNif());
@@ -42,28 +42,26 @@ public class ProveedorDAO {
                 stmtEntidad.setString(5, p.getTelefono());
                 stmtEntidad.executeUpdate();
 
-                // Obtener el ID generado en entidad
                 ResultSet rs = stmtEntidad.getGeneratedKeys();
                 if (rs.next()) {
-                    long idEntidad = rs.getLong(1);
+                    idEntidad = rs.getLong(1);
 
-                    // Insertar en proveedores usando el id_entidad
-                    try (PreparedStatement stmtProveedor = conn.prepareStatement(sqlProveedor)) {
-                        stmtProveedor.setLong(1, idEntidad);
-                        stmtProveedor.setInt(2, p.getCodigo());
-                        stmtProveedor.executeUpdate();
+                    try (PreparedStatement stmtProv = conn.prepareStatement(sqlProveedor)) {
+                        stmtProv.setLong(1, idEntidad);
+                        stmtProv.setInt(2, p.getCodigo());
+                        stmtProv.executeUpdate();
                     }
                 }
-
-                conn.commit(); // Confirmar transacción
+                rs.close();
+                conn.commit();
             } catch (SQLException e) {
-                conn.rollback(); // Revertir si hay error
+                conn.rollback();
                 throw e;
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return idEntidad;
     }
 
     // === ACTUALIZAR ===
