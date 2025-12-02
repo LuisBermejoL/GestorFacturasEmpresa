@@ -59,7 +59,7 @@ public class FacturaClientesController {
     @FXML private TableView<Factura> tablaFacturas;
     @FXML private TableColumn<Factura,String> colFacturaTipo,colFacturaNumero,colFacturaFecha,colFacturaIvaTotal,
             colFacturaTotal,colFacturaEstado;
-    @FXML private TextField txtFacturaNumero,txtFacturaFecha,txtFacturaConcepto,
+    @FXML private TextField txtFacturaEntidadID, txtFacturaNumero,txtFacturaFecha,txtFacturaConcepto,
             txtFacturaBase,txtFacturaIvaTotal,txtFacturaTotal,txtFacturaObservaciones;
     @FXML private ComboBox<String> comboFacturaTipo,comboFacturaEstado;
 
@@ -144,16 +144,6 @@ public class FacturaClientesController {
             return false;
         }
         return true;
-    }
-    // Comprueba si existe la entidad en la empresa
-    private boolean existeEntidad(long empresaId, long entidadId) {
-        List<Entidad> entidades = entidadController.consultarTodos(empresaId);
-        for (Entidad e : entidades) {
-            if (e.getId() == entidadId) {
-                return true;
-            }
-        }
-        return false;
     }
     private boolean validarNumero(TextField tf,String nombreCampo){
         try{Double.parseDouble(tf.getText().trim());return true;}
@@ -407,21 +397,9 @@ public class FacturaClientesController {
     }
 
     // CRUD Facturas
-    
-    // Obtiene el id de la entidad seleccionada (cliente o proveedor)
-    // Aquí debes adaptar según tu interfaz: por ejemplo, si tienes combo o selección en tabla
-    private long obtenerEntidadIdSeleccionada() {
-        Cliente clienteSel = tablaClientes.getSelectionModel().getSelectedItem();
-        if (clienteSel != null) return clienteSel.getId();
-
-        Proveedor proveedorSel = tablaProveedores.getSelectionModel().getSelectedItem();
-        if (proveedorSel != null) return proveedorSel.getId();
-
-        return -1; // ningún cliente/proveedor seleccionado
-    }
-
     private void añadirFactura() {
         if (empresa == null) { mostrarError("No hay empresa activa."); return; }
+        if (!validarCampoObligatorio(txtFacturaEntidadID,"NIF de entidad")) return;
         if (!validarCampoObligatorio(txtFacturaNumero,"Número de factura")) return;
         if (!validarCampoObligatorio(txtFacturaFecha,"Fecha")) return;
         if (!validarCampoObligatorio(txtFacturaConcepto,"Concepto")) return;
@@ -429,15 +407,9 @@ public class FacturaClientesController {
         if (!validarNumero(txtFacturaIvaTotal,"IVA Total")) return;
         if (!validarNumero(txtFacturaTotal,"Total Factura")) return;
 
-        long entidadIdSeleccionada = obtenerEntidadIdSeleccionada();
-        if (entidadIdSeleccionada <= 0 || !existeEntidad(empresa.getId(), entidadIdSeleccionada)) {
-            mostrarError("Debe seleccionar un cliente o proveedor válido antes de crear la factura.");
-            return;
-        }
-
         Factura f = new Factura();
         f.setEmpresaId(empresa.getId());
-        f.setEntidadId(entidadIdSeleccionada);
+        f.setEntidadId(Long.parseLong(txtFacturaEntidadID.getText().trim()));
         f.setTipo(mapTipoFactura(comboFacturaTipo.getValue()));
         f.setNumero(txtFacturaNumero.getText().trim());
 
@@ -530,7 +502,7 @@ public class FacturaClientesController {
     // Dirección: obtener un campo para mostrar en tabla (primer registro encontrado)
     private String obtenerDireccionCampo(Long entidadId,String campo){
         if(empresa==null || entidadId==null) return "";
-        List<Direccion> todas=direccionController.consultarTodos(empresa.getId());
+        List<Direccion> todas=direccionController.consultarTodosPorEmpresa(empresa.getId());
         for(Direccion d: todas){
             if(entidadId.equals(d.getEntidadId())){
                 if("direccion".equals(campo)) return safeStr(d.getDireccion());

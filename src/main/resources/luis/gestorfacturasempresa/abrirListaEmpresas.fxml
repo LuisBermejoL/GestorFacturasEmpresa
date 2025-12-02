@@ -23,7 +23,7 @@
                         <Image url="@../../retroceder.png" />
                      </image>
                   </ImageView>
-                  <Label alignment="CENTER" layoutX="262.0" layoutY="17.0" text="Abrir Empresa" />
+                  <Label alignment="CENTER" layoutX="262.0" layoutY="17.0" text="Abrir Empresa" AnchorPane.bottomAnchor="17.4" AnchorPane.leftAnchor="261.6" AnchorPane.rightAnchor="282.8" AnchorPane.topAnchor="16.799999999999997" />
                </children>
             </AnchorPane>
 

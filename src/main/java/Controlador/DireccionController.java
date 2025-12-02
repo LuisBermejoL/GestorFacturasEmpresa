@@ -67,8 +67,8 @@ public class DireccionController {
      * @param empresaId ID de la empresa
      * @return Lista de objetos Direccion
      */
-    public List<Direccion> consultarTodos(long empresaId) {
+    public List<Direccion> consultarTodosPorEmpresa(long empresaId) {
         // Delegamos en el DAO la consulta de todas las direcciones de la empresa
-        return direccionDAO.consultarTodos(empresaId);
+        return direccionDAO.consultarTodosPorEmpresa(empresaId);
     }
 }
