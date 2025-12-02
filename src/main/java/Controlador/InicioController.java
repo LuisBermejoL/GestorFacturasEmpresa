@@ -17,16 +17,22 @@ import javafx.util.Duration;
 public class InicioController {
 
     // Paneles de contenido
-    @FXML private AnchorPane nuevoMenu;
-    @FXML private AnchorPane abrirMenu;
+    @FXML
+    private AnchorPane nuevoMenu;
+    @FXML
+    private AnchorPane abrirMenu;
 
     // Botones del menú lateral
-    @FXML private Button btnNuevo;
-    @FXML private Button btnAbrir;
+    @FXML
+    private Button btnNuevo;
+    @FXML
+    private Button btnAbrir;
 
     // VBox clickables
-    @FXML private VBox contenedorNuevo;
-    @FXML private VBox contenedorAbrir;
+    @FXML
+    private VBox contenedorNuevo;
+    @FXML
+    private VBox contenedorAbrir;
 
     // Se ejecuta automáticamente después de cargar el FXML
     @FXML
@@ -43,13 +49,19 @@ public class InicioController {
 
         // Click en los contenedores
         contenedorNuevo.setOnMouseClicked(e -> {
-            try { abrirVentana("/luis/gestorfacturasempresa/nuevaEmpresa.fxml", "Nueva Empresa", 465, 510, btnNuevo); }
-            catch (IOException ex) { Logger.getLogger(InicioController.class.getName()).log(Level.SEVERE, null, ex); }
+            try {
+                abrirVentana("/luis/gestorfacturasempresa/nuevaEmpresa.fxml", "Nueva Empresa", 465, 530, btnNuevo);
+            } catch (IOException ex) {
+                Logger.getLogger(InicioController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
 
         contenedorAbrir.setOnMouseClicked(e -> {
-            try { abrirVentana("/luis/gestorfacturasempresa/abrirListaEmpresas.fxml", "Lista de Empresas", 600, 450, btnAbrir); }
-            catch (IOException ex) { Logger.getLogger(InicioController.class.getName()).log(Level.SEVERE, null, ex); }
+            try {
+                abrirVentana("/luis/gestorfacturasempresa/abrirListaEmpresas.fxml", "Lista de Empresas", 650, 450, btnAbrir);
+            } catch (IOException ex) {
+                Logger.getLogger(InicioController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
 
@@ -78,11 +90,27 @@ public class InicioController {
 
     // Efecto visual al pasar el ratón
     private void agregarEfectosHover() {
-        btnNuevo.setOnMouseEntered(e -> { if (!nuevoMenu.isVisible()) btnNuevo.setStyle("-fx-background-color: #96D41B; -fx-text-fill: white;"); });
-        btnNuevo.setOnMouseExited(e -> { if (!nuevoMenu.isVisible()) btnNuevo.setStyle("-fx-background-color: transparent; -fx-text-fill: white;"); });
+        btnNuevo.setOnMouseEntered(e -> {
+            if (!nuevoMenu.isVisible()) {
+                btnNuevo.setStyle("-fx-background-color: #96D41B; -fx-text-fill: white;");
+            }
+        });
+        btnNuevo.setOnMouseExited(e -> {
+            if (!nuevoMenu.isVisible()) {
+                btnNuevo.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+            }
+        });
 
-        btnAbrir.setOnMouseEntered(e -> { if (!abrirMenu.isVisible()) btnAbrir.setStyle("-fx-background-color: #96D41B; -fx-text-fill: white;"); });
-        btnAbrir.setOnMouseExited(e -> { if (!abrirMenu.isVisible()) btnAbrir.setStyle("-fx-background-color: transparent; -fx-text-fill: white;"); });
+        btnAbrir.setOnMouseEntered(e -> {
+            if (!abrirMenu.isVisible()) {
+                btnAbrir.setStyle("-fx-background-color: #96D41B; -fx-text-fill: white;");
+            }
+        });
+        btnAbrir.setOnMouseExited(e -> {
+            if (!abrirMenu.isVisible()) {
+                btnAbrir.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+            }
+        });
     }
 
     // Método genérico para abrir ventanas

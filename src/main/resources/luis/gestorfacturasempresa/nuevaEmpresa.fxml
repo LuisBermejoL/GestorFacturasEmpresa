@@ -11,31 +11,31 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="511.0" prefWidth="455.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.NuevaEmpresaController">
+<AnchorPane prefHeight="520.0" prefWidth="467.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.NuevaEmpresaController">
    <children>
-      <Line endX="440.0" endY="40.0" fill="#00000048" startX="15.0" startY="40.0" stroke="#53424230" />
       <VBox layoutX="215.0" layoutY="68.0" prefHeight="262.0" prefWidth="490.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane prefHeight="40.0">
+            <AnchorPane VBox.vgrow="ALWAYS">
                <children>
-                  <ImageView fx:id="retroceder" fitHeight="47.0" fitWidth="31.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                  <ImageView fx:id="retroceder" fitHeight="47.0" fitWidth="31.0" layoutX="15.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                      <image>
                         <Image url="@../../retroceder.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="186.0" layoutY="14.0" text="Nueva Empresa" />
-                  <ImageView fitHeight="47.0" fitWidth="31.0" layoutX="410.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="186.0" layoutY="14.0" text="Nueva Empresa" />
+                  <ImageView fitHeight="47.0" fitWidth="31.0" layoutX="410.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../empresa.png" />
                      </image>
                   </ImageView>
+                  <Line endX="440.0" endY="53.6" fill="#00000048" startX="15.0" startY="53.6" stroke="#53424230" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.6" />
                </children>
             </AnchorPane>
-        <AnchorPane prefHeight="427.0" prefWidth="455.0">
+        <AnchorPane VBox.vgrow="ALWAYS">
                <children>
-                  <VBox alignment="CENTER" prefHeight="338.4" prefWidth="473.6" spacing="6.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox alignment="CENTER" spacing="6.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <VBox fx:id="Contacto" alignment="CENTER_LEFT" spacing="6.0">
+                        <VBox fx:id="Contacto" alignment="CENTER_LEFT" spacing="6.0" VBox.vgrow="ALWAYS">
                            <children>
                               <Label text="Contacto:" />
                               <HBox alignment="CENTER_LEFT" prefWidth="266.0" spacing="10.0">
@@ -99,7 +99,7 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox fx:id="Localizacion" alignment="CENTER_LEFT" spacing="6.0">
+                        <VBox fx:id="Localizacion" alignment="CENTER_LEFT" spacing="6.0" VBox.vgrow="ALWAYS">
                            <children>
                               <Label text="Localización:" />
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
@@ -160,9 +160,9 @@
                   <Insets left="20.0" top="10.0" />
                </padding>
             </AnchorPane>
-            <AnchorPane prefHeight="65.0" prefWidth="455.0">
+            <AnchorPane VBox.vgrow="ALWAYS">
                <children>
-                  <Button fx:id="btnAceptar" layoutX="188.0" layoutY="15.0" mnemonicParsing="false" prefWidth="80.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Aceptar" />
+                  <Button fx:id="btnAceptar" alignment="CENTER" contentDisplay="CENTER" layoutX="194.0" layoutY="11.0" mnemonicParsing="false" prefWidth="80.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Aceptar" textAlignment="CENTER" />
                </children>
                <VBox.margin>
                   <Insets />

@@ -469,6 +469,15 @@
                                             <AnchorPane>
                                                 <children>
                                                     <VBox fx:id="datosFacturas" alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                             <children>
+                                                <Label prefWidth="120.0" text="Entidad ID" />
+                                                <TextField fx:id="txtEmpresaID" prefWidth="150.0" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets left="20.0" />
+                                             </VBox.margin>
+                                          </HBox>
 
                                                         <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                             <children>
@@ -591,15 +600,15 @@
             </TabPane>
 
             <!-- Botón inferior -->
-            <AnchorPane prefHeight="60.0" prefWidth="609.0">
+            <AnchorPane prefHeight="60.0" prefWidth="609.0" VBox.vgrow="ALWAYS">
                 <children>
-                    <Button fx:id="btnAñadir" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" onAction="#handleAñadir" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Añadir" />
+                    <Button fx:id="btnAñadir" alignment="CENTER" contentDisplay="CENTER" layoutX="286.0" layoutY="17.0" mnemonicParsing="false" onAction="#handleAñadir" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Añadir" />
 
-                    <Button fx:id="btnModificar" layoutX="165.0" layoutY="16.0" mnemonicParsing="false" onAction="#handleModificar" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Modificar" />
+                    <Button fx:id="btnModificar" alignment="CENTER" contentDisplay="CENTER" layoutX="437.0" layoutY="17.0" mnemonicParsing="false" onAction="#handleModificar" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Modificar" />
 
-                    <Button fx:id="btnConsultar" layoutX="319.0" layoutY="16.0" mnemonicParsing="false" onAction="#handleConsultar" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Consultar" />
+                    <Button fx:id="btnConsultar" alignment="CENTER" contentDisplay="CENTER" layoutX="591.0" layoutY="17.0" mnemonicParsing="false" onAction="#handleConsultar" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Consultar" />
 
-                    <Button fx:id="btnEliminar" layoutX="472.0" layoutY="16.0" mnemonicParsing="false" onAction="#handleEliminar" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Eliminar" />
+                    <Button fx:id="btnEliminar" alignment="CENTER" contentDisplay="CENTER" layoutX="744.0" layoutY="17.0" mnemonicParsing="false" onAction="#handleEliminar" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Eliminar" />
                 </children>
                 <VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin>
             </AnchorPane>
