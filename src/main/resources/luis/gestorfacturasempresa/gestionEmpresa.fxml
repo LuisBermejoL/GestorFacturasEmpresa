@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="683.0" prefWidth="1153.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.GestionEmpresaController">
+<AnchorPane prefHeight="683.0" prefWidth="1412.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.GestionEmpresaController">
 
     <children>
         <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -594,24 +594,24 @@
                                                    </HBox>
                                                    <VBox spacing="10.0">
                                                       <VBox.margin>
-                                                         <Insets left="20.0" right="20.0" top="10.0" bottom="10.0"/>
+                                                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                                                       </VBox.margin>
                                                       <Label style="-fx-font-weight: bold;" text="Añadir Líneas" />
 
-                                                      <HBox spacing="10.0" alignment="CENTER_LEFT">
-                                                         <ComboBox fx:id="comboFacturaProducto" promptText="Producto" prefWidth="200.0"/>
-                                                         <TextField fx:id="txtFacturaCantidad" promptText="Cant." prefWidth="60.0"/>
-                                                         <TextField fx:id="txtFacturaDescuento" promptText="Desc. €" prefWidth="60.0"/>
-                                                         <Button text="+" onAction="#handleAgregarLinea" style="-fx-background-color: #6F9E11; -fx-text-fill: white; -fx-cursor: hand;"/>
-                                                         <Button text="-" onAction="#handleQuitarLinea" style="-fx-background-color: #d9534f; -fx-text-fill: white; -fx-cursor: hand;"/>
+                                                      <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                         <ComboBox fx:id="comboFacturaProducto" prefWidth="200.0" promptText="Producto" />
+                                                         <TextField fx:id="txtFacturaCantidad" prefWidth="60.0" promptText="Cant." />
+                                                         <TextField fx:id="txtFacturaDescuento" prefWidth="60.0" promptText="Desc. €" />
+                                                         <Button onAction="#handleAgregarLinea" style="-fx-background-color: #6F9E11; -fx-text-fill: white; -fx-cursor: hand;" text="+" />
+                                                         <Button onAction="#handleQuitarLinea" style="-fx-background-color: #d9534f; -fx-text-fill: white; -fx-cursor: hand;" text="-" />
                                                       </HBox>
 
                                                       <TableView fx:id="tablaLineasFactura" prefHeight="150.0">
                                                          <columns>
-                                                             <TableColumn fx:id="colLineaProducto" text="Producto" prefWidth="150.0"/>
-                                                             <TableColumn fx:id="colLineaCantidad" text="Cant." prefWidth="50.0"/>
-                                                             <TableColumn fx:id="colLineaPrecio" text="Precio Unit." prefWidth="80.0"/>
-                                                             <TableColumn fx:id="colLineaTotal" text="Total" prefWidth="80.0"/>
+                                                             <TableColumn fx:id="colLineaProducto" prefWidth="150.0" text="Producto" />
+                                                             <TableColumn fx:id="colLineaCantidad" prefWidth="50.0" text="Cant." />
+                                                             <TableColumn fx:id="colLineaPrecio" prefWidth="80.0" text="Precio Unit." />
+                                                             <TableColumn fx:id="colLineaTotal" prefWidth="80.0" text="Total" />
                                                          </columns>
                                                          <columnResizePolicy>
                                                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
