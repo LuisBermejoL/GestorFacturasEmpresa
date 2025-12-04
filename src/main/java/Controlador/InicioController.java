@@ -28,7 +28,7 @@ public class InicioController {
     @FXML
     private Button btnAbrir;
 
-    // VBox clickables
+    // Contenedores clicables
     @FXML
     private VBox contenedorNuevo;
     @FXML
@@ -125,6 +125,7 @@ public class InicioController {
         stage.setMinHeight(height);
         stage.centerOnScreen();
 
+        // Si quieres cerrar la ventana principal al abrir otra, deja estas líneas:
         Stage principalStage = (Stage) origen.getScene().getWindow();
         principalStage.close();
 

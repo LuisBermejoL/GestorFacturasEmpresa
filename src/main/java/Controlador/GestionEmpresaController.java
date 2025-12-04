@@ -104,7 +104,7 @@ public class GestionEmpresaController {
     private TableColumn<Factura, String> colFacturaEntidadId, colFacturaTipo, colFacturaNumero, colFacturaFecha, colFacturaIvaTotal,
             colFacturaTotal, colFacturaEstado;
     @FXML
-    private TextField txtFacturaNumero, txtFacturaFecha, txtFacturaConcepto,
+    private TextField txtFacturaEntidadID, txtFacturaNumero, txtFacturaFecha, txtFacturaConcepto,
             txtFacturaBase, txtFacturaIvaTotal, txtFacturaTotal, txtFacturaObservaciones;
     @FXML
     private ComboBox<String> comboFacturaTipo, comboFacturaEstado;
@@ -616,38 +616,18 @@ public class GestionEmpresaController {
     }
 
     private void añadirFactura() {
-        if (empresa == null) {
-            mostrarError("No hay empresa activa.");
-            return;
-        }
-        if (!validarCampoObligatorio(txtFacturaNumero, "Número de factura")) {
-            return;
-        }
-        if (!validarCampoObligatorio(txtFacturaFecha, "Fecha")) {
-            return;
-        }
-        if (!validarCampoObligatorio(txtFacturaConcepto, "Concepto")) {
-            return;
-        }
-        if (!validarNumero(txtFacturaBase, "Base imponible")) {
-            return;
-        }
-        if (!validarNumero(txtFacturaIvaTotal, "IVA Total")) {
-            return;
-        }
-        if (!validarNumero(txtFacturaTotal, "Total Factura")) {
-            return;
-        }
-
-        long entidadIdSeleccionada = obtenerEntidadIdSeleccionada();
-        if (entidadIdSeleccionada <= 0 || !existeEntidad(empresa.getId(), entidadIdSeleccionada)) {
-            mostrarError("Debe seleccionar un cliente o proveedor válido antes de crear la factura.");
-            return;
-        }
+        if (empresa == null) { mostrarError("No hay empresa activa."); return; }
+        if (!validarCampoObligatorio(txtFacturaEntidadID,"NIF de entidad")) return;
+        if (!validarCampoObligatorio(txtFacturaNumero,"Número de factura")) return;
+        if (!validarCampoObligatorio(txtFacturaFecha,"Fecha")) return;
+        if (!validarCampoObligatorio(txtFacturaConcepto,"Concepto")) return;
+        if (!validarNumero(txtFacturaBase,"Base imponible")) return;
+        if (!validarNumero(txtFacturaIvaTotal,"IVA Total")) return;
+        if (!validarNumero(txtFacturaTotal,"Total Factura")) return;
 
         Factura f = new Factura();
         f.setEmpresaId(empresa.getId());
-        f.setEntidadId(entidadIdSeleccionada);
+        f.setEntidadId(Long.parseLong(txtFacturaEntidadID.getText().trim()));
         f.setTipo(mapTipoFactura(comboFacturaTipo.getValue()));
         f.setNumero(txtFacturaNumero.getText().trim());
 
@@ -659,9 +639,9 @@ public class GestionEmpresaController {
         }
 
         f.setConcepto(txtFacturaConcepto.getText().trim());
-        f.setBaseImponible(parseDoubleSafe(txtFacturaBase, 0.0));
-        f.setIvaTotal(parseDoubleSafe(txtFacturaIvaTotal, 0.0));
-        f.setTotalFactura(parseDoubleSafe(txtFacturaTotal, 0.0));
+        f.setBaseImponible(parseDoubleSafe(txtFacturaBase,0.0));
+        f.setIvaTotal(parseDoubleSafe(txtFacturaIvaTotal,0.0));
+        f.setTotalFactura(parseDoubleSafe(txtFacturaTotal,0.0));
         f.setEstado(comboFacturaEstado.getValue());
         f.setObservaciones(safe(txtFacturaObservaciones));
 
@@ -814,7 +794,7 @@ public class GestionEmpresaController {
         if (empresa == null || entidadId == null) {
             return "";
         }
-        List<Direccion> todas = direccionController.consultarTodos(empresa.getId());
+        List<Direccion> todas = direccionController.consultarTodosPorEmpresa(empresa.getId());
         for (Direccion d : todas) {
             if (entidadId.equals(d.getEntidadId())) {
                 if ("direccion".equals(campo)) {

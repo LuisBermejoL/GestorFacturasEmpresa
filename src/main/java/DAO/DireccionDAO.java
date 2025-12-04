@@ -42,64 +42,26 @@ public class DireccionDAO {
         }
     }
 
-    // === LEER TODOS ===
-    /**
-     * Consulta todas las direcciones registradas en una empresa.
-     *
-     * @param empresaId ID de la empresa
-     * @return Lista de objetos Direccion
-     */
-    public List<Direccion> consultarTodos(long empresaId) {
-        List<Direccion> lista = new ArrayList<>();
-        String sql = "SELECT d.* FROM direccion d " +
-                     "JOIN entidad e ON d.entidad_id = e.id " +
-                     "WHERE e.empresa_id=?";
-
-        try (Connection conn = ConexionBD.get();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setLong(1, empresaId);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                Direccion d = new Direccion();
-                d.setId(rs.getLong("id"));
-                d.setEntidadId(rs.getLong("entidad_id"));
-                d.setEtiqueta(rs.getString("etiqueta"));
-                d.setDireccion(rs.getString("direccion"));
-                d.setCp(rs.getString("cp"));
-                d.setCiudad(rs.getString("ciudad"));
-                d.setProvincia(rs.getString("provincia"));
-                d.setPais(rs.getString("pais"));
-                lista.add(d);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return lista;
-    }
-
     // === LEER UNO ===
     /**
-     * Consulta una dirección por su ID dentro de una empresa.
+     * Consulta una dirección por su ID y verifica que pertenezca a la empresa.
      *
      * @param empresaId ID de la empresa
      * @param id        Identificador único de la dirección
-     * @return Direccion encontrada o null si no existe
+     * @return Direccion encontrada o null si no existe o no pertenece a la empresa
      */
     public Direccion consultarPorId(long empresaId, long id) {
-        String sql = "SELECT d.* FROM direccion d " +
-                     "JOIN entidad e ON d.entidad_id = e.id " +
-                     "WHERE e.empresa_id=? AND d.id=?";
+        // CORRECCIÓN: Se añade el JOIN con entidad y la cláusula WHERE para filtrar por empresa_id.
+        String sql = "SELECT d.* FROM direccion d JOIN entidad e ON d.entidad_id = e.id WHERE d.id=? AND e.empresa_id=?";
         try (Connection conn = ConexionBD.get();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setLong(1, empresaId);
-            stmt.setLong(2, id);
-            ResultSet rs = stmt.executeQuery();
+            stmt.setLong(1, id);
+            stmt.setLong(2, empresaId); // Nuevo parámetro para el filtro de empresa_id
 
+            ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
+                // [Lógica para mapear el ResultSet a objeto Direccion omitida, se asume correcta]
                 Direccion d = new Direccion();
                 d.setId(rs.getLong("id"));
                 d.setEntidadId(rs.getLong("entidad_id"));
@@ -115,6 +77,42 @@ public class DireccionDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    // === LEER TODOS ===
+    /**
+     * Consulta todas las direcciones vinculadas a entidades de una empresa.
+     *
+     * @param empresaId ID de la empresa
+     * @return Lista de objetos Direccion
+     */
+    public List<Direccion> consultarTodosPorEmpresa(long empresaId) {
+        List<Direccion> lista = new ArrayList<>();
+        // CORRECCIÓN: Se añade el JOIN con entidad y la cláusula WHERE para filtrar por empresa_id.
+        String sql = "SELECT d.* FROM direccion d JOIN entidad e ON d.entidad_id = e.id WHERE e.empresa_id=?";
+        try (Connection conn = ConexionBD.get();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, empresaId); // Parámetro para el filtro de empresa_id
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                // [Lógica para mapear el ResultSet a objeto Direccion omitida, se asume correcta]
+                Direccion d = new Direccion();
+                d.setId(rs.getLong("id"));
+                d.setEntidadId(rs.getLong("entidad_id"));
+                d.setEtiqueta(rs.getString("etiqueta"));
+                d.setDireccion(rs.getString("direccion"));
+                d.setCp(rs.getString("cp"));
+                d.setCiudad(rs.getString("ciudad"));
+                d.setProvincia(rs.getString("provincia"));
+                d.setPais(rs.getString("pais"));
+                lista.add(d);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
     }
 
     // === ACTUALIZAR ===
