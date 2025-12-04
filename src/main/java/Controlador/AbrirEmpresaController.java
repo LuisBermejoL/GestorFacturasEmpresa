@@ -124,7 +124,7 @@ public class AbrirEmpresaController {
                 // Crear nueva ventana para mostrar los datos
                 Stage detalleStage = new Stage();
                 detalleStage.setTitle("Factura Clientes - " + seleccionada.getNombre());
-                detalleStage.setScene(new Scene(root, 1150, 700));
+                detalleStage.setScene(new Scene(root, 1450, 700));
                 detalleStage.show();
 
                 // Cerrar la ventana Abrir Lista de Empresas
