@@ -476,7 +476,7 @@
                                        </AnchorPane>
                                     </children>
                                  </HBox>
-                                 <TableView fx:id="tablaProducto" style="-fx-background-color: #6F9E11;">
+                                 <TableView fx:id="tablaProductos" style="-fx-background-color: #6F9E11;">
                                     <columns>
                                        <TableColumn fx:id="colProductoCodigo" prefWidth="75.0" text="Codigo" />
                                        <TableColumn fx:id="colProductoDescripcion" prefWidth="75.0" text="Descripción" />

@@ -111,11 +111,23 @@ public class GestionEmpresaController {
 
     @FXML
     private void initialize() {
+        // 1. Configuración de los ComboBox (Listas desplegables)
         comboFacturaTipo.setItems(FXCollections.observableArrayList("Venta", "Compra"));
         comboFacturaEstado.setItems(FXCollections.observableArrayList("PENDIENTE", "PAGADA", "ANULADA"));
 
-        // Evento de clic en la flecha retroceder → volver a la lista de empresas
+        // 2. Configurar el botón de retroceso
         retroceder.setOnMouseClicked(event -> volverAListaEmpresas());
+
+        // --- CORRECCIÓN IMPORTANTE ---
+
+        // 3. Vincular las columnas de la tabla con los datos del modelo.
+        // Sin esto, la tabla no sabe qué campo (nombre, nif, etc.) pintar en cada columna.
+        configurarTablas();
+
+        // 4. Marcar el controlador como listo.
+        // Esto es vital: permite que cuando 'setEmpresa()' sea llamado desde la otra ventana,
+        // el 'if (inicializado)' sea verdadero y ejecute 'refrescarTodo()'.
+        inicializado = true;
     }
 
     // Configurar columnas de tablas
