@@ -50,7 +50,7 @@ public class InicioController {
         // Click en los contenedores
         contenedorNuevo.setOnMouseClicked(e -> {
             try {
-                abrirVentana("/luis/gestorfacturasempresa/nuevaEmpresa.fxml", "Nueva Empresa", 465, 530, btnNuevo);
+                abrirVentana("/luis/gestorfacturasempresa/nuevaEmpresa.fxml", "Nueva Empresa", 450, 550, btnNuevo);
             } catch (IOException ex) {
                 Logger.getLogger(InicioController.class.getName()).log(Level.SEVERE, null, ex);
             }
