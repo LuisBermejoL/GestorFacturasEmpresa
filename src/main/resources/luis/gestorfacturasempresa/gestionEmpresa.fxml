@@ -190,20 +190,23 @@
                                               </children>
                                           </HBox>
       
-                                                <!-- Tabla cliente a la derecha -->
+                                          <!-- Tabla cliente a la derecha -->
                                           <TableView fx:id="tablaClientes" style="-fx-background-color: #6F9E11;">
-                                              <columns>
-                                                  <TableColumn fx:id="colClienteNombre" prefWidth="75.0" text="Nombre" />
-                                                  <TableColumn fx:id="colClienteNif" prefWidth="75.0" text="NIF" />
-                                                  <TableColumn fx:id="colClienteCorreo" prefWidth="75.0" text="Correo" />
-                                                  <TableColumn fx:id="colClienteTelefono" prefWidth="75.0" text="Teléfono" />
-                                                  <TableColumn fx:id="colClienteDireccion" prefWidth="75.0" text="Dirección" />
-                                                  <TableColumn fx:id="colClienteCiudad" prefWidth="75.0" text="Ciudad" />
-                                                  <TableColumn fx:id="colClienteCp" prefWidth="75.0" text="CP" />
-                                              </columns>
-                                              <columnResizePolicy>
-                                                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                              </columnResizePolicy>
+                                            <columns>
+                                                <TableColumn fx:id="colClienteCodigo" prefWidth="50.0" text="Cód." />
+                                                <TableColumn fx:id="colClienteNombre" prefWidth="100.0" text="Nombre" />
+                                                <TableColumn fx:id="colClienteNif" prefWidth="80.0" text="NIF" />
+                                                <TableColumn fx:id="colClienteCorreo" prefWidth="100.0" text="Correo" />
+                                                <TableColumn fx:id="colClienteTelefono" prefWidth="80.0" text="Teléfono" />
+                                                <TableColumn fx:id="colClienteDireccion" prefWidth="120.0" text="Dirección" />
+                                                <TableColumn fx:id="colClienteCiudad" prefWidth="80.0" text="Ciudad" />
+                                                <TableColumn fx:id="colClienteProvincia" prefWidth="80.0" text="Provincia" />
+                                                <TableColumn fx:id="colClientePais" prefWidth="80.0" text="País" />
+                                                <TableColumn fx:id="colClienteCp" prefWidth="60.0" text="CP" />
+                                            </columns>
+                                            <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                            </columnResizePolicy>
                                           </TableView>
                               </children>
                               <padding>
@@ -358,16 +361,19 @@
                                  </HBox>
                                  <TableView fx:id="tablaProveedores" style="-fx-background-color: #6F9E11;">
                                     <columns>
-                                       <TableColumn fx:id="colProveedorNombre" prefWidth="75.0" text="Nombre" />
-                                       <TableColumn fx:id="colProveedorNif" prefWidth="75.0" text="NIF" />
-                                       <TableColumn fx:id="colProveedorCorreo" prefWidth="75.0" text="Correo" />
-                                       <TableColumn fx:id="colProveedorTelefono" prefWidth="75.0" text="Teléfono" />
-                                       <TableColumn fx:id="colProveedorDireccion" prefWidth="75.0" text="Dirección" />
-                                       <TableColumn fx:id="colProveedorCiudad" prefWidth="75.0" text="Ciudad" />
-                                       <TableColumn fx:id="colProveedorCp" prefWidth="75.0" text="CP" />
+                                        <TableColumn fx:id="colProveedorCodigo" prefWidth="50.0" text="Cód." />
+                                        <TableColumn fx:id="colProveedorNombre" prefWidth="100.0" text="Nombre" />
+                                        <TableColumn fx:id="colProveedorNif" prefWidth="80.0" text="NIF" />
+                                        <TableColumn fx:id="colProveedorCorreo" prefWidth="100.0" text="Correo" />
+                                        <TableColumn fx:id="colProveedorTelefono" prefWidth="80.0" text="Teléfono" />
+                                        <TableColumn fx:id="colProveedorDireccion" prefWidth="120.0" text="Dirección" />
+                                        <TableColumn fx:id="colProveedorCiudad" prefWidth="80.0" text="Ciudad" />
+                                        <TableColumn fx:id="colProveedorProvincia" prefWidth="80.0" text="Provincia" />
+                                        <TableColumn fx:id="colProveedorPais" prefWidth="80.0" text="País" />
+                                        <TableColumn fx:id="colProveedorCp" prefWidth="60.0" text="CP" />
                                     </columns>
                                     <columnResizePolicy>
-                                       <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                     </columnResizePolicy>
                                  </TableView>
                               </children>
@@ -433,6 +439,15 @@
                                                    </HBox>
                                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                       <children>
+                                                         <Label prefWidth="80.0" text="Proveedor" />
+                                                         <ComboBox fx:id="comboProductoProveedor" prefWidth="300.0" promptText="Seleccione un proveedor" />
+                                                      </children>
+                                                      <VBox.margin>
+                                                         <Insets left="20.0" />
+                                                      </VBox.margin>
+                                                   </HBox>
+                                                   <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                      <children>
                                                          <Label prefWidth="80.0" text="IVA" />
                                                          <TextField fx:id="txtProductoIva" prefWidth="120.0" />
                                                       </children>
@@ -478,16 +493,17 @@
                                  </HBox>
                                  <TableView fx:id="tablaProductos" style="-fx-background-color: #6F9E11;">
                                     <columns>
-                                       <TableColumn fx:id="colProductoCodigo" prefWidth="75.0" text="Codigo" />
-                                       <TableColumn fx:id="colProductoDescripcion" prefWidth="75.0" text="Descripción" />
-                                       <TableColumn fx:id="colProductoReferencia" prefWidth="75.0" text="Referencia" />
-                                       <TableColumn fx:id="colProductoIva" prefWidth="75.0" text="IVA" />
-                                       <TableColumn fx:id="colProductoPrecioCoste" prefWidth="75.0" text="Precio Coste" />
-                                       <TableColumn fx:id="colProductoPrecioVenta" prefWidth="75.0" text="Precio Venta" />
-                                       <TableColumn fx:id="colProductoStock" prefWidth="75.0" text="Stock" />
+                                        <TableColumn fx:id="colProductoCodigo" prefWidth="75.0" text="Código" />
+                                        <TableColumn fx:id="colProductoDescripcion" prefWidth="150.0" text="Descripción" />
+                                        <TableColumn fx:id="colProductoReferencia" prefWidth="75.0" text="Ref. Prov" />
+                                        <TableColumn fx:id="colProductoProveedor" prefWidth="50.0" text="ID Prov" />
+                                        <TableColumn fx:id="colProductoIva" prefWidth="50.0" text="IVA" />
+                                        <TableColumn fx:id="colProductoPrecioCoste" prefWidth="75.0" text="Coste" />
+                                        <TableColumn fx:id="colProductoPrecioVenta" prefWidth="75.0" text="P. Venta" />
+                                        <TableColumn fx:id="colProductoStock" prefWidth="50.0" text="Stock" />
                                     </columns>
                                     <columnResizePolicy>
-                                       <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                     </columnResizePolicy>
                                  </TableView>
                               </children>
@@ -526,8 +542,8 @@
                                                 <children>
                                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                       <children>
-                                                         <Label prefWidth="120.0" text="Entidad ID" />
-                                                         <TextField fx:id="txtFacturaEntidadID" prefWidth="150.0" />
+                                                         <Label prefWidth="120.0" text="Cliente/Prov." />
+                                                         <ComboBox fx:id="comboFacturaEntidad" prefWidth="250.0" promptText="Seleccione entidad..." />
                                                       </children>
                                                       <VBox.margin>
                                                          <Insets left="20.0" />
@@ -576,6 +592,32 @@
                                                          <Insets left="20.0" />
                                                       </VBox.margin>
                                                    </HBox>
+                                                   <VBox spacing="10.0">
+                                                      <VBox.margin>
+                                                         <Insets left="20.0" right="20.0" top="10.0" bottom="10.0"/>
+                                                      </VBox.margin>
+                                                      <Label style="-fx-font-weight: bold;" text="Añadir Líneas" />
+
+                                                      <HBox spacing="10.0" alignment="CENTER_LEFT">
+                                                         <ComboBox fx:id="comboFacturaProducto" promptText="Producto" prefWidth="200.0"/>
+                                                         <TextField fx:id="txtFacturaCantidad" promptText="Cant." prefWidth="60.0"/>
+                                                         <TextField fx:id="txtFacturaDescuento" promptText="Desc. €" prefWidth="60.0"/>
+                                                         <Button text="+" onAction="#handleAgregarLinea" style="-fx-background-color: #6F9E11; -fx-text-fill: white; -fx-cursor: hand;"/>
+                                                         <Button text="-" onAction="#handleQuitarLinea" style="-fx-background-color: #d9534f; -fx-text-fill: white; -fx-cursor: hand;"/>
+                                                      </HBox>
+
+                                                      <TableView fx:id="tablaLineasFactura" prefHeight="150.0">
+                                                         <columns>
+                                                             <TableColumn fx:id="colLineaProducto" text="Producto" prefWidth="150.0"/>
+                                                             <TableColumn fx:id="colLineaCantidad" text="Cant." prefWidth="50.0"/>
+                                                             <TableColumn fx:id="colLineaPrecio" text="Precio Unit." prefWidth="80.0"/>
+                                                             <TableColumn fx:id="colLineaTotal" text="Total" prefWidth="80.0"/>
+                                                         </columns>
+                                                         <columnResizePolicy>
+                                                             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                         </columnResizePolicy>
+                                                      </TableView>
+                                                   </VBox>
                                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                       <children>
                                                          <Label prefWidth="120.0" text="Base imponible" />
@@ -640,16 +682,19 @@
                                  </HBox>
                                  <TableView fx:id="tablaFacturas" style="-fx-background-color: #6F9E11;">
                                     <columns>
-                                       <TableColumn fx:id="colFacturaEntidadId" prefWidth="75.0" text="Entidad ID" />
-                                       <TableColumn fx:id="colFacturaTipo" prefWidth="75.0" text="Tipo" />
-                                       <TableColumn fx:id="colFacturaNumero" prefWidth="75.0" text="Núm. Factura" />
-                                       <TableColumn fx:id="colFacturaFecha" prefWidth="75.0" text="Fecha" />
-                                       <TableColumn fx:id="colFacturaIvaTotal" prefWidth="75.0" text="IVA Total" />
-                                       <TableColumn fx:id="colFacturaTotal" prefWidth="75.0" text="Total" />
-                                       <TableColumn fx:id="colFacturaEstado" prefWidth="75.0" text="Estado" />
+                                        <TableColumn fx:id="colFacturaNumero" prefWidth="60.0" text="Nº" />
+                                        <TableColumn fx:id="colFacturaFecha" prefWidth="80.0" text="Fecha" />
+                                        <TableColumn fx:id="colFacturaTipo" prefWidth="50.0" text="Tipo" />
+                                        <TableColumn fx:id="colFacturaEntidadId" prefWidth="50.0" text="ID Ent." />
+                                        <TableColumn fx:id="colFacturaConcepto" prefWidth="120.0" text="Concepto" />
+                                        <TableColumn fx:id="colFacturaBase" prefWidth="70.0" text="Base Imp." />
+                                        <TableColumn fx:id="colFacturaIvaTotal" prefWidth="60.0" text="IVA" />
+                                        <TableColumn fx:id="colFacturaTotal" prefWidth="70.0" text="Total" />
+                                        <TableColumn fx:id="colFacturaEstado" prefWidth="70.0" text="Estado" />
+                                        <TableColumn fx:id="colFacturaObservaciones" prefWidth="100.0" text="Obs." />
                                     </columns>
                                     <columnResizePolicy>
-                                       <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                     </columnResizePolicy>
                                  </TableView>
                               </children>
