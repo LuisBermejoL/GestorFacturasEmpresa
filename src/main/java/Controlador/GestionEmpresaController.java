@@ -13,6 +13,7 @@ import javafx.scene.control.Alert.AlertType;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -291,6 +292,105 @@ public class GestionEmpresaController {
         else if ("Producto".equals(tabName)) eliminarProducto();
         else if ("Facturas".equals(tabName)) eliminarFactura();
     }
+    
+    // Botón "+" (Agregar línea a la tabla temporal)
+    @FXML
+    private void handleAgregarLinea() {
+        Producto p = comboFacturaProducto.getValue();
+        if (p == null) {
+            mostrarError("Por favor, selecciona un producto.");
+            return;
+        }
+
+        double cantidad = parseDoubleSafe(txtFacturaCantidad, 1.0);
+        double descuento = parseDoubleSafe(txtFacturaDescuento, 0.0);
+        
+        // Usamos el precio de venta del producto como base
+        double precioUnitario = p.getPrecioVenta();
+
+        // Creamos el objeto línea (aún sin ID de base de datos)
+        LineaFactura linea = new LineaFactura();
+        linea.setProductoId(p.getId());
+        linea.setCantidad(cantidad);
+        linea.setPrecioUnitario(precioUnitario);
+        linea.setDescuento(descuento);
+
+        // Añadimos a la lista visual
+        lineasTemporales.add(linea);
+
+        // Recalculamos los totales de la factura automáticamente
+        recalcularTotalesFactura();
+
+        // Limpiamos los campos pequeños para meter el siguiente
+        txtFacturaCantidad.setText("");
+        txtFacturaDescuento.setText("");
+        comboFacturaProducto.getSelectionModel().clearSelection();
+    }
+
+    // Botón "-" (Quitar línea seleccionada)
+    @FXML
+    private void handleQuitarLinea() {
+        LineaFactura seleccionada = tablaLineasFactura.getSelectionModel().getSelectedItem();
+        if (seleccionada != null) {
+            lineasTemporales.remove(seleccionada);
+            recalcularTotalesFactura(); // Recalcular al borrar
+        } else {
+            mostrarError("Selecciona una línea de la tabla pequeña para quitarla.");
+        }
+    }
+    
+    // Calcula la suma de todas las líneas y actualiza los TextField de totales
+    private void recalcularTotalesFactura() {
+        double baseImponible = 0.0;
+
+        for (LineaFactura lf : lineasTemporales) {
+            baseImponible += lf.getTotalLinea();
+        }
+
+        // Cálculo de IVA (Asumimos 21% general, puedes ajustarlo)
+        double porcentajeIVA = 0.21; 
+        double ivaTotal = baseImponible * porcentajeIVA;
+        double totalFactura = baseImponible + ivaTotal;
+
+        // Actualizamos la interfaz (reemplazamos puntos por comas si es necesario o viceversa)
+        txtFacturaBase.setText(String.format("%.2f", baseImponible).replace(",", "."));
+        txtFacturaIvaTotal.setText(String.format("%.2f", ivaTotal).replace(",", "."));
+        txtFacturaTotal.setText(String.format("%.2f", totalFactura).replace(",", "."));
+    }
+
+    // Método vital para que la tabla de líneas muestre el nombre del producto y no un número
+    private String obtenerNombreProducto(long productoId) {
+        // Buscamos en la tabla grande de productos (ya cargada en memoria)
+        if (tablaProductos != null && tablaProductos.getItems() != null) {
+            for (Producto p : tablaProductos.getItems()) {
+                if (p.getId() == productoId) {
+                    return p.getCodigo() + " - " + p.getDescripcion();
+                }
+            }
+        }
+        return "Prod. ID: " + productoId;
+    }
+    
+    private void cargarEntidadesEnFactura(String tipoFactura) {
+        if (empresa == null || comboFacturaEntidad == null) return;
+
+        try {
+            // Limpiamos la lista actual
+            comboFacturaEntidad.getItems().clear();
+            
+            if ("Venta".equals(tipoFactura)) {
+                // Cargar CLIENTES
+                List<Cliente> clientes = clienteController.consultarTodos(empresa.getId());
+                comboFacturaEntidad.getItems().addAll(clientes);
+            } else if ("Compra".equals(tipoFactura)) {
+                // Cargar PROVEEDORES
+                List<Proveedor> proveedores = proveedorController.consultarTodos(empresa.getId());
+                comboFacturaEntidad.getItems().addAll(proveedores);
+            }
+        } catch (Exception e) {
+            System.err.println("Error al cargar entidades: " + e.getMessage());
+        }
+    }
 
     // =========================================================================
     // LÓGICA DE NEGOCIO (CRUD) - CLIENTES
@@ -427,6 +527,10 @@ public class GestionEmpresaController {
         if (!validarCampoObligatorio(txtFacturaNumero, "Número")) return;
         if (!validarCampoObligatorio(txtFacturaFecha, "Fecha")) return;
 
+        if (!validarCampoObligatorio(txtFacturaNumero, "Número de factura")) return;
+        if (!validarCampoObligatorio(txtFacturaFecha, "Fecha")) return;
+
+        // 2. Creación del objeto Factura
         Factura f = new Factura();
         f.setEmpresaId(empresa.getId());
         f.setEntidadId(entidadSeleccionada.getId());
