@@ -11,6 +11,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -67,8 +68,11 @@
       
                                                                       <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                           <children>
-                                                                              <Label prefWidth="80.0" text="Nombre" />
-                                                                              <TextField fx:id="txtClienteNombre" prefWidth="250.0" />
+                                                                              <Label prefWidth="80.0" text="Nombre*" />
+                                                                              <TextField fx:id="txtClienteNombre" prefWidth="250.0">
+                                                               <tooltip>
+                                                                  <Tooltip text="Nombre del cliente (obligatorio)." />
+                                                               </tooltip></TextField>
                                                                           </children>
                                                                           <VBox.margin>
                                                             <Insets left="20.0" />
@@ -77,8 +81,11 @@
       
                                                                       <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                           <children>
-                                                                              <Label prefWidth="80.0" text="NIF" />
-                                                                              <TextField fx:id="txtClienteNif" prefWidth="150.0" />
+                                                                              <Label prefWidth="80.0" text="NIF*" />
+                                                                              <TextField fx:id="txtClienteNif" prefWidth="150.0">
+                                                               <tooltip>
+                                                                  <Tooltip text="NIF del cliente (obligatorio)." />
+                                                               </tooltip></TextField>
                                                                           </children>
                                                                           <VBox.margin>
                                                             <Insets left="20.0" />
@@ -87,8 +94,11 @@
       
                                                                       <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                           <children>
-                                                                              <Label prefWidth="80.0" text="Correo" />
-                                                                              <TextField fx:id="txtClienteCorreo" prefWidth="250.0" />
+                                                                              <Label prefWidth="80.0" text="Correo*" />
+                                                                              <TextField fx:id="txtClienteCorreo" prefWidth="250.0">
+                                                               <tooltip>
+                                                                  <Tooltip text="Correo del cliente (obligatorio)." />
+                                                               </tooltip></TextField>
                                                                           </children>
                                                                           <VBox.margin>
                                                             <Insets left="20.0" />
@@ -97,8 +107,11 @@
       
                                                                       <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                           <children>
-                                                                              <Label prefWidth="80.0" text="Teléfono" />
-                                                                              <TextField fx:id="txtClienteTelefono" prefWidth="150.0" />
+                                                                              <Label prefWidth="80.0" text="Teléfono*" />
+                                                                              <TextField fx:id="txtClienteTelefono" prefWidth="150.0">
+                                                               <tooltip>
+                                                                  <Tooltip text="Teléfono del cliente (obligatorio). Debe tener 9 dígitos." />
+                                                               </tooltip></TextField>
                                                                           </children>
                                                                           <VBox.margin>
                                                             <Insets left="20.0" />
@@ -114,7 +127,7 @@
       
                                                                       <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                           <children>
-                                                                              <Label prefHeight="17.0" prefWidth="81.0" text="Tipo" />
+                                                                              <Label prefHeight="17.0" prefWidth="81.0" text="Tipo*" />
                                                                               <ComboBox fx:id="comboClienteDireccion" prefWidth="150.0" promptText="Selecciona tipo">
                                                                                   <items>
                                                                                       <FXCollections fx:factory="observableArrayList">
@@ -123,6 +136,9 @@
                                                                                           <String fx:value="Otro" />
                                                                                       </FXCollections>
                                                                                   </items>
+                                                               <tooltip>
+                                                                  <Tooltip text="Tipo de dirección, puede ser domicilio fiscal, dirección de envió u otro." />
+                                                               </tooltip>
                                                                               </ComboBox>
                                                                           </children>
                                                                           <VBox.margin>
@@ -132,8 +148,11 @@
       
                                                                       <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                           <children>
-                                                                              <Label prefHeight="17.0" prefWidth="81.0" text="Dirección" />
-                                                                              <TextField fx:id="txtClienteDireccion" prefWidth="300.0" />
+                                                                              <Label prefHeight="17.0" prefWidth="81.0" text="Dirección*" />
+                                                                              <TextField fx:id="txtClienteDireccion" prefWidth="300.0">
+                                                               <tooltip>
+                                                                  <Tooltip text="Dirección del cliente (obligatorio)." />
+                                                               </tooltip></TextField>
                                                                           </children>
                                                                           <VBox.margin>
                                                             <Insets left="20.0" />
@@ -142,8 +161,11 @@
       
                                                                       <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                           <children>
-                                                                              <Label prefHeight="17.0" prefWidth="81.0" text="CP" />
-                                                                              <TextField fx:id="txtClienteCp" prefWidth="100.0" />
+                                                                              <Label prefHeight="17.0" prefWidth="81.0" text="CP*" />
+                                                                              <TextField fx:id="txtClienteCp" prefWidth="100.0">
+                                                               <tooltip>
+                                                                  <Tooltip text="Código Postal del cliente (obligatorio)." />
+                                                               </tooltip></TextField>
                                                                           </children>
                                                                           <VBox.margin>
                                                             <Insets left="20.0" />
@@ -152,8 +174,11 @@
       
                                                                       <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                           <children>
-                                                                              <Label prefHeight="17.0" prefWidth="80.0" text="Ciudad" />
-                                                                              <TextField fx:id="txtClienteCiudad" prefWidth="200.0" />
+                                                                              <Label prefHeight="17.0" prefWidth="80.0" text="Ciudad*" />
+                                                                              <TextField fx:id="txtClienteCiudad" prefWidth="200.0">
+                                                               <tooltip>
+                                                                  <Tooltip text="Ciudad (obligatorio)." />
+                                                               </tooltip></TextField>
                                                                           </children>
                                                                           <VBox.margin>
                                                             <Insets left="20.0" />
@@ -163,7 +188,10 @@
                                                                       <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                           <children>
                                                                               <Label prefHeight="17.0" prefWidth="80.0" text="Provincia" />
-                                                                              <TextField fx:id="txtClienteProvincia" prefWidth="200.0" />
+                                                                              <TextField fx:id="txtClienteProvincia" prefWidth="200.0">
+                                                               <tooltip>
+                                                                  <Tooltip text="Provincia de residencia del cliente." />
+                                                               </tooltip></TextField>
                                                                           </children>
                                                                           <VBox.margin>
                                                             <Insets left="20.0" />
@@ -172,8 +200,11 @@
       
                                                                       <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                           <children>
-                                                                              <Label prefHeight="17.0" prefWidth="80.0" text="País" />
-                                                                              <TextField fx:id="txtClientePais" prefWidth="200.0" />
+                                                                              <Label prefHeight="17.0" prefWidth="80.0" text="País*" />
+                                                                              <TextField fx:id="txtClientePais" prefWidth="200.0">
+                                                               <tooltip>
+                                                                  <Tooltip text="País de residencia del cliente (obligatorio)." />
+                                                               </tooltip></TextField>
                                                                           </children>
                                                                           <VBox.margin>
                                                             <Insets left="20.0" />
@@ -599,14 +630,14 @@
                                                       <Label style="-fx-font-weight: bold;" text="Añadir Líneas" />
 
                                                       <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                         <ComboBox fx:id="comboFacturaProducto" prefWidth="200.0" promptText="Producto" />
+                                                         <ComboBox fx:id="comboFacturaProducto" prefWidth="180.0" promptText="Producto" />
                                                          <TextField fx:id="txtFacturaCantidad" prefWidth="60.0" promptText="Cant." />
                                                          <TextField fx:id="txtFacturaDescuento" prefWidth="60.0" promptText="Desc. €" />
-                                                         <Button onAction="#handleAgregarLinea" style="-fx-background-color: #6F9E11; -fx-text-fill: white; -fx-cursor: hand;" text="+" />
-                                                         <Button onAction="#handleQuitarLinea" style="-fx-background-color: #d9534f; -fx-text-fill: white; -fx-cursor: hand;" text="-" />
+                                                         <Button onAction="#handleAgregarLinea" prefWidth="25.0" style="-fx-background-color: #6F9E11; -fx-text-fill: white; -fx-cursor: hand;" text="+" />
+                                                         <Button onAction="#handleQuitarLinea" prefWidth="25.0" style="-fx-background-color: #d9534f; -fx-text-fill: white; -fx-cursor: hand;" text="-" />
                                                       </HBox>
 
-                                                      <TableView fx:id="tablaLineasFactura" prefHeight="150.0">
+                                                         <TableView fx:id="tablaLineasFactura" prefHeight="150.0">
                                                          <columns>
                                                              <TableColumn fx:id="colLineaProducto" prefWidth="150.0" text="Producto" />
                                                              <TableColumn fx:id="colLineaCantidad" prefWidth="50.0" text="Cant." />
@@ -680,23 +711,28 @@
                                        </AnchorPane>
                                     </children>
                                  </HBox>
-                                 <TableView fx:id="tablaFacturas" style="-fx-background-color: #6F9E11;">
-                                    <columns>
-                                        <TableColumn fx:id="colFacturaNumero" prefWidth="60.0" text="Nº" />
-                                        <TableColumn fx:id="colFacturaFecha" prefWidth="80.0" text="Fecha" />
-                                        <TableColumn fx:id="colFacturaTipo" prefWidth="50.0" text="Tipo" />
-                                        <TableColumn fx:id="colFacturaEntidadId" prefWidth="50.0" text="ID Ent." />
-                                        <TableColumn fx:id="colFacturaConcepto" prefWidth="120.0" text="Concepto" />
-                                        <TableColumn fx:id="colFacturaBase" prefWidth="70.0" text="Base Imp." />
-                                        <TableColumn fx:id="colFacturaIvaTotal" prefWidth="60.0" text="IVA" />
-                                        <TableColumn fx:id="colFacturaTotal" prefWidth="70.0" text="Total" />
-                                        <TableColumn fx:id="colFacturaEstado" prefWidth="70.0" text="Estado" />
-                                        <TableColumn fx:id="colFacturaObservaciones" prefWidth="100.0" text="Obs." />
-                                    </columns>
-                                    <columnResizePolicy>
-                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                    </columnResizePolicy>
-                                 </TableView>
+                                 <VBox alignment="TOP_CENTER" spacing="10.0">
+                                    <children>
+                                       <TableView fx:id="tablaFacturas" maxWidth="1.7976931348623157E308" prefHeight="494.0" prefWidth="732.0" style="-fx-background-color: #6F9E11;">
+                                          <columns>
+                                              <TableColumn fx:id="colFacturaNumero" prefWidth="60.0" text="Nº" />
+                                              <TableColumn fx:id="colFacturaFecha" prefWidth="80.0" text="Fecha" />
+                                              <TableColumn fx:id="colFacturaTipo" prefWidth="50.0" text="Tipo" />
+                                              <TableColumn fx:id="colFacturaEntidadId" prefWidth="50.0" text="ID Ent." />
+                                              <TableColumn fx:id="colFacturaConcepto" prefWidth="120.0" text="Concepto" />
+                                              <TableColumn fx:id="colFacturaBase" prefWidth="70.0" text="Base Imp." />
+                                              <TableColumn fx:id="colFacturaIvaTotal" prefWidth="60.0" text="IVA" />
+                                              <TableColumn fx:id="colFacturaTotal" prefWidth="70.0" text="Total" />
+                                              <TableColumn fx:id="colFacturaEstado" prefWidth="70.0" text="Estado" />
+                                              <TableColumn fx:id="colFacturaObservaciones" prefWidth="100.0" text="Obs." />
+                                          </columns>
+                                          <columnResizePolicy>
+                                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                          </columnResizePolicy>
+                                       </TableView>
+                                       <Button fx:id="btnGenerarFactura" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleAñadir" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Generar Factura" />
+                                    </children>
+                                 </VBox>
                               </children>
                               <padding>
                                  <Insets bottom="20.0" top="20.0" />

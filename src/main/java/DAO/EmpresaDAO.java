@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DAO (Data Access Object) para la entidad Empresa.
- * Contiene métodos CRUD (Crear, Leer, Actualizar, Borrar).
- * 
+ * DAO (Data Access Object) para la entidad Empresa. Contiene métodos CRUD
+ * (Crear, Leer, Actualizar, Borrar).
+ *
  * En la base de datos corresponde a la tabla 'empresa'.
- * 
+ *
  * @author luisb
  */
 public class EmpresaDAO {
@@ -19,13 +19,12 @@ public class EmpresaDAO {
     // === CREAR ===
     /**
      * Inserta una nueva empresa en la base de datos.
-     * 
+     *
      * @param e Objeto Empresa con los datos a insertar
      */
     public void añadir(Empresa e) {
         String sql = "INSERT INTO empresa (nombre, nif, direccion, cp, ciudad, provincia, pais, telefono, email, web, domicilio_fiscal, contacto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = ConexionBD.get();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.get(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, e.getNombre());
             stmt.setString(2, e.getNif());
@@ -48,15 +47,14 @@ public class EmpresaDAO {
 
     // === ACTUALIZAR ===
     /**
-     * Modifica los datos de una empresa existente.
-     * Se busca por NIF, que actúa como identificador único.
-     * 
+     * Modifica los datos de una empresa existente. Se busca por NIF, que actúa
+     * como identificador único.
+     *
      * @param e Objeto Empresa con los datos actualizados
      */
     public void modificar(Empresa e) {
         String sql = "UPDATE empresa SET nombre=?, direccion=?, cp=?, ciudad=?, provincia=?, pais=?, telefono=?, email=?, web=?, domicilio_fiscal=?, contacto=? WHERE nif=?";
-        try (Connection conn = ConexionBD.get();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.get(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, e.getNombre());
             stmt.setString(2, e.getDireccion());
@@ -80,13 +78,12 @@ public class EmpresaDAO {
     // === BORRAR ===
     /**
      * Elimina una empresa por su NIF.
-     * 
+     *
      * @param nif Identificador fiscal único de la empresa
      */
     public void borrarPorNIF(String nif) {
         String sql = "DELETE FROM empresa WHERE nif=?";
-        try (Connection conn = ConexionBD.get();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.get(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, nif);
             stmt.executeUpdate();
@@ -98,14 +95,13 @@ public class EmpresaDAO {
     // === LEER UNO ===
     /**
      * Consulta una empresa por su NIF.
-     * 
+     *
      * @param nif Identificador fiscal único de la empresa
      * @return Empresa encontrada o null si no existe
      */
     public Empresa consultarPorNIF(String nif) {
         String sql = "SELECT * FROM empresa WHERE nif=?";
-        try (Connection conn = ConexionBD.get();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.get(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, nif);
             ResultSet rs = stmt.executeQuery();
@@ -135,15 +131,13 @@ public class EmpresaDAO {
     // === LEER TODOS ===
     /**
      * Consulta todas las empresas registradas en la base de datos.
-     * 
+     *
      * @return Lista de objetos Empresa
      */
     public List<Empresa> consultarTodas() {
         List<Empresa> lista = new ArrayList<>();
         String sql = "SELECT * FROM empresa";
-        try (Connection conn = ConexionBD.get();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conn = ConexionBD.get(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Empresa e = new Empresa();

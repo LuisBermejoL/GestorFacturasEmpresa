@@ -7,8 +7,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * Clase principal de la aplicación JavaFX "Gestor de Facturas Empresa".
- * Carga la interfaz principal definida en el archivo FXML y lanza la ventana.
+ * Clase principal de la aplicación JavaFX "Gestor de Facturas Empresa". Carga
+ * la interfaz principal definida en el archivo FXML y lanza la ventana.
  */
 public class App extends Application {
 

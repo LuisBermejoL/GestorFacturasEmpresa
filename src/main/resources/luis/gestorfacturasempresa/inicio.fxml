@@ -15,10 +15,11 @@
          <children>
             <AnchorPane style="-fx-background-color: A1EB63;" HBox.hgrow="ALWAYS">
                <children>
-                  <VBox alignment="TOP_CENTER" minWidth="-Infinity" prefWidth="172.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox alignment="TOP_CENTER" minWidth="-Infinity" prefWidth="172.0" spacing="6.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Button fx:id="btnNuevo" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: none; -fx-cursor: hand;" text="Nuevo" />
                         <Button fx:id="btnAbrir" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: none; -fx-cursor: hand;" text="Abrir" />
+                        <Button fx:id="btnSalir" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: none; -fx-cursor: hand;" text="Salir" />
                      </children>
                   </VBox>
                </children>
@@ -33,69 +34,85 @@
                   <VBox prefHeight="390.0" prefWidth="396.0" style="-fx-background-color: E6E6E6;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                          
-                              <!-- SECCIÓN NUEVO -->
+                                    <!-- SECCIÓN NUEVO -->
                         <AnchorPane fx:id="nuevoMenu" style="-fx-background-color: E6E6E6;" VBox.vgrow="ALWAYS">
                            <children>
-                              <Label layoutX="51.0" layoutY="39.0" style="-fx-font-size: 30px;" text="Nuevo" />
-                              <HBox alignment="CENTER" layoutY="88.8" prefHeight="107.0" prefWidth="396.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="89.0">
+                              <HBox alignment="CENTER" prefHeight="194.4" prefWidth="396.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <!-- SELECCIONAR NUEVO -->
-                                    <VBox fx:id="contenedorNuevo" style="-fx-cursor: hand;">
+                                    <AnchorPane>
                                        <children>
-                                          <ImageView fitHeight="79.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../../nuevo.png" />
-                                             </image>
-                                          </ImageView>
-                                          <Label text="Nueva Empresa" />
+                                          <Label layoutX="45.0" layoutY="43.0" style="-fx-font-size: 30px;" text="Nuevo" />
+                                          <HBox alignment="CENTER" prefHeight="107.0" prefWidth="396.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="89.0">
+                                             <children>
+                                                <!-- SELECCIONAR NUEVO -->
+                                                <VBox fx:id="contenedorNuevo" style="-fx-cursor: hand;">
+                                                   <children>
+                                                      <ImageView fitHeight="79.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../nuevo.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                      <Label text="Nueva Empresa" />
+                                                   </children>
+                                                </VBox>
+                                                <VBox>
+                                                   <children>
+                                                      <Label style="-fx-font-size: 13px; -fx-font-weight: bold;" text="Crear una nueva empresa" />
+                                                      <Label style="-fx-font-size: 11px;" text="Crear una nueva empresa en el programa" />
+                                                   </children>
+                                                   <HBox.margin>
+                                                      <Insets left="20.0" />
+                                                   </HBox.margin>
+                                                </VBox>
+                                             </children>
+                                             <padding>
+                                                <Insets left="20.0" />
+                                             </padding>
+                                          </HBox>
                                        </children>
-                                    </VBox>
-                                    <VBox>
-                                       <children>
-                                          <Label style="-fx-font-size: 13px; -fx-font-weight: bold;" text="Crear una nueva empresa" />
-                                          <Label style="-fx-font-size: 11px;" text="Crear una nueva empresa en el programa" />
-                                       </children>
-                                       <HBox.margin>
-                                          <Insets left="20.0" />
-                                       </HBox.margin>
-                                    </VBox>
+                                    </AnchorPane>
                                  </children>
-                                 <padding>
-                                    <Insets left="20.0" />
-                                 </padding>
                               </HBox>
                            </children>
                         </AnchorPane>
                         <!-- SECCIÓN ABRIR -->
                         <AnchorPane fx:id="abrirMenu" style="-fx-background-color: E6E6E6;" visible="false" VBox.vgrow="ALWAYS">
                            <children>
-                              <Label layoutX="51.0" layoutY="39.0" style="-fx-font-size: 30px;" text="Abrir" />
-                              <HBox alignment="CENTER" layoutY="88.8" prefHeight="107.0" prefWidth="396.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="89.0">
+                              <HBox alignment="CENTER" prefHeight="198.4" prefWidth="396.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <!-- SELECCIONAR ABRIR -->
-                                    <VBox fx:id="contenedorAbrir" prefHeight="106.0" prefWidth="82.4" style="-fx-cursor: hand;">
+                                    <AnchorPane>
                                        <children>
-                                          <ImageView fitHeight="79.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../../cargar.png" />
-                                             </image>
-                                          </ImageView>
-                                          <Label text="Abrir Empresa" />
+                                          <Label layoutX="45.0" layoutY="43.0" style="-fx-font-size: 30px;" text="Abrir" />
+                                          <HBox alignment="CENTER" prefHeight="107.0" prefWidth="396.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="89.0">
+                                             <children>
+                                                <!-- SELECCIONAR ABRIR -->
+                                                <VBox fx:id="contenedorAbrir" prefHeight="106.0" prefWidth="82.4" style="-fx-cursor: hand;">
+                                                   <children>
+                                                      <ImageView fitHeight="79.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../cargar.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                      <Label text="Abrir Empresa" />
+                                                   </children>
+                                                </VBox>
+                                                <VBox prefWidth="200.8">
+                                                   <children>
+                                                      <Label style="-fx-font-size: 13px; -fx-font-weight: bold;" text="Abrir empresa creada" />
+                                                      <Label style="-fx-font-size: 11px;" text="Abrir empresa en el programa" />
+                                                   </children>
+                                                   <HBox.margin>
+                                                      <Insets left="20.0" />
+                                                   </HBox.margin>
+                                                </VBox>
+                                             </children>
+                                             <padding>
+                                                <Insets left="20.0" />
+                                             </padding>
+                                          </HBox>
                                        </children>
-                                    </VBox>
-                                    <VBox prefWidth="200.8">
-                                       <children>
-                                          <Label style="-fx-font-size: 13px; -fx-font-weight: bold;" text="Abrir empresa creada" />
-                                          <Label style="-fx-font-size: 11px;" text="Abrir empresa en el programa" />
-                                       </children>
-                                       <HBox.margin>
-                                          <Insets left="20.0" />
-                                       </HBox.margin>
-                                    </VBox>
+                                    </AnchorPane>
                                  </children>
-                                 <padding>
-                                    <Insets left="20.0" />
-                                 </padding>
                               </HBox>
                            </children>
                         </AnchorPane>

@@ -139,7 +139,7 @@ public class NuevaEmpresaController {
         }
 
         if (!validarTelefono(telefono)) {
-            mostrarAlerta("Teléfono incorrecto", "El teléfono debe tener exactamente 9 dígitos.");
+            mostrarAlerta("Teléfono incorrecto", "El teléfono debe tener exactamente 9 dígitos y no comenzar por 0.");
             return;
         }
 
@@ -276,10 +276,19 @@ public class NuevaEmpresaController {
             faltan.append("• Teléfono\n");
         }
         if (txtEmpresaCorreo.getText().trim().isEmpty()) {
-            faltan.append("• Email\n");
+            faltan.append("• Correo\n");
+        }
+        if (txtEmpresaDfiscal.getText().trim().isEmpty()) {
+            faltan.append("• Dirección Fiscal\n");
+        }
+        if (txtEmpresaContacto.getText().trim().isEmpty()) {
+            faltan.append("• Contacto\n");
         }
         if (txtEmpresaDireccion.getText().trim().isEmpty()) {
             faltan.append("• Dirección\n");
+        }
+        if (txtEmpresaPais.getText().trim().isEmpty()) {
+            faltan.append("• País\n");
         }
         if (txtEmpresaCiudad.getText().trim().isEmpty()) {
             faltan.append("• Ciudad\n");
@@ -299,11 +308,11 @@ public class NuevaEmpresaController {
         nif = nif.trim().toUpperCase();
 
         // Validar formato de NIF empresa: 1 letra + 7 números + 1 dígito (letra o número)
-        return nif.matches("^[ABCEFGJ]\\d{7}[0-9A-J]$");
+        return nif.matches("^[ABCEFGJ][0-9]{7}[0-9A-J]$");
     }
 
     private boolean validarTelefono(String telefono) {
-        return telefono.matches("\\d{9}");
+        return telefono.matches("[1-9]\\d{8}");
     }
 
     private boolean validarEmail(String email) {

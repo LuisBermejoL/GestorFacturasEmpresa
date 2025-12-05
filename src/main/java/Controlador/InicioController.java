@@ -27,6 +27,8 @@ public class InicioController {
     private Button btnNuevo;
     @FXML
     private Button btnAbrir;
+    @FXML
+    private Button btnSalir;
 
     // Contenedores clicables
     @FXML
@@ -38,11 +40,16 @@ public class InicioController {
     @FXML
     private void initialize() {
         // Mostrar "Nuevo" por defecto al iniciar
-        mostrarSeccion(nuevoMenu, btnNuevo, abrirMenu, btnAbrir);
+        mostrarSeccion(nuevoMenu, btnNuevo, abrirMenu, btnAbrir, btnSalir);
 
         // Listeners de los botones
-        btnNuevo.setOnAction(e -> mostrarSeccion(nuevoMenu, btnNuevo, abrirMenu, btnAbrir));
-        btnAbrir.setOnAction(e -> mostrarSeccion(abrirMenu, btnAbrir, nuevoMenu, btnNuevo));
+        btnNuevo.setOnAction(e -> mostrarSeccion(nuevoMenu, btnNuevo, abrirMenu, btnAbrir, btnSalir));
+        btnAbrir.setOnAction(e -> mostrarSeccion(abrirMenu, btnAbrir, nuevoMenu, btnNuevo, btnSalir));
+        btnSalir.setOnAction(e -> {
+            // Obtiene la Stage (ventana) actual desde el botón y la cierra
+            Stage stage = (Stage) btnSalir.getScene().getWindow();
+            stage.close();
+        });
 
         // Efectos hover
         agregarEfectosHover();
@@ -66,7 +73,7 @@ public class InicioController {
     }
 
     // Método genérico para mostrar secciones
-    private void mostrarSeccion(AnchorPane mostrar, Button botonActivo, AnchorPane ocultar, Button botonInactivo) {
+    private void mostrarSeccion(AnchorPane mostrar, Button botonActivo, AnchorPane ocultar, Button botonInactivo, Button botonDefecto) {
         mostrar.setVisible(true);
         mostrar.setManaged(true);
         ocultar.setVisible(false);
@@ -78,6 +85,7 @@ public class InicioController {
         // Estilos de botones
         botonActivo.setStyle("-fx-background-color: #6F9E11; -fx-text-fill: white; -fx-font-weight: bold;");
         botonInactivo.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+        botonDefecto.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
     }
 
     // Animación de transición
@@ -111,6 +119,17 @@ public class InicioController {
                 btnAbrir.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
             }
         });
+
+        btnSalir.setOnMouseEntered(e -> {
+            // Ya que no tiene que ver con la visibilidad de un menú, simplemente aplicamos el estilo hover
+            btnSalir.setStyle("-fx-background-color: #96D41B; -fx-text-fill: white;");
+        });
+
+        btnSalir.setOnMouseExited(e -> {
+            // Al salir, volvemos al estilo normal (transparente)
+            btnSalir.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
+        });
+
     }
 
     // Método genérico para abrir ventanas
