@@ -29,13 +29,7 @@ public class Producto {
     private String referenciaProveedor;
 
     // ID del proveedor habitual (puede ser null si no tiene proveedor asignado)
-    private Long proveedorId;
-
-    // ID del tipo de IVA aplicado al producto (ej. 1 = 21%)
-    private int tipoIVAId;
-
-    // Precio de coste del producto (se actualiza según compras)
-    private double precioCoste;
+    private long proveedorId;
 
     // Precio de venta del producto
     private double precioVenta;
@@ -58,22 +52,16 @@ public class Producto {
      * @param descripcion         Descripción general
      * @param referenciaProveedor Código de referencia del proveedor
      * @param proveedorId         ID del proveedor habitual
-     * @param tipoIVAId           ID del tipo de IVA
-     * @param precioCoste         Precio de coste
      * @param precioVenta         Precio de venta
      * @param stock               Stock actual
      */
-    public Producto(long id, long empresaId, String codigo, String descripcion, String referenciaProveedor,
-                    Long proveedorId, int tipoIVAId, double precioCoste,
-                    double precioVenta, double stock) {
+    public Producto(long id, long empresaId, String codigo, String descripcion, String referenciaProveedor, long proveedorId, double precioVenta, double stock) {
         this.id = id;
         this.empresaId = empresaId;
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.referenciaProveedor = referenciaProveedor;
         this.proveedorId = proveedorId;
-        this.tipoIVAId = tipoIVAId;
-        this.precioCoste = precioCoste;
         this.precioVenta = precioVenta;
         this.stock = stock;
     }
@@ -124,24 +112,8 @@ public class Producto {
         return proveedorId;
     }
 
-    public void setProveedorId(Long proveedorId) {
+    public void setProveedorId(long proveedorId) {
         this.proveedorId = proveedorId;
-    }
-
-    public int getTipoIVAId() {
-        return tipoIVAId;
-    }
-
-    public void setTipoIVAId(int tipoIVAId) {
-        this.tipoIVAId = tipoIVAId;
-    }
-
-    public double getPrecioCoste() {
-        return precioCoste;
-    }
-
-    public void setPrecioCoste(double precioCoste) {
-        this.precioCoste = precioCoste;
     }
 
     public double getPrecioVenta() {
