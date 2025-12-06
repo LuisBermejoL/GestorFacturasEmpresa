@@ -101,6 +101,9 @@ public class GestionEmpresaController {
     // Tabla temporal para ver qué estamos añadiendo a la factura antes de guardarla
     @FXML private TableView<LineaFactura> tablaLineasFactura;
     @FXML private TableColumn<LineaFactura, String> colLineaProducto, colLineaCantidad, colLineaPrecio, colLineaTotal;
+    
+    // Botón para generar el pdf de la factura
+    @FXML private Button btnImprimirFactura;
 
     // Lista en memoria para las líneas (Carrito de compra de la factura)
     private ObservableList<LineaFactura> lineasTemporales = FXCollections.observableArrayList();
@@ -116,6 +119,7 @@ public class GestionEmpresaController {
         if(comboFacturaEstado != null) comboFacturaEstado.setItems(FXCollections.observableArrayList("PENDIENTE", "PAGADA", "ANULADA"));
         if(comboClienteDireccion != null) comboClienteDireccion.setItems(FXCollections.observableArrayList("Fiscal", "Envío", "Otro"));
         if(comboProveedorDireccion != null) comboProveedorDireccion.setItems(FXCollections.observableArrayList("Fiscal", "Envío", "Otro"));
+        if (btnImprimirFactura != null) btnImprimirFactura.setOnAction(e -> handleImprimirFactura());
 
         // 2. Evento volver atrás
         if (retroceder != null) retroceder.setOnMouseClicked(event -> volverAListaEmpresas());
@@ -277,6 +281,42 @@ public class GestionEmpresaController {
         else if ("Proveedor".equals(tabName)) eliminarProveedor();
         else if ("Producto".equals(tabName)) eliminarProducto();
         else if ("Facturas".equals(tabName)) eliminarFactura();
+    }
+    
+    @FXML
+    private void handleImprimirFactura() {
+        // 1. Obtener factura seleccionada
+        Factura facturaSel = tablaFacturas.getSelectionModel().getSelectedItem();
+
+        if (facturaSel == null) {
+            mostrarError("Selecciona una factura de la tabla para imprimir.");
+            return;
+        }
+
+        // 2. Verificar que la factura ya esté guardada en BD (tenga ID)
+        if (facturaSel.getId() == 0) {
+            mostrarError("Esta factura aún no se ha guardado en la base de datos.");
+            return;
+        }
+
+        // 3. Abrir selector de archivos para elegir dónde guardar
+        javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+        fileChooser.setTitle("Guardar Factura PDF");
+
+        // Nombre sugerido: Factura_F-2024-001.pdf
+        String nombreArchivo = "Factura_" + facturaSel.getNumero() + ".pdf";
+        nombreArchivo = nombreArchivo.replaceAll("[\\\\/:*?\"<>|]", "_"); // Limpiar caracteres inválidos
+        fileChooser.setInitialFileName(nombreArchivo);
+
+        fileChooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("Archivos PDF", "*.pdf"));
+
+        java.io.File file = fileChooser.showSaveDialog(null);
+
+        if (file != null) {
+            // 4. Llamar al gestor para crear el PDF
+            GestorReportes gestor = new GestorReportes();
+            gestor.generarFacturaPdf(facturaSel.getId(), empresa.getId(), file.getAbsolutePath());
+        }
     }
 
     // ========================================================================

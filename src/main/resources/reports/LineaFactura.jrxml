@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport name="LineaFactura" language="java" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="5a6b7c8d-9e0f-1a2b-3c4d-5e6f7a8b9c0d">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="BDGestorFacturasEmpresa"/>
+	<parameter name="P_FACTURA_ID_SUB" class="java.lang.Long"/>
+	<query language="SQL"><![CDATA[SELECT
+	fp.factura_id,
+    p.codigo AS "Código",
+    p.descripcion AS "Producto",
+    fp.cantidad AS "Cantidad",
+    fp.precio_unitario AS "Precio Unitario",
+    (fp.cantidad * fp.precio_unitario - fp.descuento) AS "Total Línea"
+FROM
+    factura_producto fp
+JOIN
+    producto p ON fp.producto_id = p.id
+WHERE
+    fp.factura_id = $P{P_FACTURA_ID_SUB}]]></query>
+	<field name="factura_id" class="java.lang.Long"/>
+	<field name="Código" class="java.lang.String"/>
+	<field name="Producto" class="java.lang.String"/>
+	<field name="Cantidad" class="java.math.BigDecimal"/>
+	<field name="Precio Unitario" class="java.math.BigDecimal"/>
+	<field name="Total Línea" class="java.math.BigDecimal"/>
+	<columnHeader height="25">
+		<element kind="rectangle" uuid="6b7c8d9e-0f1a-2b3c-4d5e-6f7a8b9c0d1e" x="0" y="0" width="555" height="25" backcolor="#EBEBEB">
+			<pen lineWidth="0.0"/>
+		</element>
+		<element kind="staticText" uuid="7c8d9e0f-1a2b-3c4d-5e6f-7a8b9c0d1e2f" x="5" y="0" width="80" height="25" bold="true" vTextAlign="Middle">
+			<text><![CDATA[CÓDIGO]]></text>
+		</element>
+		<element kind="staticText" uuid="8d9e0f1a-2b3c-4d5e-6f7a-8b9c0d1e2f3a" x="90" y="0" width="230" height="25" bold="true" vTextAlign="Middle">
+			<text><![CDATA[DESCRIPCIÓN]]></text>
+		</element>
+		<element kind="staticText" uuid="9e0f1a2b-3c4d-5e6f-7a8b-9c0d1e2f3a4b" x="320" y="0" width="60" height="25" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[CANT.]]></text>
+		</element>
+		<element kind="staticText" uuid="0f1a2b3c-4d5e-6f7a-8b9c-0d1e2f3a4b5c" x="390" y="0" width="80" height="25" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[PRECIO U.]]></text>
+		</element>
+		<element kind="staticText" uuid="1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d" x="480" y="0" width="70" height="25" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[TOTAL]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<element kind="textField" uuid="2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e" x="5" y="0" width="80" height="20" vTextAlign="Middle">
+				<expression><![CDATA[$F{Código}]]></expression>
+			</element>
+			<element kind="textField" uuid="3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f" x="90" y="0" width="230" height="20" vTextAlign="Middle">
+				<expression><![CDATA[$F{Producto}]]></expression>
+			</element>
+			<element kind="textField" uuid="4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a" x="320" y="0" width="60" height="20" hTextAlign="Right" vTextAlign="Middle">
+				<expression><![CDATA[$F{Cantidad}]]></expression>
+			</element>
+			<element kind="textField" pattern="#,##0.00" uuid="5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b" x="390" y="0" width="80" height="20" hTextAlign="Right" vTextAlign="Middle">
+				<expression><![CDATA[$F{Precio Unitario}]]></expression>
+			</element>
+			<element kind="textField" pattern="#,##0.00" uuid="6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c" x="480" y="0" width="70" height="20" hTextAlign="Right" vTextAlign="Middle">
+				<expression><![CDATA[$F{Total Línea}]]></expression>
+			</element>
+			<element kind="line" uuid="7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d" x="0" y="19" width="555" height="1" forecolor="#DDDDDD"/>
+		</band>
+	</detail>
+</jasperReport>

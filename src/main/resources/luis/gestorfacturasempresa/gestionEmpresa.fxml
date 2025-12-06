@@ -730,7 +730,9 @@
                                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                           </columnResizePolicy>
                                        </TableView>
-                                       <Button fx:id="btnGenerarFactura" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleAñadir" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Generar Factura" />
+                                       
+                                       <Button fx:id="btnImprimirFactura" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleImprimirFactura" prefHeight="25.0" prefWidth="150.0" style="-fx-background-color: #5bc0de; -fx-cursor: hand; -fx-text-fill: white; -fx-font-weight: bold;" text="Generar PDF Factura" />
+                                    
                                     </children>
                                  </VBox>
                               </children>
