@@ -216,29 +216,32 @@ public class GestionEmpresaController {
         colClienteNif.setCellValueFactory(c -> new SimpleStringProperty(safeStr(c.getValue().getNif())));
         colClienteCorreo.setCellValueFactory(c -> new SimpleStringProperty(safeStr(c.getValue().getEmail())));
         colClienteTelefono.setCellValueFactory(c -> new SimpleStringProperty(safeStr(c.getValue().getTelefono())));
-        colClienteDireccionFiscal.setCellValueFactory(c -> new SimpleStringProperty(obtenerDireccionFormateada(c.getValue().getId(), "direccion")));
-        colClienteDireccionEnvio.setCellValueFactory(c -> new SimpleStringProperty(obtenerDireccionFormateada(c.getValue().getId(), "direccion")));
+        
+        // CORRECCIÓN AQUÍ: Usar 'obtenerDireccionFormateada' y especificar el tipo
+        // Asegúrate de que el nombre de la columna coincide con tu @FXML (colClienteFiscal o colClienteDireccionFiscal)
+        colClienteDireccionFiscal.setCellValueFactory(c -> new SimpleStringProperty(obtenerDireccionFormateada(c.getValue().getId(), "Fiscal")));
+        colClienteDireccionEnvio.setCellValueFactory(c -> new SimpleStringProperty(obtenerDireccionFormateada(c.getValue().getId(), "Envio")));
 
-        // --- PROVEEDORES (Lógica idéntica a Clientes) ---
+        // --- PROVEEDORES ---
         colProveedorCodigo.setCellValueFactory(p -> new SimpleStringProperty(String.valueOf(p.getValue().getCodigo())));
         colProveedorNombre.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getNombre())));
         colProveedorNif.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getNif())));
         colProveedorCorreo.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getEmail())));
         colProveedorTelefono.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getTelefono())));
-        colProveedorDireccionFiscal.setCellValueFactory(p -> new SimpleStringProperty(obtenerDireccionFormateada(p.getValue().getId(), "direccion")));
-        colProveedorDireccionEnvio.setCellValueFactory(p -> new SimpleStringProperty(obtenerDireccionFormateada(p.getValue().getId(), "direccion")));
+        
+        // CORRECCIÓN AQUÍ TAMBIÉN
+        colProveedorDireccionFiscal.setCellValueFactory(p -> new SimpleStringProperty(obtenerDireccionFormateada(p.getValue().getId(), "Fiscal")));
+        colProveedorDireccionEnvio.setCellValueFactory(p -> new SimpleStringProperty(obtenerDireccionFormateada(p.getValue().getId(), "Envio")));
 
-        // --- PRODUCTOS ---
+        // --- PRODUCTOS (Igual que antes) ---
         colProductoCodigo.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getCodigo())));
         colProductoDescripcion.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getDescripcion())));
         colProductoProveedor.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getProveedorId())));
-        // Formateamos los números decimales a 2 decimales para que se vean bonitos
         colProductoPrecioVenta.setCellValueFactory(p -> new SimpleStringProperty(formatDouble(p.getValue().getPrecioVenta())));
         colProductoStock.setCellValueFactory(p -> new SimpleStringProperty(formatDouble(p.getValue().getStock())));
 
-        // --- FACTURAS ---
+        // --- FACTURAS (Igual que antes) ---
         colFacturaEntidadId.setCellValueFactory(f -> new SimpleStringProperty(safeStr(f.getValue().getEntidadId())));
-        // Convertimos el char 'V'/'C' a texto "Venta"/"Compra"
         colFacturaTipo.setCellValueFactory(f -> new SimpleStringProperty(f.getValue().getTipo() == 'V' ? "Venta" : "Compra"));
         colFacturaNumero.setCellValueFactory(f -> new SimpleStringProperty(safeStr(f.getValue().getNumero())));
         colFacturaFecha.setCellValueFactory(f -> new SimpleStringProperty(f.getValue().getFechaEmision() != null ? f.getValue().getFechaEmision().toString() : ""));

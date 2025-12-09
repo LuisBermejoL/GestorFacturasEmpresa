@@ -297,25 +297,20 @@
                                                   </AnchorPane>
                                               </children>
                                           </HBox>
-      
-                                          <!-- Tabla cliente a la derecha -->
-                                          <TableView fx:id="tablaClientes" style="-fx-background-color: #6F9E11;">
-                                            <columns>
-                                                <TableColumn fx:id="colClienteCodigo" prefWidth="50.0" text="Cód." />
-                                                <TableColumn fx:id="colClienteNombre" prefWidth="100.0" text="Nombre" />
-                                                <TableColumn fx:id="colClienteNif" prefWidth="80.0" text="NIF" />
-                                                <TableColumn fx:id="colClienteCorreo" prefWidth="100.0" text="Correo" />
-                                                <TableColumn fx:id="colClienteTelefono" prefWidth="80.0" text="Teléfono" />
-                                                <TableColumn fx:id="colClienteDireccion" prefWidth="120.0" text="Dirección" />
-                                                <TableColumn fx:id="colClienteCiudad" prefWidth="80.0" text="Ciudad" />
-                                                <TableColumn fx:id="colClienteProvincia" prefWidth="80.0" text="Provincia" />
-                                                <TableColumn fx:id="colClientePais" prefWidth="80.0" text="País" />
-                                                <TableColumn fx:id="colClienteCp" prefWidth="60.0" text="CP" />
-                                            </columns>
-                                            <columnResizePolicy>
-                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                            </columnResizePolicy>
-                                          </TableView>
+                                 <TableView fx:id="tablaClientes" style="-fx-background-color: #6F9E11;">
+                                    <columns>
+                                       <TableColumn fx:id="colClienteCodigo" prefWidth="50.0" text="Cód." />
+                                       <TableColumn fx:id="colClienteNombre" prefWidth="100.0" text="Nombre" />
+                                       <TableColumn fx:id="colClienteNif" prefWidth="80.0" text="NIF" />
+                                       <TableColumn fx:id="colClienteCorreo" prefWidth="100.0" text="Correo" />
+                                       <TableColumn fx:id="colClienteTelefono" prefWidth="80.0" text="Teléfono" />
+                                       <TableColumn fx:id="colClienteDireccionFiscal" prefWidth="120.0" text="Dirección Fiscal" />
+                                       <TableColumn fx:id="colClienteDireccionEnvio" prefWidth="120.0" text="Dirección Envío" />
+                                    </columns>
+                                    <columnResizePolicy>
+                                       <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                    </columnResizePolicy>
+                                 </TableView>
                               </children>
                               <padding>
                                  <Insets bottom="20.0" top="20.0" />
@@ -600,19 +595,16 @@
                                  </HBox>
                                  <TableView fx:id="tablaProveedores" style="-fx-background-color: #6F9E11;">
                                     <columns>
-                                        <TableColumn fx:id="colProveedorCodigo" prefWidth="50.0" text="Cód." />
-                                        <TableColumn fx:id="colProveedorNombre" prefWidth="100.0" text="Nombre" />
-                                        <TableColumn fx:id="colProveedorNif" prefWidth="80.0" text="NIF" />
-                                        <TableColumn fx:id="colProveedorCorreo" prefWidth="100.0" text="Correo" />
-                                        <TableColumn fx:id="colProveedorTelefono" prefWidth="80.0" text="Teléfono" />
-                                        <TableColumn fx:id="colProveedorDireccion" prefWidth="120.0" text="Dirección" />
-                                        <TableColumn fx:id="colProveedorCiudad" prefWidth="80.0" text="Ciudad" />
-                                        <TableColumn fx:id="colProveedorProvincia" prefWidth="80.0" text="Provincia" />
-                                        <TableColumn fx:id="colProveedorPais" prefWidth="80.0" text="País" />
-                                        <TableColumn fx:id="colProveedorCp" prefWidth="60.0" text="CP" />
+                                       <TableColumn fx:id="colProveedorCodigo" prefWidth="50.0" text="Cód." />
+                                       <TableColumn fx:id="colProveedorNombre" prefWidth="100.0" text="Nombre" />
+                                       <TableColumn fx:id="colProveedorNif" prefWidth="80.0" text="NIF" />
+                                       <TableColumn fx:id="colProveedorCorreo" prefWidth="100.0" text="Correo" />
+                                       <TableColumn fx:id="colProveedorTelefono" prefWidth="80.0" text="Teléfono" />
+                                       <TableColumn fx:id="colProveedorDireccionFiscal" prefWidth="120.0" text="Dirección Fiscal" />
+                                       <TableColumn fx:id="colProveedorDireccionEnvio" prefWidth="120.0" text="Dirección Envío" />
                                     </columns>
                                     <columnResizePolicy>
-                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                     </columnResizePolicy>
                                  </TableView>
                               </children>
