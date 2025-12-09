@@ -124,92 +124,169 @@
                                                               <VBox fx:id="direccionCliente" alignment="CENTER_LEFT" spacing="10.0">
                                                                   <children>
                                                                       <Label style="-fx-font-weight: bold;" text="Dirección" />
-      
-                                                                      <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                                          <children>
-                                                                              <Label prefHeight="17.0" prefWidth="81.0" text="Tipo*" />
-                                                                              <ComboBox fx:id="comboClienteDireccion" prefWidth="150.0" promptText="Selecciona tipo">
-                                                                                  <items>
-                                                                                      <FXCollections fx:factory="observableArrayList">
-                                                                                          <String fx:value="Fiscal" />
-                                                                                          <String fx:value="Envío" />
-                                                                                          <String fx:value="Otro" />
-                                                                                      </FXCollections>
-                                                                                  </items>
-                                                               <tooltip>
-                                                                  <Tooltip text="Tipo de dirección, puede ser domicilio fiscal, dirección de envió u otro." />
-                                                               </tooltip>
-                                                                              </ComboBox>
-                                                                          </children>
-                                                                          <VBox.margin>
-                                                            <Insets left="20.0" />
-                                                         </VBox.margin>
-                                                                      </HBox>
-      
-                                                                      <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                                          <children>
-                                                                              <Label prefHeight="17.0" prefWidth="81.0" text="Dirección*" />
-                                                                              <TextField fx:id="txtClienteDireccion" prefWidth="300.0">
-                                                               <tooltip>
-                                                                  <Tooltip text="Dirección del cliente (obligatorio)." />
-                                                               </tooltip></TextField>
-                                                                          </children>
-                                                                          <VBox.margin>
-                                                            <Insets left="20.0" />
-                                                         </VBox.margin>
-                                                                      </HBox>
-      
-                                                                      <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                                          <children>
-                                                                              <Label prefHeight="17.0" prefWidth="81.0" text="CP*" />
-                                                                              <TextField fx:id="txtClienteCp" prefWidth="100.0">
-                                                               <tooltip>
-                                                                  <Tooltip text="Código Postal del cliente (obligatorio)." />
-                                                               </tooltip></TextField>
-                                                                          </children>
-                                                                          <VBox.margin>
-                                                            <Insets left="20.0" />
-                                                         </VBox.margin>
-                                                                      </HBox>
-      
-                                                                      <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                                          <children>
-                                                                              <Label prefHeight="17.0" prefWidth="80.0" text="Ciudad*" />
-                                                                              <TextField fx:id="txtClienteCiudad" prefWidth="200.0">
-                                                               <tooltip>
-                                                                  <Tooltip text="Ciudad (obligatorio)." />
-                                                               </tooltip></TextField>
-                                                                          </children>
-                                                                          <VBox.margin>
-                                                            <Insets left="20.0" />
-                                                         </VBox.margin>
-                                                                      </HBox>
-      
-                                                                      <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                                          <children>
-                                                                              <Label prefHeight="17.0" prefWidth="80.0" text="Provincia" />
-                                                                              <TextField fx:id="txtClienteProvincia" prefWidth="200.0">
-                                                               <tooltip>
-                                                                  <Tooltip text="Provincia de residencia del cliente." />
-                                                               </tooltip></TextField>
-                                                                          </children>
-                                                                          <VBox.margin>
-                                                            <Insets left="20.0" />
-                                                         </VBox.margin>
-                                                                      </HBox>
-      
-                                                                      <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                                          <children>
-                                                                              <Label prefHeight="17.0" prefWidth="80.0" text="País*" />
-                                                                              <TextField fx:id="txtClientePais" prefWidth="200.0">
-                                                               <tooltip>
-                                                                  <Tooltip text="País de residencia del cliente (obligatorio)." />
-                                                               </tooltip></TextField>
-                                                                          </children>
-                                                                          <VBox.margin>
-                                                            <Insets left="20.0" />
-                                                         </VBox.margin>
-                                                                      </HBox>
+                                                      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                                                        <tabs>
+                                                          <Tab text="Fiscal">
+                                                               <content>
+                                                                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                     <children>
+                                                                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="412.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                           <children>
+                              
+                                                                                                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                                  <children>
+                                                                                                      <Label prefHeight="17.0" prefWidth="81.0" text="Dirección*" />
+                                                                                                      <TextField fx:id="txtClienteDireccionFiscal" prefWidth="240.0">
+                                                                                       <tooltip>
+                                                                                          <Tooltip text="Dirección del cliente (obligatorio)." />
+                                                                                       </tooltip>
+                                                                                    </TextField>
+                                                                                                  </children>
+                                                                                                  <VBox.margin>
+                                                                                    <Insets left="20.0" />
+                                                                                 </VBox.margin>
+                                                                                              </HBox>
+                              
+                                                                                                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                                  <children>
+                                                                                                      <Label prefHeight="17.0" prefWidth="81.0" text="CP*" />
+                                                                                                      <TextField fx:id="txtClienteCpFiscal" prefWidth="100.0">
+                                                                                       <tooltip>
+                                                                                          <Tooltip text="Código Postal del cliente (obligatorio)." />
+                                                                                       </tooltip>
+                                                                                    </TextField>
+                                                                                                  </children>
+                                                                                                  <VBox.margin>
+                                                                                    <Insets left="20.0" />
+                                                                                 </VBox.margin>
+                                                                                              </HBox>
+                              
+                                                                                                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                                  <children>
+                                                                                                      <Label prefHeight="17.0" prefWidth="80.0" text="Ciudad*" />
+                                                                                                      <TextField fx:id="txtClienteCiudadFiscal" prefWidth="200.0">
+                                                                                       <tooltip>
+                                                                                          <Tooltip text="Ciudad (obligatorio)." />
+                                                                                       </tooltip>
+                                                                                    </TextField>
+                                                                                                  </children>
+                                                                                                  <VBox.margin>
+                                                                                    <Insets left="20.0" />
+                                                                                 </VBox.margin>
+                                                                                              </HBox>
+                              
+                                                                                                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                                  <children>
+                                                                                                      <Label prefHeight="17.0" prefWidth="80.0" text="Provincia" />
+                                                                                                      <TextField fx:id="txtClienteProvinciaFiscal" prefWidth="200.0">
+                                                                                       <tooltip>
+                                                                                          <Tooltip text="Provincia de residencia del cliente." />
+                                                                                       </tooltip>
+                                                                                    </TextField>
+                                                                                                  </children>
+                                                                                                  <VBox.margin>
+                                                                                    <Insets left="20.0" />
+                                                                                 </VBox.margin>
+                                                                                              </HBox>
+                              
+                                                                                                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                                  <children>
+                                                                                                      <Label prefHeight="17.0" prefWidth="80.0" text="País*" />
+                                                                                                      <TextField fx:id="txtClientePaisFiscal" prefWidth="200.0">
+                                                                                       <tooltip>
+                                                                                          <Tooltip text="País de residencia del cliente (obligatorio)." />
+                                                                                       </tooltip>
+                                                                                    </TextField>
+                                                                                                  </children>
+                                                                                                  <VBox.margin>
+                                                                                    <Insets left="20.0" />
+                                                                                 </VBox.margin>
+                                                                                              </HBox>
+                                                                           </children>
+                                                                        </VBox>
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                               </content>
+                                                            </Tab>
+                                                          <Tab text="Envío">
+                                                               <content>
+                                                                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                     <children>
+                                                                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="412.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                           <children>
+                                                                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                 <children>
+                                                                                    <Label prefHeight="17.0" prefWidth="81.0" text="Dirección*" />
+                                                                                    <TextField fx:id="txtClienteDireccionEnvio" prefWidth="240.0">
+                                                                                       <tooltip>
+                                                                                          <Tooltip text="Dirección del cliente (obligatorio)." />
+                                                                                       </tooltip>
+                                                                                    </TextField>
+                                                                                 </children>
+                                                                                 <VBox.margin>
+                                                                                    <Insets left="20.0" />
+                                                                                 </VBox.margin>
+                                                                              </HBox>
+                                                                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                 <children>
+                                                                                    <Label prefHeight="17.0" prefWidth="81.0" text="CP*" />
+                                                                                    <TextField fx:id="txtClienteCpEnvio" prefWidth="100.0">
+                                                                                       <tooltip>
+                                                                                          <Tooltip text="Código Postal del cliente (obligatorio)." />
+                                                                                       </tooltip>
+                                                                                    </TextField>
+                                                                                 </children>
+                                                                                 <VBox.margin>
+                                                                                    <Insets left="20.0" />
+                                                                                 </VBox.margin>
+                                                                              </HBox>
+                                                                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                 <children>
+                                                                                    <Label prefHeight="17.0" prefWidth="80.0" text="Ciudad*" />
+                                                                                    <TextField fx:id="txtClienteCiudadEnvio" prefWidth="200.0">
+                                                                                       <tooltip>
+                                                                                          <Tooltip text="Ciudad (obligatorio)." />
+                                                                                       </tooltip>
+                                                                                    </TextField>
+                                                                                 </children>
+                                                                                 <VBox.margin>
+                                                                                    <Insets left="20.0" />
+                                                                                 </VBox.margin>
+                                                                              </HBox>
+                                                                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                 <children>
+                                                                                    <Label prefHeight="17.0" prefWidth="80.0" text="Provincia" />
+                                                                                    <TextField fx:id="txtClienteProvinciaEnvio" prefWidth="200.0">
+                                                                                       <tooltip>
+                                                                                          <Tooltip text="Provincia de residencia del cliente." />
+                                                                                       </tooltip>
+                                                                                    </TextField>
+                                                                                 </children>
+                                                                                 <VBox.margin>
+                                                                                    <Insets left="20.0" />
+                                                                                 </VBox.margin>
+                                                                              </HBox>
+                                                                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                 <children>
+                                                                                    <Label prefHeight="17.0" prefWidth="80.0" text="País*" />
+                                                                                    <TextField fx:id="txtClientePaisEnvio" prefWidth="200.0">
+                                                                                       <tooltip>
+                                                                                          <Tooltip text="País de residencia del cliente (obligatorio)." />
+                                                                                       </tooltip>
+                                                                                    </TextField>
+                                                                                 </children>
+                                                                                 <VBox.margin>
+                                                                                    <Insets left="20.0" />
+                                                                                 </VBox.margin>
+                                                                              </HBox>
+                                                                           </children>
+                                                                        </VBox>
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                               </content>
+                                                            </Tab>
+                                                        </tabs>
+                                                      </TabPane>
                                                                   </children>
                                                               </VBox>
                                                           </VBox>
@@ -317,68 +394,199 @@
                                                    <VBox fx:id="direccionCliente1" alignment="CENTER_LEFT" spacing="10.0">
                                                       <children>
                                                          <Label style="-fx-font-weight: bold;" text="Dirección" />
-                                                         <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                            <children>
-                                                               <Label prefHeight="17.0" prefWidth="81.0" text="Tipo" />
-                                                               <ComboBox fx:id="comboProveedorDireccion" prefWidth="150.0" promptText="Selecciona tipo">
-                                                                  <items>
-                                                                     <FXCollections fx:factory="observableArrayList">
-                                                                        <String fx:value="Fiscal" />
-                                                                        <String fx:value="Envío" />
-                                                                        <String fx:value="Otro" />
-                                                                     </FXCollections>
-                                                                  </items>
-                                                               </ComboBox>
-                                                            </children>
-                                                            <VBox.margin>
-                                                               <Insets left="20.0" />
-                                                            </VBox.margin>
-                                                         </HBox>
-                                                         <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                            <children>
-                                                               <Label prefHeight="17.0" prefWidth="81.0" text="Dirección" />
-                                                               <TextField fx:id="txtProveedorDireccion" prefWidth="300.0" />
-                                                            </children>
-                                                            <VBox.margin>
-                                                               <Insets left="20.0" />
-                                                            </VBox.margin>
-                                                         </HBox>
-                                                         <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                            <children>
-                                                               <Label prefHeight="17.0" prefWidth="81.0" text="CP" />
-                                                               <TextField fx:id="txtProveedorCp" prefWidth="100.0" />
-                                                            </children>
-                                                            <VBox.margin>
-                                                               <Insets left="20.0" />
-                                                            </VBox.margin>
-                                                         </HBox>
-                                                         <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                            <children>
-                                                               <Label prefHeight="17.0" prefWidth="80.0" text="Ciudad" />
-                                                               <TextField fx:id="txtProveedorCiudad" prefWidth="200.0" />
-                                                            </children>
-                                                            <VBox.margin>
-                                                               <Insets left="20.0" />
-                                                            </VBox.margin>
-                                                         </HBox>
-                                                         <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                            <children>
-                                                               <Label prefHeight="17.0" prefWidth="80.0" text="Provincia" />
-                                                               <TextField fx:id="txtProveedorProvincia" prefWidth="200.0" />
-                                                            </children>
-                                                            <VBox.margin>
-                                                               <Insets left="20.0" />
-                                                            </VBox.margin>
-                                                         </HBox>
-                                                         <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                            <children>
-                                                               <Label prefHeight="17.0" prefWidth="80.0" text="País" />
-                                                               <TextField fx:id="txtProveedorPais" prefWidth="200.0" />
-                                                            </children>
-                                                            <VBox.margin>
-                                                               <Insets left="20.0" />
-                                                            </VBox.margin>
-                                                         </HBox>
+                                                         <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                                                            <tabs>
+                                                               <Tab text="Fiscal">
+                                                                  <content>
+                                                                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                        <children>
+                                                                           <VBox alignment="CENTER" prefHeight="200.0" prefWidth="412.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                              <children>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="81.0" text="Dirección" />
+                                                                                       <TextField fx:id="txtProveedorDireccionFiscal" prefWidth="240.0" />
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="81.0" text="CP" />
+                                                                                       <TextField fx:id="txtProveedorCpFiscal" prefWidth="100.0" />
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="80.0" text="Ciudad" />
+                                                                                       <TextField fx:id="txtProveedorCiudadFiscal" prefWidth="200.0" />
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="80.0" text="Provincia" />
+                                                                                       <TextField fx:id="txtProveedorProvinciaFiscal" prefWidth="200.0" />
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="80.0" text="País" />
+                                                                                       <TextField fx:id="txtProveedorPaisFiscal" prefWidth="200.0" />
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                              </children>
+                                                                           </VBox>
+                                                                        </children>
+                                                                     </AnchorPane>
+                                                                  </content>
+                                                               </Tab>
+                                                               <Tab text="Envío">
+                                                                  <content>
+                                                                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                        <children>
+                                                                           <VBox alignment="CENTER" prefHeight="200.0" prefWidth="412.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                              <children>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="81.0" text="Dirección*" />
+                                                                                       <TextField fx:id="txtClienteDireccionEnvio1" prefWidth="240.0">
+                                                                                          <tooltip>
+                                                                                             <Tooltip text="Dirección del cliente (obligatorio)." />
+                                                                                          </tooltip>
+                                                                                       </TextField>
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="81.0" text="CP*" />
+                                                                                       <TextField fx:id="txtClienteCpEnvio1" prefWidth="100.0">
+                                                                                          <tooltip>
+                                                                                             <Tooltip text="Código Postal del cliente (obligatorio)." />
+                                                                                          </tooltip>
+                                                                                       </TextField>
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="80.0" text="Ciudad*" />
+                                                                                       <TextField fx:id="txtClienteCiudadEnvio1" prefWidth="200.0">
+                                                                                          <tooltip>
+                                                                                             <Tooltip text="Ciudad (obligatorio)." />
+                                                                                          </tooltip>
+                                                                                       </TextField>
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="80.0" text="Provincia" />
+                                                                                       <TextField fx:id="txtClienteProvinciaEnvio1" prefWidth="200.0">
+                                                                                          <tooltip>
+                                                                                             <Tooltip text="Provincia de residencia del cliente." />
+                                                                                          </tooltip>
+                                                                                       </TextField>
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="80.0" text="País*" />
+                                                                                       <TextField fx:id="txtClientePaisEnvio1" prefWidth="200.0">
+                                                                                          <tooltip>
+                                                                                             <Tooltip text="País de residencia del cliente (obligatorio)." />
+                                                                                          </tooltip>
+                                                                                       </TextField>
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                              </children>
+                                                                           </VBox>
+                                                                        </children>
+                                                                     </AnchorPane>
+                                                                  </content>
+                                                                  <content>
+                                                                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                        <children>
+                                                                           <VBox alignment="CENTER" prefHeight="200.0" prefWidth="412.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                              <children>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="81.0" text="Dirección" />
+                                                                                       <TextField fx:id="txtProveedorDireccionEnvio" prefWidth="240.0" />
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="81.0" text="CP" />
+                                                                                       <TextField fx:id="txtProveedorCpEnvio" prefWidth="100.0" />
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="80.0" text="Ciudad" />
+                                                                                       <TextField fx:id="txtProveedorCiudadEnvio" prefWidth="200.0" />
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="80.0" text="Provincia" />
+                                                                                       <TextField fx:id="txtProveedorProvinciaEnvio" prefWidth="200.0" />
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                    <children>
+                                                                                       <Label prefHeight="17.0" prefWidth="80.0" text="País" />
+                                                                                       <TextField fx:id="txtProveedorPaisEnvio" prefWidth="200.0" />
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                       <Insets left="20.0" />
+                                                                                    </VBox.margin>
+                                                                                 </HBox>
+                                                                              </children>
+                                                                           </VBox>
+                                                                        </children>
+                                                                     </AnchorPane>
+                                                                  </content>
+                                                               </Tab>
+                                                            </tabs>
+                                                         </TabPane>
                                                       </children>
                                                    </VBox>
                                                 </children>
@@ -461,15 +669,6 @@
                                                    </HBox>
                                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                       <children>
-                                                         <Label prefWidth="80.0" text="Referencia" />
-                                                         <TextField fx:id="txtProductoReferencia" prefWidth="150.0" />
-                                                      </children>
-                                                      <VBox.margin>
-                                                         <Insets left="20.0" />
-                                                      </VBox.margin>
-                                                   </HBox>
-                                                   <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                      <children>
                                                          <Label prefWidth="80.0" text="Proveedor" />
                                                          <ComboBox fx:id="comboProductoProveedor" prefWidth="300.0" promptText="Seleccione un proveedor" />
                                                       </children>
@@ -508,7 +707,6 @@
                                     <columns>
                                         <TableColumn fx:id="colProductoCodigo" prefWidth="75.0" text="Código" />
                                         <TableColumn fx:id="colProductoDescripcion" prefWidth="150.0" text="Descripción" />
-                                        <TableColumn fx:id="colProductoReferencia" prefWidth="75.0" text="Referencia Prov" />
                                         <TableColumn fx:id="colProductoProveedor" prefWidth="50.0" text="ID Prov" />
                                         <TableColumn fx:id="colProductoPrecioVenta" prefWidth="75.0" text="Precio Venta" />
                                         <TableColumn fx:id="colProductoStock" prefWidth="50.0" text="Stock" />
@@ -553,15 +751,6 @@
                                                 <children>
                                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                       <children>
-                                                         <Label prefWidth="120.0" text="Cliente/Prov." />
-                                                         <ComboBox fx:id="comboFacturaEntidad" prefWidth="250.0" promptText="Seleccione entidad..." />
-                                                      </children>
-                                                      <VBox.margin>
-                                                         <Insets left="20.0" />
-                                                      </VBox.margin>
-                                                   </HBox>
-                                                   <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                      <children>
                                                          <Label prefWidth="120.0" text="Tipo" />
                                                          <ComboBox fx:id="comboFacturaTipo" prefWidth="150.0" promptText="Selecciona tipo">
                                                             <items>
@@ -571,6 +760,15 @@
                                                                </FXCollections>
                                                             </items>
                                                          </ComboBox>
+                                                      </children>
+                                                      <VBox.margin>
+                                                         <Insets left="20.0" />
+                                                      </VBox.margin>
+                                                   </HBox>
+                                                   <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                      <children>
+                                                         <Label prefWidth="120.0" text="Cliente/Prov." />
+                                                         <ComboBox fx:id="comboFacturaEntidad" prefWidth="250.0" promptText="Seleccione entidad..." />
                                                       </children>
                                                       <VBox.margin>
                                                          <Insets left="20.0" />
