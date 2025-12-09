@@ -99,9 +99,9 @@ public class GestionEmpresaController {
 
     // --- PESTAÑA PRODUCTOS ---
     @FXML private TableView<Producto> tablaProductos;
-    @FXML private TableColumn<Producto, String> colProductoCodigo, colProductoDescripcion, colProductoReferencia, colProductoProveedor, colProductoPrecioVenta, colProductoStock;
+    @FXML private TableColumn<Producto, String> colProductoCodigo, colProductoDescripcion, colProductoProveedor, colProductoPrecioVenta, colProductoStock;
 
-    @FXML private TextField txtProductoCodigo, txtProductoDescripcion, txtProductoReferencia;
+    @FXML private TextField txtProductoCodigo, txtProductoDescripcion;
     @FXML private ComboBox<Proveedor> comboProductoProveedor; // Selector desplegable de proveedor
     @FXML private TextField txtProductoPrecioVenta, txtProductoStock;
 
@@ -147,8 +147,8 @@ public class GestionEmpresaController {
         // 1. Rellenamos los ComboBox con opciones estáticas
         if(comboFacturaTipo != null) comboFacturaTipo.setItems(FXCollections.observableArrayList("Venta", "Compra"));
         if(comboFacturaEstado != null) comboFacturaEstado.setItems(FXCollections.observableArrayList("PENDIENTE", "PAGADA", "ANULADA"));
-        if(comboClienteDireccion != null) comboClienteDireccion.setItems(FXCollections.observableArrayList("Fiscal", "Envío", "Otro"));
-        if(comboProveedorDireccion != null) comboProveedorDireccion.setItems(FXCollections.observableArrayList("Fiscal", "Envío", "Otro"));
+        if(comboClienteDireccion != null) comboClienteDireccion.setItems(FXCollections.observableArrayList("Envío"));
+        if(comboProveedorDireccion != null) comboProveedorDireccion.setItems(FXCollections.observableArrayList("Fiscal"));
         
         // Asignamos la acción al botón de imprimir PDF
         if (btnImprimirFactura != null) btnImprimirFactura.setOnAction(e -> handleImprimirFactura());
@@ -235,7 +235,6 @@ public class GestionEmpresaController {
         // --- PRODUCTOS ---
         colProductoCodigo.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getCodigo())));
         colProductoDescripcion.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getDescripcion())));
-        colProductoReferencia.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getReferenciaProveedor())));
         colProductoProveedor.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getProveedorId())));
         // Formateamos los números decimales a 2 decimales para que se vean bonitos
         colProductoPrecioVenta.setCellValueFactory(p -> new SimpleStringProperty(formatDouble(p.getValue().getPrecioVenta())));
@@ -623,7 +622,6 @@ public class GestionEmpresaController {
             p.setEmpresaId(empresa.getId());
             p.setCodigo(txtProductoCodigo.getText().trim());
             p.setDescripcion(txtProductoDescripcion.getText().trim());
-            p.setReferenciaProveedor(safe(txtProductoReferencia));
 
             // Asignamos el proveedor
             p.setProveedorId(comboProductoProveedor.getValue().getId());
@@ -658,7 +656,6 @@ public class GestionEmpresaController {
 
         // Asignar valores
         sel.setDescripcion(safe(txtProductoDescripcion));
-        sel.setReferenciaProveedor(safe(txtProductoReferencia));
         sel.setProveedorId(comboProductoProveedor.getValue().getId());
         sel.setPrecioVenta(precio);
         
@@ -874,7 +871,6 @@ public class GestionEmpresaController {
     private void cargarDatosProducto(Producto p) {
         txtProductoCodigo.setText(p.getCodigo());
         txtProductoDescripcion.setText(p.getDescripcion());
-        txtProductoReferencia.setText(p.getReferenciaProveedor());
         txtProductoPrecioVenta.setText(formatDouble(p.getPrecioVenta()).replace(",", "."));
         txtProductoStock.setText(formatDouble(p.getStock()).replace(",", "."));
 
@@ -1003,7 +999,6 @@ public class GestionEmpresaController {
     private void limpiarProducto() {
         txtProductoCodigo.clear(); 
         txtProductoDescripcion.clear(); 
-        txtProductoReferencia.clear();
         comboProductoProveedor.getSelectionModel().clearSelection();
         txtProductoPrecioVenta.clear(); 
         txtProductoStock.clear();

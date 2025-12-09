@@ -316,7 +316,7 @@ public class NuevaEmpresaController {
     }
 
     private boolean validarEmail(String email) {
-        return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+        return email.matches("^(?:[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}|\"[^\"]*\"@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$");
     }
 
     private boolean validarWeb(String web) {
