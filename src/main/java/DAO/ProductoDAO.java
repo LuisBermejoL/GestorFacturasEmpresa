@@ -15,7 +15,7 @@ public class ProductoDAO {
 
     // === CREAR ===
     public void añadir(Producto producto, long empresaId) {
-        String sql = "INSERT INTO producto (empresa_id, codigo, descripcion, referencia_proveedor, proveedor_id, precio_venta, stock) " +
+        String sql = "INSERT INTO producto (empresa_id, codigo, descripcion, proveedor_id, precio_venta, stock) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionBD.get();
@@ -24,16 +24,15 @@ public class ProductoDAO {
             stmt.setLong(1, empresaId);
             stmt.setString(2, producto.getCodigo());
             stmt.setString(3, producto.getDescripcion());
-            stmt.setString(4, producto.getReferenciaProveedor());
 
             if (producto.getProveedorId() != null) {
-                stmt.setLong(5, producto.getProveedorId());
+                stmt.setLong(4, producto.getProveedorId());
             } else {
-                stmt.setNull(5, Types.BIGINT);
+                stmt.setNull(4, Types.BIGINT);
             }
 
-            stmt.setDouble(6, producto.getPrecioVenta());
-            stmt.setDouble(7, producto.getStock());
+            stmt.setDouble(5, producto.getPrecioVenta());
+            stmt.setDouble(6, producto.getStock());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -60,7 +59,6 @@ public class ProductoDAO {
                 
                 p.setCodigo(rs.getString("codigo"));
                 p.setDescripcion(rs.getString("descripcion"));
-                p.setReferenciaProveedor(rs.getString("referencia_proveedor"));
                 p.setProveedorId(rs.getObject("proveedor_id", Long.class));
                 
                 p.setPrecioVenta(rs.getDouble("precio_venta"));
@@ -93,7 +91,6 @@ public class ProductoDAO {
                 p.setEmpresaId(rs.getLong("empresa_id"));
                 p.setCodigo(rs.getString("codigo"));
                 p.setDescripcion(rs.getString("descripcion"));
-                p.setReferenciaProveedor(rs.getString("referencia_proveedor"));
                 p.setProveedorId(rs.getObject("proveedor_id", Long.class));
                 p.setPrecioVenta(rs.getDouble("precio_venta"));
                 p.setStock(rs.getDouble("stock"));
@@ -114,20 +111,19 @@ public class ProductoDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, producto.getDescripcion());
-            stmt.setString(2, producto.getReferenciaProveedor());
 
             if (producto.getProveedorId() != null) {
-                stmt.setLong(3, producto.getProveedorId());
+                stmt.setLong(2, producto.getProveedorId());
             } else {
-                stmt.setNull(3, Types.BIGINT);
+                stmt.setNull(2, Types.BIGINT);
             }
 
-            stmt.setDouble(4, producto.getPrecioVenta());
-            stmt.setDouble(5, producto.getStock());
+            stmt.setDouble(3, producto.getPrecioVenta());
+            stmt.setDouble(4, producto.getStock());
             
             // WHERE
-            stmt.setString(6, producto.getCodigo());
-            stmt.setLong(7, producto.getEmpresaId());
+            stmt.setString(5, producto.getCodigo());
+            stmt.setLong(6, producto.getEmpresaId());
 
             stmt.executeUpdate();
         } catch (SQLException e) {

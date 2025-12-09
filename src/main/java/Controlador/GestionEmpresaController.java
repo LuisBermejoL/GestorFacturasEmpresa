@@ -84,18 +84,21 @@ public class GestionEmpresaController {
     
     // Campos de formulario para editar/crear clientes
     @FXML private TextField txtClienteNombre, txtClienteNif, txtClienteCorreo, txtClienteTelefono;
-    @FXML private ComboBox<String> comboClienteDireccion; // Tipo de dirección (Fiscal, Envío...)
-    @FXML private TextField txtClienteDireccion, txtClienteCp, txtClienteCiudad, txtClienteProvincia, txtClientePais;
+    
+    // NUEVOS CAMPOS DE DIRECCIÓN (FISCAL Y ENVÍO)
+    @FXML private TextField txtClienteDireccionFiscal, txtClienteCpFiscal, txtClienteCiudadFiscal, txtClienteProvinciaFiscal, txtClientePaisFiscal;
+    @FXML private TextField txtClienteDireccionEnvio, txtClienteCpEnvio, txtClienteCiudadEnvio, txtClienteProvinciaEnvio, txtClientePaisEnvio;
 
     // --- PESTAÑA PROVEEDORES ---
-    // (Estructura idéntica a clientes)
     @FXML private TableView<Proveedor> tablaProveedores;
     @FXML private TableColumn<Proveedor, String> colProveedorCodigo, colProveedorNombre, colProveedorNif, colProveedorCorreo, colProveedorTelefono;
     @FXML private TableColumn<Proveedor, String> colProveedorDireccion, colProveedorCiudad, colProveedorProvincia, colProveedorPais, colProveedorCp;
 
     @FXML private TextField txtProveedorNombre, txtProveedorNif, txtProveedorCorreo, txtProveedorTelefono;
-    @FXML private ComboBox<String> comboProveedorDireccion;
-    @FXML private TextField txtProveedorDireccion, txtProveedorCp, txtProveedorCiudad, txtProveedorProvincia, txtProveedorPais;
+    
+    // NUEVOS CAMPOS DE DIRECCIÓN (FISCAL Y ENVÍO)
+    @FXML private TextField txtProveedorDireccionFiscal, txtProveedorCpFiscal, txtProveedorCiudadFiscal, txtProveedorProvinciaFiscal, txtProveedorPaisFiscal;
+    @FXML private TextField txtProveedorDireccionEnvio, txtProveedorCpEnvio, txtProveedorCiudadEnvio, txtProveedorProvinciaEnvio, txtProveedorPaisEnvio;
 
     // --- PESTAÑA PRODUCTOS ---
     @FXML private TableView<Producto> tablaProductos;
@@ -124,8 +127,9 @@ public class GestionEmpresaController {
     @FXML private TableView<LineaFactura> tablaLineasFactura;
     @FXML private TableColumn<LineaFactura, String> colLineaProducto, colLineaCantidad, colLineaPrecio, colLineaTotal;
     
-    // Botón específico para imprimir (generar PDF) la factura seleccionada
+    // Botones específicos
     @FXML private Button btnImprimirFactura;
+    @FXML private Button btnLimpiar;
 
     /**
      * Lista Observable para las líneas de factura.
@@ -144,46 +148,45 @@ public class GestionEmpresaController {
      */
     @FXML
     private void initialize() {
-        // 1. Rellenamos los ComboBox con opciones estáticas
+        // 1. Configuración de elementos estáticos (Listas fijas)
         if(comboFacturaTipo != null) comboFacturaTipo.setItems(FXCollections.observableArrayList("Venta", "Compra"));
         if(comboFacturaEstado != null) comboFacturaEstado.setItems(FXCollections.observableArrayList("PENDIENTE", "PAGADA", "ANULADA"));
-        if(comboClienteDireccion != null) comboClienteDireccion.setItems(FXCollections.observableArrayList("Fiscal", "Envío", "Otro"));
-        if(comboProveedorDireccion != null) comboProveedorDireccion.setItems(FXCollections.observableArrayList("Fiscal", "Envío", "Otro"));
         
-        // Asignamos la acción al botón de imprimir PDF
+        // NOTA: Se han eliminado los combos de dirección porque ahora son campos fijos (Fiscal/Envío)
+
+        // Asignamos la acción a los botones especiales
         if (btnImprimirFactura != null) btnImprimirFactura.setOnAction(e -> handleImprimirFactura());
+        if (btnLimpiar != null) btnLimpiar.setOnAction(e -> handleLimpiar());
 
         // 2. Configurar botón de volver atrás
         if (retroceder != null) retroceder.setOnMouseClicked(event -> volverAListaEmpresas());
 
-        // 3. Configurar las columnas de todas las tablas (qué dato va en cada columna)
+        // 3. Configurar Tablas (Binding)
         configurarTablas();
 
-        // 4. Configurar cómo se ven los objetos (Proveedor, Entidad) dentro de los ComboBox (para ver nombres y no códigos raros)
+        // 4. Configurar Visualización de Combos
         configurarConvertidoresCombos();
 
         // 5. Configurar la tabla pequeña de líneas de factura
         configurarTablaLineas();
 
-        // 6. Listener Dinámico: Si el usuario cambia el tipo de factura (Venta <-> Compra),
-        // recargamos la lista de entidades (Clientes <-> Proveedores) automáticamente.
+        // 6. Listener Dinámico para Tipo de Factura
         if (comboFacturaTipo != null) {
             comboFacturaTipo.valueProperty().addListener((obs, oldVal, newVal) -> {
                 if (newVal != null) cargarEntidadesEnFactura(newVal);
             });
         }
 
-        // 7. LISTENERS DE SELECCIÓN DE TABLAS (AUTO-RELLENADO)
-        // Cuando el usuario hace clic en una fila de cualquier tabla, copiamos los datos a los campos de texto
-        // para que pueda editarlos fácilmente.
+        // 7. LISTENERS DE SELECCIÓN (AUTO-RELLENADO)
         if(tablaClientes != null) tablaClientes.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> { if(n!=null) cargarDatosCliente(n); });
         if(tablaProveedores != null) tablaProveedores.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> { if(n!=null) cargarDatosProveedor(n); });
         if(tablaProductos != null) tablaProductos.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> { if(n!=null) cargarDatosProducto(n); });
         if(tablaFacturas != null) tablaFacturas.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> { if(n!=null) cargarDatosFactura(n); });
 
-        // 8. Marcar como inicializado
+        // 8. Finalizar carga
         inicializado = true;
-        // Pre-selección para evitar que el combo de tipo de factura aparezca vacío
+        
+        // Pre-selección inicial
         if (comboFacturaTipo != null) comboFacturaTipo.getSelectionModel().select("Venta");
     }
 
@@ -235,7 +238,6 @@ public class GestionEmpresaController {
         // --- PRODUCTOS ---
         colProductoCodigo.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getCodigo())));
         colProductoDescripcion.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getDescripcion())));
-        colProductoReferencia.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getReferenciaProveedor())));
         colProductoProveedor.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getProveedorId())));
         // Formateamos los números decimales a 2 decimales para que se vean bonitos
         colProductoPrecioVenta.setCellValueFactory(p -> new SimpleStringProperty(formatDouble(p.getValue().getPrecioVenta())));
@@ -390,6 +392,34 @@ public class GestionEmpresaController {
         else if ("Facturas".equals(tabName)) eliminarFactura();
     }
     
+    @FXML
+    private void handleLimpiar() {
+        // Detecta qué pestaña está activa
+        String tabName = MenuCliente.getSelectionModel().getSelectedItem().getText();
+
+        if ("Cliente".equals(tabName)) {
+            limpiarCliente();
+            tablaClientes.getSelectionModel().clearSelection(); // Deseleccionar tabla
+        } 
+        else if ("Proveedor".equals(tabName)) {
+            limpiarProveedor();
+            tablaProveedores.getSelectionModel().clearSelection();
+        } 
+        else if ("Producto".equals(tabName)) {
+            limpiarProducto();
+            tablaProductos.getSelectionModel().clearSelection();
+        } 
+        else if ("Facturas".equals(tabName)) {
+            limpiarFactura();
+            tablaFacturas.getSelectionModel().clearSelection();
+            // Resetear cosas específicas de factura
+            txtFacturaNumero.clear();
+            txtFacturaFecha.clear();
+        }
+        
+        mostrarInfo("Formulario limpiado.");
+    }
+    
     /**
      * Maneja la generación del PDF de la factura seleccionada usando JasperReports.
      */
@@ -454,21 +484,24 @@ public class GestionEmpresaController {
         if (existeEntidadConTelefono(empresa.getId(), telefono)) { mostrarError("Ya existe un cliente con ese Teléfono."); return; }
 
         try {
-            // Creación del objeto Cliente
             Cliente c = new Cliente();
             c.setNombre(txtClienteNombre.getText().trim());
-            c.setNif(nif);
+            c.setNif(txtClienteNif.getText().trim());
             c.setEmail(txtClienteCorreo.getText().trim());
-            c.setTelefono(telefono);
-            c.setCodigo(0); // El código interno se genera o gestiona en BD
+            c.setTelefono(txtClienteTelefono.getText().trim());
+            c.setCodigo(0);
 
-            // Guardado en BD
             long entidadId = clienteController.añadir(c, empresa.getId());
             c.setId(entidadId);
 
-            // Si se rellenó dirección, la guardamos en la tabla 'direccion'
             if (entidadId > 0) {
-                añadirDireccionSiRellenada(entidadId, comboClienteDireccion, txtClienteDireccion, txtClienteCp, txtClienteCiudad, txtClienteProvincia, txtClientePais);
+                // GUARDAR FISCAL
+                guardarOActualizarDireccion(entidadId, "Fiscal", 
+                    txtClienteDireccionFiscal, txtClienteCpFiscal, txtClienteCiudadFiscal, txtClienteProvinciaFiscal, txtClientePaisFiscal);
+                
+                // GUARDAR ENVÍO
+                guardarOActualizarDireccion(entidadId, "Envio", 
+                    txtClienteDireccionEnvio, txtClienteCpEnvio, txtClienteCiudadEnvio, txtClienteProvinciaEnvio, txtClientePaisEnvio);
             }
             refrescarClientes();
             limpiarCliente();
@@ -498,8 +531,15 @@ public class GestionEmpresaController {
 
         try {
             clienteController.modificar(sel);
-            // Actualización inteligente de dirección (crea si no existe, actualiza si existe)
-            modificarDireccionSiExiste(sel.getId(), comboClienteDireccion, txtClienteDireccion, txtClienteCp, txtClienteCiudad, txtClienteProvincia, txtClientePais);
+            
+            // ACTUALIZAR FISCAL
+            guardarOActualizarDireccion(sel.getId(), "Fiscal", 
+                txtClienteDireccionFiscal, txtClienteCpFiscal, txtClienteCiudadFiscal, txtClienteProvinciaFiscal, txtClientePaisFiscal);
+            
+            // ACTUALIZAR ENVÍO
+            guardarOActualizarDireccion(sel.getId(), "Envio", 
+                txtClienteDireccionEnvio, txtClienteCpEnvio, txtClienteCiudadEnvio, txtClienteProvinciaEnvio, txtClientePaisEnvio);
+
             refrescarClientes();
             limpiarCliente();
             mostrarInfo("Cliente modificado.");
@@ -547,7 +587,13 @@ public class GestionEmpresaController {
             p.setId(entidadId);
 
             if (entidadId > 0) {
-                añadirDireccionSiRellenada(entidadId, comboProveedorDireccion, txtProveedorDireccion, txtProveedorCp, txtProveedorCiudad, txtProveedorProvincia, txtProveedorPais);
+                // GUARDAR FISCAL
+                guardarOActualizarDireccion(entidadId, "Fiscal", 
+                    txtProveedorDireccionFiscal, txtProveedorCpFiscal, txtProveedorCiudadFiscal, txtProveedorProvinciaFiscal, txtProveedorPaisFiscal);
+                
+                // GUARDAR ENVÍO
+                guardarOActualizarDireccion(entidadId, "Envio", 
+                    txtProveedorDireccionEnvio, txtProveedorCpEnvio, txtProveedorCiudadEnvio, txtProveedorProvinciaEnvio, txtProveedorPaisEnvio);
             }
             refrescarProveedores();
             limpiarProveedor();
@@ -556,31 +602,54 @@ public class GestionEmpresaController {
     }
 
     private void modificarProveedor() {
+        // 1. Obtener proveedor seleccionado
         Proveedor sel = tablaProveedores.getSelectionModel().getSelectedItem();
-        if (sel == null) { mostrarError("Selecciona un proveedor."); return; }
+        if (sel == null) { mostrarError("Selecciona un proveedor de la tabla."); return; }
 
+        // 2. Validaciones de campos
         if (!campoEsValido(txtProveedorNombre, "Nombre")) return;
+        
         String nif = txtProveedorNif.getText().trim().toUpperCase();
         String telefono = txtProveedorTelefono.getText().trim();
 
-        if (!validarNIF(nif)) { mostrarError("NIF incorrecto."); return; }
-        if (!validarTelefono(telefono)) { mostrarError("Teléfono incorrecto."); return; }
+        if (!validarNIF(nif)) { mostrarError("El NIF debe tener 7 números y 1 letra."); return; }
+        if (!validarTelefono(telefono)) { mostrarError("El teléfono debe tener 9 dígitos."); return; }
+        if (!validarEmail(txtProveedorCorreo.getText().trim())) { mostrarError("Email incorrecto."); return; }
 
-        if (existeNifDuplicado(empresa.getId(), nif, sel.getId())) { mostrarError("NIF duplicado."); return; }
-        if (existeTelefonoDuplicado(empresa.getId(), telefono, sel.getId())) { mostrarError("Teléfono duplicado."); return; }
+        // 3. Validar duplicados (EXCLUYENDO al propio proveedor que editamos)
+        if (existeNifDuplicado(empresa.getId(), nif, sel.getId())) { 
+            mostrarError("Ya existe otro proveedor o cliente con ese NIF."); 
+            return; 
+        }
+        if (existeTelefonoDuplicado(empresa.getId(), telefono, sel.getId())) { 
+            mostrarError("Ya existe otro proveedor o cliente con ese Teléfono."); 
+            return; 
+        }
 
+        // 4. Actualizar objeto
         sel.setNombre(txtProveedorNombre.getText().trim());
         sel.setNif(nif);
         sel.setEmail(txtProveedorCorreo.getText().trim());
         sel.setTelefono(telefono);
 
         try {
+            // Guardar cambios principales
             proveedorController.modificar(sel);
-            modificarDireccionSiExiste(sel.getId(), comboProveedorDireccion, txtProveedorDireccion, txtProveedorCp, txtProveedorCiudad, txtProveedorProvincia, txtProveedorPais);
+            
+            // 5. Actualizar DIRECCIONES (Fiscal y Envío)
+            guardarOActualizarDireccion(sel.getId(), "Fiscal", 
+                txtProveedorDireccionFiscal, txtProveedorCpFiscal, txtProveedorCiudadFiscal, txtProveedorProvinciaFiscal, txtProveedorPaisFiscal);
+            
+            guardarOActualizarDireccion(sel.getId(), "Envio", 
+                txtProveedorDireccionEnvio, txtProveedorCpEnvio, txtProveedorCiudadEnvio, txtProveedorProvinciaEnvio, txtProveedorPaisEnvio);
+
+            // Refrescar vista
             refrescarProveedores();
             limpiarProveedor();
-            mostrarInfo("Proveedor modificado.");
-        } catch (Exception e) { mostrarError(e.getMessage()); }
+            mostrarInfo("Proveedor modificado correctamente.");
+        } catch (Exception e) { 
+            mostrarError("Error al modificar: " + e.getMessage()); 
+        }
     }
 
     private void eliminarProveedor() {
@@ -598,17 +667,21 @@ public class GestionEmpresaController {
     private void añadirProducto() {
         if (empresa == null) { mostrarError("No hay empresa activa."); return; }
 
-        // Validaciones de texto
+        // 1. Validaciones de campos
         if (!campoEsValido(txtProductoCodigo, "Código")) return;
         if (!campoEsValido(txtProductoDescripcion, "Descripción")) return;
+        
+        String codigoNuevo = txtProductoCodigo.getText().trim();
+        if (existeProductoConCodigo(codigoNuevo)) {
+            mostrarError("Ya existe un producto con el código '" + codigoNuevo + "'.\nPor favor, usa otro código.");
+            return;
+        }
 
-        // Validación: Es obligatorio asignar un proveedor
         if (comboProductoProveedor.getValue() == null) {
             mostrarError("Debes seleccionar un Proveedor de la lista.");
             return;
         }
 
-        // Validaciones numéricas
         if (!esDecimalValido(txtProductoPrecioVenta, "Precio Venta")) return;
         if (!esDecimalValido(txtProductoStock, "Stock Inicial")) return;
 
@@ -621,15 +694,12 @@ public class GestionEmpresaController {
         try {
             Producto p = new Producto();
             p.setEmpresaId(empresa.getId());
-            p.setCodigo(txtProductoCodigo.getText().trim());
+            p.setCodigo(codigoNuevo);
             p.setDescripcion(txtProductoDescripcion.getText().trim());
-            p.setReferenciaProveedor(safe(txtProductoReferencia));
-
-            // Asignamos el proveedor
             p.setProveedorId(comboProductoProveedor.getValue().getId());
             
             p.setPrecioVenta(precio);
-            p.setStock(stock); // Stock inicial permitido al crear
+            p.setStock(stock);
 
             productoController.añadir(p, empresa.getId());
             refrescarProductos();
@@ -658,7 +728,6 @@ public class GestionEmpresaController {
 
         // Asignar valores
         sel.setDescripcion(safe(txtProductoDescripcion));
-        sel.setReferenciaProveedor(safe(txtProductoReferencia));
         sel.setProveedorId(comboProductoProveedor.getValue().getId());
         sel.setPrecioVenta(precio);
         
@@ -689,14 +758,18 @@ public class GestionEmpresaController {
 
     private void añadirFactura() {
         if (empresa == null) { mostrarError("Error de empresa."); return; }
-        // No permitimos guardar facturas vacías
         if (lineasTemporales.isEmpty()) { mostrarError("La factura está vacía."); return; }
 
         Entidad entidadSeleccionada = comboFacturaEntidad.getValue();
         if (entidadSeleccionada == null) { mostrarError("Selecciona un Cliente/Proveedor."); return; }
         if (!validarCampoObligatorio(txtFacturaNumero, "Número")) return;
+        
+        String numeroNuevo = txtFacturaNumero.getText().trim();
+        if (existeNumeroFactura(numeroNuevo)) {
+            mostrarError("Ya existe una factura con el número '" + numeroNuevo + "'.");
+            return;
+        }
 
-        // Crear objeto factura
         Factura f = new Factura();
         f.setEmpresaId(empresa.getId());
         f.setEntidadId(entidadSeleccionada.getId());
@@ -704,33 +777,28 @@ public class GestionEmpresaController {
         String tipoString = comboFacturaTipo.getValue();
         f.setTipo(tipoString != null ? mapTipoFactura(tipoString) : 'V');
 
-        f.setNumero(txtFacturaNumero.getText().trim());
+        f.setNumero(numeroNuevo);
         try { f.setFechaEmision(Date.valueOf(txtFacturaFecha.getText().trim())); } 
         catch (Exception e) { mostrarError("Fecha inválida (YYYY-MM-DD)."); return; }
 
         f.setConcepto(txtFacturaConcepto.getText().trim());
 
-        // --- CÁLCULO INTERNO DE TOTALES ---
-        // Calculamos los totales basándonos en las líneas, NO en lo que ponga el usuario (seguridad)
         double baseCalculada = 0.0;
         for (LineaFactura lf : lineasTemporales) {
             baseCalculada += lf.getTotalLinea();
         }
-        double ivaCalculado = baseCalculada * 0.21; // 21% IVA fijo
+        double ivaCalculado = baseCalculada * 0.21;
         double totalCalculado = baseCalculada + ivaCalculado;
 
         f.setBaseImponible(baseCalculada);
         f.setIvaTotal(ivaCalculado);
         f.setTotalFactura(totalCalculado);
-        // --------------------------------
 
         f.setEstado(comboFacturaEstado.getValue());
         f.setObservaciones(safe(txtFacturaObservaciones));
 
         try {
-            // Guardar factura y líneas en BD
             facturaController.añadir(f, new ArrayList<>(lineasTemporales));
-            // Actualizar stock de productos afectados
             actualizarStockProductos(f.getTipo(), lineasTemporales);
 
             refrescarFacturas();
@@ -860,21 +928,74 @@ public class GestionEmpresaController {
         txtClienteNif.setText(c.getNif());
         txtClienteCorreo.setText(c.getEmail());
         txtClienteTelefono.setText(c.getTelefono());
-        cargarDireccionEnFormulario(c.getId(), comboClienteDireccion, txtClienteDireccion, txtClienteCp, txtClienteCiudad, txtClienteProvincia, txtClientePais);
-    }
 
+        // Limpiar campos primero
+        txtClienteDireccionFiscal.clear(); txtClienteCpFiscal.clear(); // ... limpiar resto de fiscales
+        txtClienteDireccionEnvio.clear(); txtClienteCpEnvio.clear(); // ... limpiar resto de envios
+
+        // Buscar y rellenar
+        if (cacheDirecciones != null) {
+            for (Direccion d : cacheDirecciones) {
+                if (d.getEntidadId() == c.getId()) {
+                    if ("Fiscal".equalsIgnoreCase(d.getEtiqueta())) {
+                        txtClienteDireccionFiscal.setText(safeStr(d.getDireccion()));
+                        txtClienteCpFiscal.setText(safeStr(d.getCp()));
+                        txtClienteCiudadFiscal.setText(safeStr(d.getCiudad()));
+                        txtClienteProvinciaFiscal.setText(safeStr(d.getProvincia()));
+                        txtClientePaisFiscal.setText(safeStr(d.getPais()));
+                    } 
+                    else if ("Envio".equalsIgnoreCase(d.getEtiqueta())) {
+                        txtClienteDireccionEnvio.setText(safeStr(d.getDireccion()));
+                        txtClienteCpEnvio.setText(safeStr(d.getCp()));
+                        txtClienteCiudadEnvio.setText(safeStr(d.getCiudad()));
+                        txtClienteProvinciaEnvio.setText(safeStr(d.getProvincia()));
+                        txtClientePaisEnvio.setText(safeStr(d.getPais()));
+                    }
+                }
+            }
+        }
+    }
+    
     private void cargarDatosProveedor(Proveedor p) {
+        // 1. Cargar datos básicos
         txtProveedorNombre.setText(p.getNombre());
         txtProveedorNif.setText(p.getNif());
         txtProveedorCorreo.setText(p.getEmail());
         txtProveedorTelefono.setText(p.getTelefono());
-        cargarDireccionEnFormulario(p.getId(), comboProveedorDireccion, txtProveedorDireccion, txtProveedorCp, txtProveedorCiudad, txtProveedorProvincia, txtProveedorPais);
+        
+        // 2. Limpiar campos de dirección antes de rellenar
+        txtProveedorDireccionFiscal.clear(); txtProveedorCpFiscal.clear(); 
+        txtProveedorCiudadFiscal.clear(); txtProveedorProvinciaFiscal.clear(); txtProveedorPaisFiscal.clear();
+        
+        txtProveedorDireccionEnvio.clear(); txtProveedorCpEnvio.clear();
+        txtProveedorCiudadEnvio.clear(); txtProveedorProvinciaEnvio.clear(); txtProveedorPaisEnvio.clear();
+
+        // 3. Buscar direcciones en la caché y rellenar según etiqueta
+        if (cacheDirecciones != null) {
+            for (Direccion d : cacheDirecciones) {
+                if (d.getEntidadId() == p.getId()) {
+                    if ("Fiscal".equalsIgnoreCase(d.getEtiqueta())) {
+                        txtProveedorDireccionFiscal.setText(safeStr(d.getDireccion()));
+                        txtProveedorCpFiscal.setText(safeStr(d.getCp()));
+                        txtProveedorCiudadFiscal.setText(safeStr(d.getCiudad()));
+                        txtProveedorProvinciaFiscal.setText(safeStr(d.getProvincia()));
+                        txtProveedorPaisFiscal.setText(safeStr(d.getPais()));
+                    } 
+                    else if ("Envio".equalsIgnoreCase(d.getEtiqueta())) {
+                        txtProveedorDireccionEnvio.setText(safeStr(d.getDireccion()));
+                        txtProveedorCpEnvio.setText(safeStr(d.getCp()));
+                        txtProveedorCiudadEnvio.setText(safeStr(d.getCiudad()));
+                        txtProveedorProvinciaEnvio.setText(safeStr(d.getProvincia()));
+                        txtProveedorPaisEnvio.setText(safeStr(d.getPais()));
+                    }
+                }
+            }
+        }
     }
 
     private void cargarDatosProducto(Producto p) {
         txtProductoCodigo.setText(p.getCodigo());
         txtProductoDescripcion.setText(p.getDescripcion());
-        txtProductoReferencia.setText(p.getReferenciaProveedor());
         txtProductoPrecioVenta.setText(formatDouble(p.getPrecioVenta()).replace(",", "."));
         txtProductoStock.setText(formatDouble(p.getStock()).replace(",", "."));
 
@@ -989,15 +1110,47 @@ public class GestionEmpresaController {
     }
 
     private void limpiarCliente() {
-        txtClienteNombre.clear(); txtClienteNif.clear(); txtClienteCorreo.clear(); txtClienteTelefono.clear();
-        comboClienteDireccion.getSelectionModel().clearSelection(); txtClienteDireccion.clear(); txtClienteCp.clear();
-        txtClienteCiudad.clear(); txtClienteProvincia.clear(); txtClientePais.clear();
+        // Datos básicos
+        txtClienteNombre.clear(); 
+        txtClienteNif.clear(); 
+        txtClienteCorreo.clear(); 
+        txtClienteTelefono.clear();
+
+        // Dirección Fiscal
+        txtClienteDireccionFiscal.clear(); 
+        txtClienteCpFiscal.clear(); 
+        txtClienteCiudadFiscal.clear(); 
+        txtClienteProvinciaFiscal.clear(); 
+        txtClientePaisFiscal.clear();
+        
+        // Dirección de Envío
+        txtClienteDireccionEnvio.clear(); 
+        txtClienteCpEnvio.clear(); 
+        txtClienteCiudadEnvio.clear(); 
+        txtClienteProvinciaEnvio.clear(); 
+        txtClientePaisEnvio.clear();
     }
 
     private void limpiarProveedor() {
-        txtProveedorNombre.clear(); txtProveedorNif.clear(); txtProveedorCorreo.clear(); txtProveedorTelefono.clear();
-        comboProveedorDireccion.getSelectionModel().clearSelection(); txtProveedorDireccion.clear(); txtProveedorCp.clear();
-        txtProveedorCiudad.clear(); txtProveedorProvincia.clear(); txtProveedorPais.clear();
+        // Datos básicos
+        txtProveedorNombre.clear(); 
+        txtProveedorNif.clear(); 
+        txtProveedorCorreo.clear(); 
+        txtProveedorTelefono.clear();
+        
+        // Dirección Fiscal
+        txtProveedorDireccionFiscal.clear(); 
+        txtProveedorCpFiscal.clear(); 
+        txtProveedorCiudadFiscal.clear(); 
+        txtProveedorProvinciaFiscal.clear(); 
+        txtProveedorPaisFiscal.clear();
+        
+        // Dirección de Envío
+        txtProveedorDireccionEnvio.clear(); 
+        txtProveedorCpEnvio.clear(); 
+        txtProveedorCiudadEnvio.clear(); 
+        txtProveedorProvinciaEnvio.clear(); 
+        txtProveedorPaisEnvio.clear();
     }
     
     private void limpiarProducto() {
@@ -1106,35 +1259,55 @@ public class GestionEmpresaController {
         return "";
     }
 
-    private void añadirDireccionSiRellenada(Long entidadId, ComboBox<String> combo, TextField dir, TextField cp, TextField ciu, TextField pro, TextField pai) {
-        if (entidadId <= 0 || safe(dir).isEmpty()) return;
-        Direccion d = new Direccion();
-        d.setEntidadId(entidadId);
-        d.setEtiqueta(combo.getValue() != null ? combo.getValue() : "Fiscal");
-        d.setDireccion(safe(dir)); d.setCp(safe(cp)); d.setCiudad(safe(ciu));
-        d.setProvincia(safe(pro)); d.setPais(safe(pai));
-        direccionController.añadir(d);
-    }
-    
-    private void modificarDireccionSiExiste(long entidadId, ComboBox<String> combo, TextField dir, TextField cp, TextField ciu, TextField pro, TextField pai) {
-        if (entidadId <= 0) return;
-        Direccion existente = null;
+    /**
+     * Método unificado para guardar, actualizar o borrar direcciones.
+     * Busca una dirección específica por su Entidad y su Etiqueta (Fiscal/Envio).
+     */
+    private void guardarOActualizarDireccion(long entidadId, String tipoEtiqueta, 
+                                             TextField txtDir, TextField txtCp, TextField txtCiu, TextField txtPro, TextField txtPai) {
+        
+        String direccionTexto = safe(txtDir);
+        
+        // 1. Buscar si ya existe esa dirección específica en la caché
+        Direccion dirExistente = null;
         if (cacheDirecciones != null) {
             for (Direccion d : cacheDirecciones) {
-                if (d.getEntidadId() == entidadId) { existente = d; break; }
+                // CLAVE: Buscamos por ID de entidad Y por etiqueta para no mezclar Fiscal con Envío
+                if (d.getEntidadId() == entidadId && d.getEtiqueta().equalsIgnoreCase(tipoEtiqueta)) {
+                    dirExistente = d;
+                    break;
+                }
             }
         }
-        if (existente != null) {
-            if (safe(dir).isEmpty()) {
-                direccionController.borrarPorId(existente.getId());
+
+        // 2. Lógica de persistencia
+        if (dirExistente != null) {
+            // Si la dirección YA EXISTE...
+            if (direccionTexto.isEmpty()) {
+                // Si el usuario ha borrado el texto, eliminamos la dirección de la BD para no dejar basura
+                direccionController.borrarPorId(dirExistente.getId());
             } else {
-                existente.setEtiqueta(combo.getValue() != null ? combo.getValue() : "Fiscal");
-                existente.setDireccion(safe(dir)); existente.setCp(safe(cp));
-                existente.setCiudad(safe(ciu)); existente.setProvincia(safe(pro)); existente.setPais(safe(pai));
-                direccionController.modificar(existente);
+                // Si hay texto, actualizamos los datos
+                dirExistente.setDireccion(direccionTexto);
+                dirExistente.setCp(safe(txtCp));
+                dirExistente.setCiudad(safe(txtCiu));
+                dirExistente.setProvincia(safe(txtPro));
+                dirExistente.setPais(safe(txtPai));
+                direccionController.modificar(dirExistente);
             }
         } else {
-            if (!safe(dir).isEmpty()) añadirDireccionSiRellenada(entidadId, combo, dir, cp, ciu, pro, pai);
+            // Si la dirección NO EXISTE y hay datos... la creamos nueva
+            if (!direccionTexto.isEmpty()) {
+                Direccion nueva = new Direccion();
+                nueva.setEntidadId(entidadId);
+                nueva.setEtiqueta(tipoEtiqueta); // "Fiscal" o "Envio"
+                nueva.setDireccion(direccionTexto);
+                nueva.setCp(safe(txtCp));
+                nueva.setCiudad(safe(txtCiu));
+                nueva.setProvincia(safe(txtPro));
+                nueva.setPais(safe(txtPai));
+                direccionController.añadir(nueva);
+            }
         }
     }
 
@@ -1170,6 +1343,32 @@ public class GestionEmpresaController {
             }
         }
         return false;
+    }
+    
+    // Método auxiliar para comprobar duplicados sin usar consultarPorCodigo
+    private boolean existeProductoConCodigo(String codigo) {
+        // Obtenemos la lista actual de la base de datos
+        List<Producto> lista = productoController.consultarTodos(empresa.getId());
+        for (Producto p : lista) {
+            if (p.getCodigo().equalsIgnoreCase(codigo)) {
+                return true; // Ya existe
+            }
+        }
+        return false;
+    }
+    
+    // Método auxiliar para comprobar si ya existe el número de factura
+    private boolean existeNumeroFactura(String numero) {
+        // 1. Obtenemos todas las facturas de la empresa actual desde la base de datos
+        List<Factura> facturas = facturaController.consultarTodas(empresa.getId());
+        
+        // 2. Recorremos la lista buscando si alguna tiene el mismo número
+        for (Factura f : facturas) {
+            if (f.getNumero().equalsIgnoreCase(numero)) {
+                return true; // ¡Encontrado! Ya existe.
+            }
+        }
+        return false; // No existe, el número está libre.
     }
 
     private String obtenerCodigoProducto(long id) {

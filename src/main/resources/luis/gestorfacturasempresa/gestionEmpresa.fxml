@@ -719,6 +719,8 @@
                           <Button fx:id="btnConsultar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleConsultar" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Consultar" />
       
                           <Button fx:id="btnEliminar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleEliminar" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: A1EB63; -fx-cursor: hand;" text="Eliminar" />
+                          
+                          <Button fx:id="btnLimpiar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleLimpiar" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: #f0ad4e; -fx-cursor: hand; -fx-text-fill: white; -fx-font-weight: bold;" text="Limpiar" />
                   </children>
                </HBox>
                 </children>

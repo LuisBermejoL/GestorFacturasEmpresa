@@ -23,11 +23,6 @@ public class Producto {
     // Descripción general del producto
     private String descripcion;
 
-    // Código de referencia que el proveedor habitual asigna al producto.
-    // Sirve para identificar el producto en el catálogo del proveedor.
-    // Ejemplo: tu producto interno "P-001" puede ser "ABC-123" en el proveedor.
-    private String referenciaProveedor;
-
     // ID del proveedor habitual (puede ser null si no tiene proveedor asignado)
     private long proveedorId;
 
@@ -50,17 +45,15 @@ public class Producto {
      * @param empresaId           ID de la empresa propietaria
      * @param codigo              Código del producto
      * @param descripcion         Descripción general
-     * @param referenciaProveedor Código de referencia del proveedor
      * @param proveedorId         ID del proveedor habitual
      * @param precioVenta         Precio de venta
      * @param stock               Stock actual
      */
-    public Producto(long id, long empresaId, String codigo, String descripcion, String referenciaProveedor, long proveedorId, double precioVenta, double stock) {
+    public Producto(long id, long empresaId, String codigo, String descripcion, long proveedorId, double precioVenta, double stock) {
         this.id = id;
         this.empresaId = empresaId;
         this.codigo = codigo;
         this.descripcion = descripcion;
-        this.referenciaProveedor = referenciaProveedor;
         this.proveedorId = proveedorId;
         this.precioVenta = precioVenta;
         this.stock = stock;
@@ -98,14 +91,6 @@ public class Producto {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public String getReferenciaProveedor() {
-        return referenciaProveedor;
-    }
-
-    public void setReferenciaProveedor(String referenciaProveedor) {
-        this.referenciaProveedor = referenciaProveedor;
     }
 
     public Long getProveedorId() {
