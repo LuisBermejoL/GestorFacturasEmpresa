@@ -76,35 +76,33 @@ public class ProductoDAO {
     }
 
     // === LEER UNO ===
-    public Producto consultarPorCodigo(long empresaId, String codigo) {
-        String sql = "SELECT * FROM producto WHERE empresa_id=? AND codigo=?";
+    public List<Producto> consultarProductos(long empresaId, String busquedaCodigo) {
+        List<Producto> lista = new ArrayList<>();
+        String sql = "SELECT * FROM producto WHERE empresa_id=? AND codigo LIKE ?";
+
         try (Connection conn = ConexionBD.get();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, empresaId);
-            stmt.setString(2, codigo);
+            stmt.setString(2, "%" + busquedaCodigo + "%");
+            
             ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
+            while (rs.next()) {
                 Producto p = new Producto();
                 p.setId(rs.getLong("id"));
-                // CORRECCIÓN IMPORTANTE: Cargar el empresa_id
                 p.setEmpresaId(rs.getLong("empresa_id"));
-                
                 p.setCodigo(rs.getString("codigo"));
                 p.setDescripcion(rs.getString("descripcion"));
                 p.setReferenciaProveedor(rs.getString("referencia_proveedor"));
                 p.setProveedorId(rs.getObject("proveedor_id", Long.class));
-                
                 p.setPrecioVenta(rs.getDouble("precio_venta"));
                 p.setStock(rs.getDouble("stock"));
-                
-                return p;
+                lista.add(p);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return lista;
     }
 
     // === ACTUALIZAR ===

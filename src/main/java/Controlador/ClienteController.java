@@ -51,11 +51,12 @@ public class ClienteController {
      * Consultar un cliente por su código dentro de una empresa.
      *
      * @param empresaId ID de la empresa
-     * @param codigo    Código único del cliente
+     * @param nombreCliente Nombre del cliente
+     * @param nifCliente NIF del cliente
      * @return Cliente encontrado o null si no existe
      */
-    public Cliente consultarPorCodigo(long empresaId, int codigo) {
-        return clienteDAO.consultarPorCodigo(empresaId, codigo);
+    public List<Cliente> consultarClientes(long empresaId, String nombreCliente, String nifCliente) {
+        return clienteDAO.consultarClientes(empresaId, nombreCliente, nifCliente);
     }
 
     // === LEER TODOS ===

@@ -130,24 +130,31 @@ public class ClienteDAO {
 
     // === LEER UNO ===
     /**
-     * Consulta un cliente por su código dentro de una empresa.
-     *
+     * Busca clientes que coincidan parcialmente con el nombre y el NIF proporcionados.
+     * Si los campos están vacíos, actúa como un "ver todos".
+     * 
      * @param empresaId ID de la empresa
-     * @param codigo    Código único del cliente
-     * @return Cliente encontrado o null si no existe
+     * @param busquedaNombre Nombre del cliente
+     * @param busquedaNif NIF del cliente
+     * @return Lista de objetos Cliente
      */
-    public Cliente consultarPorCodigo(long empresaId, int codigo) {
+    public List<Cliente> consultarClientes(long empresaId, String busquedaNombre, String busquedaNif) {
+        List<Cliente> lista = new ArrayList<>();
+        // Usamos LIKE para buscar coincidencias parciales (%texto%)
         String sql = "SELECT e.id, e.nombre, e.nif, e.email, e.telefono, c.codigo " +
                      "FROM entidad e JOIN clientes c ON e.id = c.id_entidad " +
-                     "WHERE e.empresa_id=? AND c.codigo=?";
+                     "WHERE e.empresa_id=? AND e.nombre LIKE ? AND e.nif LIKE ?";
+                     
         try (Connection conn = ConexionBD.get();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, empresaId);
-            stmt.setInt(2, codigo);
+            stmt.setString(2, "%" + busquedaNombre + "%"); // El % permite buscar texto contenido
+            stmt.setString(3, "%" + busquedaNif + "%");
+            
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 Cliente c = new Cliente();
                 c.setId(rs.getLong("id"));
                 c.setNombre(rs.getString("nombre"));
@@ -155,12 +162,12 @@ public class ClienteDAO {
                 c.setEmail(rs.getString("email"));
                 c.setTelefono(rs.getString("telefono"));
                 c.setCodigo(rs.getInt("codigo"));
-                return c;
+                lista.add(c);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return lista;
     }
 
     // === LEER TODOS ===

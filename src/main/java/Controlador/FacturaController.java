@@ -51,11 +51,11 @@ public class FacturaController {
      * Consultar una factura por su ID dentro de una empresa.
      *
      * @param empresaId ID de la empresa
-     * @param id        Identificador único de la factura
+     * @param numeroFactura Número de la factura
      * @return Factura encontrada o null si no existe
      */
-    public Factura consultarPorId(long empresaId, long id) {
-        return facturaDAO.consultarPorId(empresaId, id);
+    public List<Factura> consultarFacturas(long empresaId, String numeroFactura) {
+        return facturaDAO.consultarFacturas(empresaId, numeroFactura);
     }
 
     // === LEER TODOS ===

@@ -54,12 +54,12 @@ public class ProductoController {
      * Consultar un producto por su código dentro de una empresa.
      *
      * @param empresaId ID de la empresa
-     * @param codigo    Código único del producto
+     * @param codigoProducto    Código único del producto
      * @return Producto encontrado o null si no existe
      */
-    public Producto consultarPorCodigo(long empresaId, String codigo) {
+    public List<Producto> consultarProductos(long empresaId, String codigoProducto) {
         // Delegamos en el DAO la consulta por código y empresa
-        return productoDAO.consultarPorCodigo(empresaId, codigo);
+        return productoDAO.consultarProductos(empresaId, codigoProducto);
     }
 
     // === LEER TODOS ===

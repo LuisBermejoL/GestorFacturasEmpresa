@@ -321,7 +321,64 @@ public class GestionEmpresaController {
 
     @FXML
     private void handleConsultar() {
-        refrescarTodo(); // Recarga todos los datos desde la base de datos
+        if (empresa == null) return;
+
+        String tabName = MenuCliente.getSelectionModel().getSelectedItem().getText();
+
+        if ("Cliente".equals(tabName)) {
+            consultarClientesConFiltro();
+        } 
+        else if ("Proveedor".equals(tabName)) {
+            consultarProveedoresConFiltro();
+        } 
+        else if ("Producto".equals(tabName)) {
+            consultarProductosConFiltro();
+        } 
+        else if ("Facturas".equals(tabName)) {
+            consultarFacturasConFiltro();
+        }
+    }
+
+    // --- MÉTODOS DE FILTRADO ESPECÍFICOS ---
+
+    private void consultarClientesConFiltro() {
+        String filtroNombre = safe(txtClienteNombre);
+        String filtroNif = safe(txtClienteNif);
+        
+        List<Cliente> resultados = clienteController.consultarClientes(empresa.getId(), filtroNombre, filtroNif);
+        tablaClientes.setItems(FXCollections.observableArrayList(resultados));
+        
+        if (resultados.isEmpty()) mostrarInfo("No se encontraron clientes.");
+    }
+
+    private void consultarProveedoresConFiltro() {
+        String filtroNombre = safe(txtProveedorNombre);
+        String filtroNif = safe(txtProveedorNif);
+        
+        List<Proveedor> resultados = proveedorController.consultarProveedores(empresa.getId(), filtroNombre, filtroNif);
+        tablaProveedores.setItems(FXCollections.observableArrayList(resultados));
+        
+        if (resultados.isEmpty()) mostrarInfo("No se encontraron proveedores.");
+    }
+
+    private void consultarProductosConFiltro() {
+        // Filtramos solo por el campo CÓDIGO
+        String filtroCodigo = safe(txtProductoCodigo);
+        
+        List<Producto> resultados = productoController.consultarProductos(empresa.getId(), filtroCodigo);
+        tablaProductos.setItems(FXCollections.observableArrayList(resultados));
+        
+        if (resultados.isEmpty()) mostrarInfo("No se encontraron productos con ese código.");
+    }
+
+    private void consultarFacturasConFiltro() {
+        // Filtramos solo por el campo NÚMERO DE FACTURA
+        String filtroNumero = safe(txtFacturaNumero);
+        
+        List<Factura> resultados = facturaController.consultarFacturas(empresa.getId(), filtroNumero);
+        tablaFacturas.setItems(FXCollections.observableArrayList(resultados));
+        
+        if (resultados.isEmpty()) mostrarInfo("No se encontraron facturas con ese número.");
     }
 
     @FXML

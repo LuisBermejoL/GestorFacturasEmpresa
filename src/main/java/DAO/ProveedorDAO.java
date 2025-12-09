@@ -123,19 +123,24 @@ public class ProveedorDAO {
      * Consulta un proveedor por su código dentro de una empresa.
      *
      * @param empresaId ID de la empresa
-     * @param codigo    Código único del proveedor
+     * @param busquedaNombre Nombre del cliente
+     * @param busquedaNif NIF del cliente
      * @return Proveedor encontrado o null si no existe
      */
-    public Proveedor consultarPorCodigo(long empresaId, int codigo) {
+    public List<Proveedor> consultarProveedores(long empresaId, String busquedaNombre, String busquedaNif) {
+        List<Proveedor> lista = new ArrayList<>();
         String sql = "SELECT e.id, e.nombre, e.nif, e.email, e.telefono, p.codigo " +
                      "FROM entidad e JOIN proveedores p ON e.id = p.id_entidad " +
-                     "WHERE e.empresa_id=? AND p.codigo=?";
+                     "WHERE e.empresa_id=? AND e.nombre LIKE ? AND e.nif LIKE ?";
         try (Connection conn = ConexionBD.get();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setLong(1, empresaId);
-            stmt.setInt(2, codigo);
+            stmt.setString(2, "%" + busquedaNombre + "%");
+            stmt.setString(3, "%" + busquedaNif + "%");
+            
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
                 Proveedor p = new Proveedor();
                 p.setId(rs.getLong("id"));
                 p.setNombre(rs.getString("nombre"));
@@ -143,12 +148,12 @@ public class ProveedorDAO {
                 p.setEmail(rs.getString("email"));
                 p.setTelefono(rs.getString("telefono"));
                 p.setCodigo(rs.getInt("codigo"));
-                return p;
+                lista.add(p);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return lista;
     }
 
     // === LEER TODOS ===

@@ -126,19 +126,21 @@ public class FacturaDAO {
      * Consulta una factura por su ID dentro de una empresa.
      *
      * @param empresaId ID de la empresa
-     * @param id        ID de la factura
+     * @param busquedaNumero Número de la factura
      * @return Factura encontrada o null si no existe
      */
-    public Factura consultarPorId(long empresaId, long id) {
-        String sql = "SELECT * FROM factura WHERE empresa_id=? AND id=?";
+    public List<Factura> consultarFacturas(long empresaId, String busquedaNumero) {
+        List<Factura> lista = new ArrayList<>();
+        String sql = "SELECT * FROM factura WHERE empresa_id=? AND numero LIKE ?";
+
         try (Connection conn = ConexionBD.get();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, empresaId);
-            stmt.setLong(2, id);
+            stmt.setString(2, "%" + busquedaNumero + "%");
+            
             ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
+            while (rs.next()) {
                 Factura f = new Factura();
                 f.setId(rs.getLong("id"));
                 f.setEmpresaId(rs.getLong("empresa_id"));
@@ -152,12 +154,12 @@ public class FacturaDAO {
                 f.setTotalFactura(rs.getDouble("total_factura"));
                 f.setEstado(rs.getString("estado"));
                 f.setObservaciones(rs.getString("observaciones"));
-                return f;
+                lista.add(f);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return lista;
     }
 
     // === ACTUALIZAR ===

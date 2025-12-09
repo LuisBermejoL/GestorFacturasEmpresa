@@ -50,11 +50,12 @@ public class ProveedorController {
      * Consultar un proveedor por su código dentro de una empresa.
      *
      * @param empresaId ID de la empresa
-     * @param codigo    Código único del proveedor
+     * @param nombreProveedor Nombre del cliente
+     * @param nifProveedor NIF del cliente
      * @return Proveedor encontrado o null si no existe
      */
-    public Proveedor consultarPorCodigo(long empresaId, int codigo) {
-        return proveedorDAO.consultarPorCodigo(empresaId, codigo);
+    public List<Proveedor> consultarProveedores(long empresaId, String nombreProveedor, String nifProveedor) {
+        return proveedorDAO.consultarProveedores(empresaId, nombreProveedor, nifProveedor);
     }
 
     // === LEER TODOS ===
