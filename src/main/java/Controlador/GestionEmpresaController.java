@@ -80,7 +80,7 @@ public class GestionEmpresaController {
     @FXML private TableView<Cliente> tablaClientes;
     // Columnas de la tabla de clientes
     @FXML private TableColumn<Cliente, String> colClienteCodigo, colClienteNombre, colClienteNif, colClienteCorreo, colClienteTelefono;
-    @FXML private TableColumn<Cliente, String> colClienteDireccion, colClienteCiudad, colClienteProvincia, colClientePais, colClienteCp;
+    @FXML private TableColumn<Cliente, String> colClienteDireccionFiscal, colClienteDireccionEnvio;
     
     // Campos de formulario para editar/crear clientes
     @FXML private TextField txtClienteNombre, txtClienteNif, txtClienteCorreo, txtClienteTelefono;
@@ -92,7 +92,7 @@ public class GestionEmpresaController {
     // --- PESTAÑA PROVEEDORES ---
     @FXML private TableView<Proveedor> tablaProveedores;
     @FXML private TableColumn<Proveedor, String> colProveedorCodigo, colProveedorNombre, colProveedorNif, colProveedorCorreo, colProveedorTelefono;
-    @FXML private TableColumn<Proveedor, String> colProveedorDireccion, colProveedorCiudad, colProveedorProvincia, colProveedorPais, colProveedorCp;
+    @FXML private TableColumn<Proveedor, String> colProveedorDireccionFiscal, colProveedorDireccionEnvio;
 
     @FXML private TextField txtProveedorNombre, txtProveedorNif, txtProveedorCorreo, txtProveedorTelefono;
     
@@ -216,12 +216,8 @@ public class GestionEmpresaController {
         colClienteNif.setCellValueFactory(c -> new SimpleStringProperty(safeStr(c.getValue().getNif())));
         colClienteCorreo.setCellValueFactory(c -> new SimpleStringProperty(safeStr(c.getValue().getEmail())));
         colClienteTelefono.setCellValueFactory(c -> new SimpleStringProperty(safeStr(c.getValue().getTelefono())));
-        // Estas columnas obtienen el dato cruzando el ID con la caché de direcciones
-        colClienteDireccion.setCellValueFactory(c -> new SimpleStringProperty(obtenerDireccionCampo(c.getValue().getId(), "direccion")));
-        colClienteCiudad.setCellValueFactory(c -> new SimpleStringProperty(obtenerDireccionCampo(c.getValue().getId(), "ciudad")));
-        colClienteProvincia.setCellValueFactory(c -> new SimpleStringProperty(obtenerDireccionCampo(c.getValue().getId(), "provincia")));
-        colClientePais.setCellValueFactory(c -> new SimpleStringProperty(obtenerDireccionCampo(c.getValue().getId(), "pais")));
-        colClienteCp.setCellValueFactory(c -> new SimpleStringProperty(obtenerDireccionCampo(c.getValue().getId(), "cp")));
+        colClienteDireccionFiscal.setCellValueFactory(c -> new SimpleStringProperty(obtenerDireccionFormateada(c.getValue().getId(), "direccion")));
+        colClienteDireccionEnvio.setCellValueFactory(c -> new SimpleStringProperty(obtenerDireccionFormateada(c.getValue().getId(), "direccion")));
 
         // --- PROVEEDORES (Lógica idéntica a Clientes) ---
         colProveedorCodigo.setCellValueFactory(p -> new SimpleStringProperty(String.valueOf(p.getValue().getCodigo())));
@@ -229,11 +225,8 @@ public class GestionEmpresaController {
         colProveedorNif.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getNif())));
         colProveedorCorreo.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getEmail())));
         colProveedorTelefono.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getTelefono())));
-        colProveedorDireccion.setCellValueFactory(p -> new SimpleStringProperty(obtenerDireccionCampo(p.getValue().getId(), "direccion")));
-        colProveedorCiudad.setCellValueFactory(p -> new SimpleStringProperty(obtenerDireccionCampo(p.getValue().getId(), "ciudad")));
-        colProveedorProvincia.setCellValueFactory(p -> new SimpleStringProperty(obtenerDireccionCampo(p.getValue().getId(), "provincia")));
-        colProveedorPais.setCellValueFactory(p -> new SimpleStringProperty(obtenerDireccionCampo(p.getValue().getId(), "pais")));
-        colProveedorCp.setCellValueFactory(p -> new SimpleStringProperty(obtenerDireccionCampo(p.getValue().getId(), "cp")));
+        colProveedorDireccionFiscal.setCellValueFactory(p -> new SimpleStringProperty(obtenerDireccionFormateada(p.getValue().getId(), "direccion")));
+        colProveedorDireccionEnvio.setCellValueFactory(p -> new SimpleStringProperty(obtenerDireccionFormateada(p.getValue().getId(), "direccion")));
 
         // --- PRODUCTOS ---
         colProductoCodigo.setCellValueFactory(p -> new SimpleStringProperty(safeStr(p.getValue().getCodigo())));
@@ -1241,22 +1234,21 @@ public class GestionEmpresaController {
             }
         } catch (Exception e) { System.err.println(e.getMessage()); }
     }
-
-    private String obtenerDireccionCampo(Long entidadId, String campo) {
+    
+    private String obtenerDireccionFormateada(Long entidadId, String tipoEtiqueta) {
         if (empresa == null || entidadId == null || cacheDirecciones == null) return "";
+        
         for (Direccion d : cacheDirecciones) {
-            if (entidadId.equals(d.getEntidadId())) {
-                switch (campo) {
-                    case "direccion": return safeStr(d.getDireccion());
-                    case "ciudad": return safeStr(d.getCiudad());
-                    case "cp": return safeStr(d.getCp());
-                    case "provincia": return safeStr(d.getProvincia());
-                    case "pais": return safeStr(d.getPais());
-                    default: return "";
-                }
+            // Buscamos coincidencia de ID y Tipo (Fiscal/Envio)
+            if (d.getEntidadId() == entidadId && d.getEtiqueta().equalsIgnoreCase(tipoEtiqueta)) {
+                StringBuilder sb = new StringBuilder();
+                if (d.getDireccion() != null && !d.getDireccion().isEmpty()) sb.append(d.getDireccion());
+                if (d.getCiudad() != null && !d.getCiudad().isEmpty()) sb.append(", ").append(d.getCiudad());
+                if (d.getCp() != null && !d.getCp().isEmpty()) sb.append(" (").append(d.getCp()).append(")");
+                return sb.toString();
             }
         }
-        return "";
+        return ""; 
     }
 
     /**
