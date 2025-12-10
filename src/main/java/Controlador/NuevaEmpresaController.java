@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -116,81 +117,91 @@ public class NuevaEmpresaController {
      */
     @FXML
     private void guardarEmpresa() {
-        // 1. Validar que todos los campos obligatorios estén rellenos
-        if (!validarCamposObligatorios()) {
-            return; // Se mostró alerta, no seguimos
+        // CAMPOS OBLIGATORIOS
+        if (!campoEsValido(txtEmpresaNombre, "Nombre de la empresa")) {
+            return;
+        }
+        if (!campoEsValido(txtEmpresaNif, "NIF")) {
+            return;
+        }
+        if (!campoEsValido(txtEmpresaTelefono, "Teléfono")) {
+            return;
+        }
+        if (!campoEsValido(txtEmpresaCorreo, "Correo electrónico")) {
+            return;
+        }
+        if (!campoEsValido(txtEmpresaDireccion, "Dirección")) {
+            return;
+        }
+        if (!campoEsValido(txtEmpresaCiudad, "Ciudad")) {
+            return;
+        }
+        if (!campoEsValido(txtEmpresaPais, "País")) {
+            return;
+        }
+        if (!campoEsValido(txtEmpresaCp, "Código Postal")) {
+            return;
+        }
+        if (!campoEsValido(txtEmpresaDfiscal, "Domicilio Fiscal")) {
+            return;
+        }
+        if (!campoEsValido(txtEmpresaContacto, "Persona de contacto")) {
+            return;
         }
 
-        // 2. Validar formatos específicos
         String nif = txtEmpresaNif.getText().trim().toUpperCase();
         String telefono = txtEmpresaTelefono.getText().trim();
         String email = txtEmpresaCorreo.getText().trim();
-        String web = txtEmpresaWeb.getText().trim();
         String cp = txtEmpresaCp.getText().trim();
 
+        // VALIDACIONES DE FORMATO
         if (!validarNIF(nif)) {
-            mostrarAlerta("NIF incorrecto",
-                    "El NIF de empresa debe tener:\n"
-                    + "• 1 letra (A,B,C,E,F,G,J)\n"
-                    + "• 7 números\n"
-                    + "• 1 dígito de control (0-9 o A-J)\n\n"
-                    + "Ejemplo: B1234567C");
+            mostrarError("Campo NIF.\n\nDebe tener 5-20 caracteres alfanuméricos.\nEjemplos:\n• B12345678\n• DE123456789");
             return;
         }
-
         if (!validarTelefono(telefono)) {
-            mostrarAlerta("Teléfono incorrecto", "El teléfono debe tener exactamente 9 dígitos y no comenzar por 0.");
+            mostrarError("Teléfono inválido.\n\nDebe tener 6-15 dígitos (puede empezar con +).\nEjemplos:\n• 612345678\n• +34612345678");
             return;
         }
-
         if (!validarEmail(email)) {
-            mostrarAlerta("Email incorrecto", "Por favor, introduce un correo electrónico válido.\nEjemplo: empresa@dominio.com");
+            mostrarError("Correo electrónico inválido.\nEjemplo: empresa@dominio.com");
+            return;
+        }
+        if (!validarCP(cp)) {
+            mostrarError("Código Postal inválido.\n\nDebe tener 3-10 caracteres alfanuméricos.\nEjemplos:\n• 28001\n• SW1A 1AA");
             return;
         }
 
-        if (!web.isEmpty() && !validarWeb(web)) {
-            mostrarAlerta("Web incorrecta", "La página web debe tener un formato válido.\nEjemplo: www.empresa.com");
-            return;
-        }
-
-        if (!validarCodigoPostal(cp)) {
-            mostrarAlerta("Código Postal incorrecto", "El C.P. debe tener exactamente 5 dígitos.");
-            return;
-        }
-
-        // 3. Si todo está bien → crear empresa
+        // GUARDAR EMPRESA
         Empresa empresa = new Empresa();
-        // Si estamos editando, usamos el ID original
-        if (this.empresaEnEdicion != null) {
-            empresa.setId(this.empresaEnEdicion.getId());
+        if (empresaEnEdicion != null) {
+            empresa.setId(empresaEnEdicion.getId());
         }
+
         empresa.setNombre(txtEmpresaNombre.getText().trim());
         empresa.setNif(nif);
         empresa.setTelefono(telefono);
         empresa.setEmail(email);
-        empresa.setWeb(web.isEmpty() ? null : web);
+        empresa.setWeb(txtEmpresaWeb.getText().trim().isEmpty() ? null : txtEmpresaWeb.getText().trim());
         empresa.setDomicilioFiscal(txtEmpresaDfiscal.getText().trim());
         empresa.setContacto(txtEmpresaContacto.getText().trim());
         empresa.setDireccion(txtEmpresaDireccion.getText().trim());
-        empresa.setPais(txtEmpresaPais.getText().trim().isEmpty() ? "España" : txtEmpresaPais.getText().trim());
+        empresa.setPais(txtEmpresaPais.getText().trim());
         empresa.setCiudad(txtEmpresaCiudad.getText().trim());
         empresa.setProvincia(txtEmpresaProvincia.getText().trim());
         empresa.setCp(cp);
 
         try {
-            if (this.empresaEnEdicion != null) {
-                // Modo edición: llama a MODIFICAR
+            if (empresaEnEdicion != null) {
                 empresaDAO.modificar(empresa);
-                mostrarAlerta("Éxito", "Empresa actualizada correctamente.");
+                mostrarInfo("Empresa modificada correctamente.");
             } else {
-                // Modo nueva empresa: llama a AÑADIR
                 empresaDAO.añadir(empresa);
-                mostrarAlerta("Éxito", "Empresa creada correctamente.");
+                mostrarInfo("Empresa creada correctamente.");
             }
             abrirListaEmpresas();
-
         } catch (Exception ex) {
-            mostrarAlerta("Error", "No se pudo guardar la empresa: " + ex.getMessage());
+            mostrarError("Error al guardar la empresa:\n" + ex.getMessage());
         }
     }
 
@@ -253,78 +264,57 @@ public class NuevaEmpresaController {
      * Método auxiliar para mostrar mensajes al usuario.
      *
      * @param titulo Título de la alerta
-     * @param mensaje Contenido del mensaje
      */
-    private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+    private void mostrarError(String mensaje) {
+        Alert a = new Alert(Alert.AlertType.ERROR);
+        a.setTitle("Error");
+        a.setHeaderText(null);
+        a.setContentText(mensaje);
+        a.showAndWait();
     }
 
-    private boolean validarCamposObligatorios() {
-        StringBuilder faltan = new StringBuilder("Los siguientes campos son obligatorios:\n");
+    private void mostrarInfo(String mensaje) {
+        Alert a = new Alert(AlertType.CONFIRMATION);
+        a.setTitle("Exito");
+        a.setHeaderText(null);
+        a.setContentText(mensaje);
+        a.showAndWait();
+    }
 
-        if (txtEmpresaNombre.getText().trim().isEmpty()) {
-            faltan.append("• Nombre de la empresa\n");
-        }
-        if (txtEmpresaNif.getText().trim().isEmpty()) {
-            faltan.append("• NIF\n");
-        }
-        if (txtEmpresaTelefono.getText().trim().isEmpty()) {
-            faltan.append("• Teléfono\n");
-        }
-        if (txtEmpresaCorreo.getText().trim().isEmpty()) {
-            faltan.append("• Correo\n");
-        }
-        if (txtEmpresaDfiscal.getText().trim().isEmpty()) {
-            faltan.append("• Dirección Fiscal\n");
-        }
-        if (txtEmpresaContacto.getText().trim().isEmpty()) {
-            faltan.append("• Contacto\n");
-        }
-        if (txtEmpresaDireccion.getText().trim().isEmpty()) {
-            faltan.append("• Dirección\n");
-        }
-        if (txtEmpresaPais.getText().trim().isEmpty()) {
-            faltan.append("• País\n");
-        }
-        if (txtEmpresaCiudad.getText().trim().isEmpty()) {
-            faltan.append("• Ciudad\n");
-        }
-        if (txtEmpresaCp.getText().trim().isEmpty()) {
-            faltan.append("• Código Postal\n");
-        }
-
-        if (faltan.length() > 50) { // Si hay errores
-            mostrarAlerta("Faltan datos obligatorios", faltan.toString());
+    private boolean validarNIF(String taxId) {
+        if (taxId == null || taxId.trim().isEmpty()) {
             return false;
         }
-        return true;
+        return taxId.trim().toUpperCase().matches("^[A-Z0-9\\-\\s\\.]{5,20}$");
     }
 
-    private boolean validarNIF(String nif) {
-        nif = nif.trim().toUpperCase();
-
-        // Validar formato de NIF empresa: 1 letra + 7 números + 1 dígito (letra o número)
-        return nif.matches("^[ABCEFGJ][0-9]{7}[0-9A-J]$");
-    }
-
-    private boolean validarTelefono(String telefono) {
-        return telefono.matches("[1-9]\\d{8}");
+    private boolean validarTelefono(String tel) {
+        if (tel == null || tel.trim().isEmpty()) {
+            return false;
+        }
+        return tel.trim().matches("^\\+?[0-9]{6,15}$");
     }
 
     private boolean validarEmail(String email) {
-        return email.matches("^(?:[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}|\"[^\"]*\"@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$");
+        if (email == null || email.trim().isEmpty()) {
+            return true;
+        }
+        return email.trim().matches("^[\\w._%+-]+@[\\w.-]+\\.[A-Za-z]{2,6}$");
     }
 
-    private boolean validarWeb(String web) {
-        return web.matches("^(www\\.)?[\\w\\-]+\\.[\\w\\-]+(\\.[\\w\\-]+)*$");
+    private boolean validarCP(String cp) {
+        if (cp == null || cp.trim().isEmpty()) {
+            return false;
+        }
+        return cp.trim().matches("^[A-Z0-9\\-\\s]{3,10}$");
     }
 
-    private boolean validarCodigoPostal(String cp) {
-        return cp.matches("\\d{5}");
+    private boolean campoEsValido(TextField campo, String nombre) {
+        if (campo.getText() == null || campo.getText().trim().isEmpty()) {
+            mostrarError("El campo '" + nombre + "' es obligatorio.");
+            return false;
+        }
+        return true;
     }
 
 }

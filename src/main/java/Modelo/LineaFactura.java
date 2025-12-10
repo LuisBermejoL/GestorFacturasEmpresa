@@ -112,6 +112,6 @@ public class LineaFactura {
      * @return Total de la línea después de aplicar el descuento
      */
     public double getTotalLinea() {
-        return (cantidad * precioUnitario) - descuento;
+        return precioUnitario * (1 - descuento / 100.0) * cantidad;
     }
 }

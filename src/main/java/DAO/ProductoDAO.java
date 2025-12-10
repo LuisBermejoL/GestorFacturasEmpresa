@@ -16,7 +16,7 @@ public class ProductoDAO {
     // === CREAR ===
     public void añadir(Producto producto, long empresaId) {
         String sql = "INSERT INTO producto (empresa_id, codigo, descripcion, proveedor_id, precio_venta, stock) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                     "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionBD.get();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -104,7 +104,7 @@ public class ProductoDAO {
 
     // === ACTUALIZAR ===
     public void modificar(Producto producto) {
-        String sql = "UPDATE producto SET descripcion=?, referencia_proveedor=?, proveedor_id=?, precio_venta=?, stock=? " +
+        String sql = "UPDATE producto SET descripcion=?, proveedor_id=?, precio_venta=?, stock=? " +
                      "WHERE codigo=? AND empresa_id=?";
 
         try (Connection conn = ConexionBD.get();

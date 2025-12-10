@@ -114,8 +114,9 @@ public class GestionEmpresaController {
             colFacturaBase, colFacturaIvaTotal, colFacturaTotal, colFacturaEstado, colFacturaObservaciones;
 
     @FXML private ComboBox<Entidad> comboFacturaEntidad; // Selector inteligente: Carga Clientes si es Venta, Proveedores si es Compra
-    @FXML private TextField txtFacturaNumero, txtFacturaFecha, txtFacturaConcepto, txtFacturaObservaciones;
+    @FXML private TextField txtFacturaNumero, txtFacturaConcepto, txtFacturaObservaciones;
     @FXML private ComboBox<String> comboFacturaTipo, comboFacturaEstado;
+    @FXML private DatePicker datePickerFacturaFecha;
 
     // --- PESTAÑA FACTURAS (LÍNEAS/DETALLES) ---
     // Elementos para añadir productos individuales a la factura
@@ -323,6 +324,10 @@ public class GestionEmpresaController {
 
         String tabName = MenuCliente.getSelectionModel().getSelectedItem().getText();
 
+        if (MenuCliente.getSelectionModel().getSelectedItem().getText().equals("Producto")) {
+            consultarProductosConFiltro();
+        }
+        
         if ("Cliente".equals(tabName)) {
             consultarClientesConFiltro();
         } 
@@ -360,13 +365,31 @@ public class GestionEmpresaController {
     }
 
     private void consultarProductosConFiltro() {
-        // Filtramos solo por el campo CÓDIGO
-        String filtroCodigo = safe(txtProductoCodigo);
-        
-        List<Producto> resultados = productoController.consultarProductos(empresa.getId(), filtroCodigo);
+        if (empresa == null) {
+            mostrarError("No hay empresa activa.");
+            return;
+        }
+
+        // Obtener el proveedor seleccionado
+        Proveedor proveedorSeleccionado = comboProductoProveedor.getSelectionModel().getSelectedItem();
+
+        List<Producto> resultados;
+
+        if (proveedorSeleccionado != null) {
+            // Filtrar solo productos de ese proveedor
+            resultados = new ArrayList<>();
+            for (Producto p : productoController.consultarTodos(empresa.getId())) {
+                if (p.getProveedorId() == proveedorSeleccionado.getId()) {
+                    resultados.add(p);
+                }
+            }
+        } else {
+            // Si no hay proveedor seleccionado → mostrar todos
+            resultados = productoController.consultarTodos(empresa.getId());
+        }
+
+        // Actualizar la tabla
         tablaProductos.setItems(FXCollections.observableArrayList(resultados));
-        
-        if (resultados.isEmpty()) mostrarInfo("No se encontraron productos con ese código.");
     }
 
     private void consultarFacturasConFiltro() {
@@ -410,7 +433,7 @@ public class GestionEmpresaController {
             tablaFacturas.getSelectionModel().clearSelection();
             // Resetear cosas específicas de factura
             txtFacturaNumero.clear();
-            txtFacturaFecha.clear();
+            datePickerFacturaFecha.setValue(null);
         }
         
         mostrarInfo("Formulario limpiado.");
@@ -448,7 +471,7 @@ public class GestionEmpresaController {
         java.io.File file = fileChooser.showSaveDialog(null);
 
         if (file != null) {
-            // 3. Delegamos la creación del PDF al gestor especializado
+        // 3. Delegamos la creación del PDF al gestor especializado
             GestorReportes gestor = new GestorReportes();
             gestor.generarFacturaPdf(facturaSel.getId(), empresa.getId(), file.getAbsolutePath());
         }
@@ -466,15 +489,46 @@ public class GestionEmpresaController {
         if (!campoEsValido(txtClienteNif, "NIF")) return;
         if (!campoEsValido(txtClienteTelefono, "Teléfono")) return;
         if (!campoEsValido(txtClienteCorreo, "Correo")) return;
+        if (!campoEsValido(txtClienteDireccionFiscal, "Dirección Fiscal")) return;
+        if (!campoEsValido(txtClienteCpFiscal, "Código Postal Fiscal")) return;
+        if (!campoEsValido(txtClienteCiudadFiscal, "Ciudad Fiscal")) return;
+        if (!campoEsValido(txtClientePaisFiscal, "País Fiscal")) return;
+        if (!campoEsValido(txtClienteDireccionEnvio, "Dirección de Envío")) return;
+        if (!campoEsValido(txtClienteCpEnvio, "Código Postal de Envío")) return;
+        if (!campoEsValido(txtClienteCiudadEnvio, "Ciudad de Envío")) return;
+        if (!campoEsValido(txtClientePaisEnvio, "País de Envío")) return;
 
         String nif = txtClienteNif.getText().trim().toUpperCase();
         String telefono = txtClienteTelefono.getText().trim();
+        String email = txtClienteCorreo.getText().trim();
+        String cpFiscal = txtClienteCpFiscal.getText().trim();
+        String cpEnvio = txtClienteCpEnvio.getText().trim();
 
-        // Validaciones de formato (Regex)
-        if (!validarNIF(nif)) { mostrarError("El NIF debe tener 7 números y 1 letra."); return; }
-        if (!validarTelefono(telefono)) { mostrarError("El teléfono debe tener 9 dígitos."); return; }
-        if (!validarEmail(txtClienteCorreo.getText().trim())) { mostrarError("Email incorrecto."); return; }
+        // === VALIDACIONES DE FORMATO ===
+        if (!validarNIF(nif)) {
+            mostrarError("NIF/NIE incorrecto.\n\nDebe tener 5-20 caracteres alfanuméricos.\nEjemplos:\n• 12345678Z\n• DE123456789");
+            return;
+        }
+
+        if (!validarTelefono(telefono)) {
+            mostrarError("Teléfono inválido.\nDebe tener 6-15 dígitos, opcional '+' al inicio.\nEjemplos:\n• 612345678\n• +34612345678");
+            return;
+        }
+
+        if (!validarEmail(email)) {
+            mostrarError("Correo electrónico inválido.\nEjemplo correcto: cliente@dominio.com");
+            return;
+        }
+
+        if (!validarCP(cpFiscal)) {
+            mostrarError("Código Postal inválido.\n\nDebe tener 3-10 caracteres alfanuméricos.\nEjemplos:\n• 28001\n• SW1A 1AA");
+            return;
+        }
         
+        if (!validarCP(cpEnvio)) {
+            mostrarError("Código Postal inválido.\n\nDebe tener 3-10 caracteres alfanuméricos.\nEjemplos:\n• 28001\n• SW1A 1AA");
+            return;
+        }
         // Validaciones de negocio (Duplicados)
         if (existeEntidadConNif(empresa.getId(), nif)) { mostrarError("Ya existe un cliente con ese NIF."); return; }
         if (existeEntidadConTelefono(empresa.getId(), telefono)) { mostrarError("Ya existe un cliente con ese Teléfono."); return; }
@@ -499,6 +553,7 @@ public class GestionEmpresaController {
                 guardarOActualizarDireccion(entidadId, "Envio", 
                     txtClienteDireccionEnvio, txtClienteCpEnvio, txtClienteCiudadEnvio, txtClienteProvinciaEnvio, txtClientePaisEnvio);
             }
+            
             refrescarClientes();
             limpiarCliente();
             mostrarInfo("Cliente añadido correctamente.");
@@ -509,16 +564,63 @@ public class GestionEmpresaController {
         Cliente sel = tablaClientes.getSelectionModel().getSelectedItem();
         if (sel == null) { mostrarError("Selecciona un cliente."); return; }
 
+        // Campos obligatorios
         if (!campoEsValido(txtClienteNombre, "Nombre")) return;
+        if (!campoEsValido(txtClienteNif, "NIF")) return;
+        if (!campoEsValido(txtClienteTelefono, "Teléfono")) return;
+        if (!campoEsValido(txtClienteCorreo, "Correo")) return;
+        if (!campoEsValido(txtClienteDireccionFiscal, "Dirección Fiscal")) return;
+        if (!campoEsValido(txtClienteCpFiscal, "Código Postal Fiscal")) return;
+        if (!campoEsValido(txtClienteCiudadFiscal, "Ciudad Fiscal")) return;
+        if (!campoEsValido(txtClientePaisFiscal, "País Fiscal")) return;
+        if (!campoEsValido(txtClienteDireccionEnvio, "Dirección de Envío")) return;
+        if (!campoEsValido(txtClienteCpEnvio, "Código Postal de Envío")) return;
+        if (!campoEsValido(txtClienteCiudadEnvio, "Ciudad de Envío")) return;
+        if (!campoEsValido(txtClientePaisEnvio, "País de Envío")) return;
+        
+        
         String nif = txtClienteNif.getText().trim().toUpperCase();
         String telefono = txtClienteTelefono.getText().trim();
+        String email = txtClienteCorreo.getText().trim();
+        String cpFiscal = txtClienteCpFiscal.getText().trim();
+        String cpEnvio = txtClienteCpEnvio.getText().trim();
 
         // Validaciones y control de duplicados (excluyendo al propio cliente)
-        if (!validarNIF(nif)) { mostrarError("NIF incorrecto."); return; }
-        if (!validarTelefono(telefono)) { mostrarError("Teléfono incorrecto."); return; }
-        if (existeNifDuplicado(empresa.getId(), nif, sel.getId())) { mostrarError("NIF duplicado en otro cliente."); return; }
-        if (existeTelefonoDuplicado(empresa.getId(), telefono, sel.getId())) { mostrarError("Teléfono duplicado en otro cliente."); return; }
+        if (!validarNIF(nif)) {
+            mostrarError("NIF/NIE incorrecto.\n\nDebe tener 5-20 caracteres alfanuméricos.\nEjemplos:\n• 12345678Z\n• DE123456789");
+            return;
+        }
 
+        if (!validarTelefono(telefono)) {
+            mostrarError("Teléfono inválido.\nDebe tener 6-15 dígitos, opcional '+' al inicio.\nEjemplos:\n• 612345678\n• +34612345678");
+            return;
+        }
+
+        if (!validarEmail(email)) {
+            mostrarError("Correo electrónico inválido.\nEjemplo correcto: cliente@dominio.com");
+            return;
+        }
+
+        if (!validarCP(cpFiscal)) {
+            mostrarError("Código Postal inválido.\n\n3-10 caracteres alfanuméricos.\nEjemplos:\n• 28001\n• SW1A 1AA");
+            return;
+        }
+        
+        if (!validarCP(cpEnvio)) {
+            mostrarError("Código Postal inválido.\n\n3-10 caracteres alfanuméricos.\nEjemplos:\n• 28001\n• SW1A 1AA");
+            return;
+        }
+        
+        // === VALIDACIONES DE DUPLICADOS (excluyendo al propio) ===
+        if (existeNifDuplicado(empresa.getId(), nif, sel.getId())) {
+            mostrarError("Ya existe otro cliente o proveedor con ese NIF/NIE.");
+            return;
+        }
+        if (existeTelefonoDuplicado(empresa.getId(), telefono, sel.getId())) {
+            mostrarError("Ya existe otro cliente o proveedor con ese teléfono.");
+            return;
+        }
+    
         // Actualización de objeto
         sel.setNombre(txtClienteNombre.getText().trim());
         sel.setNif(nif);
@@ -538,7 +640,7 @@ public class GestionEmpresaController {
 
             refrescarClientes();
             limpiarCliente();
-            mostrarInfo("Cliente modificado.");
+            mostrarInfo("Cliente modificado correctamente.");
         } catch (Exception e) { mostrarError(e.getMessage()); }
     }
 
@@ -561,12 +663,36 @@ public class GestionEmpresaController {
         if (!campoEsValido(txtProveedorNombre, "Nombre")) return;
         if (!campoEsValido(txtProveedorNif, "NIF")) return;
         if (!campoEsValido(txtProveedorTelefono, "Teléfono")) return;
+        if (!campoEsValido(txtProveedorCorreo, "Correo")) return;
+        if (!campoEsValido(txtProveedorDireccionFiscal, "Dirección Fiscal")) return;
+        if (!campoEsValido(txtProveedorCpFiscal, "Código Postal Fiscal")) return;
+        if (!campoEsValido(txtProveedorCiudadFiscal, "Ciudad Fiscal")) return;
+        if (!campoEsValido(txtProveedorPaisFiscal, "País Fiscal")) return;
 
         String nif = txtProveedorNif.getText().trim().toUpperCase();
         String telefono = txtProveedorTelefono.getText().trim();
+        String email = txtProveedorCorreo.getText().trim();
+        String cpFiscal = txtProveedorCpFiscal.getText().trim();
 
-        if (!validarNIF(nif)) { mostrarError("NIF incorrecto."); return; }
-        if (!validarTelefono(telefono)) { mostrarError("Teléfono incorrecto."); return; }
+        if (!validarNIF(nif)) {
+            mostrarError("NIF/NIE incorrecto.\n\nDebe tener 5-20 caracteres alfanuméricos.\nEjemplos:\n• 12345678Z\n• DE123456789");
+            return;
+        }
+
+        if (!validarTelefono(telefono)) {
+            mostrarError("Teléfono inválido.\nDebe tener 6-15 dígitos, opcional '+' al inicio.\nEjemplos:\n• 612345678\n• +34612345678");
+            return;
+        }
+
+        if (!validarEmail(email)) {
+            mostrarError("Correo electrónico inválido.\nEjemplo correcto: cliente@dominio.com");
+            return;
+        }
+
+        if (!validarCP(cpFiscal)) {
+            mostrarError("Código Postal inválido.\n\n3-10 caracteres alfanuméricos.\nEjemplos:\n• 28001\n• SW1A 1AA");
+            return;
+        }
 
         if (existeEntidadConNif(empresa.getId(), nif)) { mostrarError("NIF duplicado."); return; }
         if (existeEntidadConTelefono(empresa.getId(), telefono)) { mostrarError("Teléfono duplicado."); return; }
@@ -604,13 +730,38 @@ public class GestionEmpresaController {
 
         // 2. Validaciones de campos
         if (!campoEsValido(txtProveedorNombre, "Nombre")) return;
+        if (!campoEsValido(txtProveedorNif, "NIF")) return;
+        if (!campoEsValido(txtProveedorTelefono, "Teléfono")) return;
+        if (!campoEsValido(txtProveedorCorreo, "Correo")) return;
+        if (!campoEsValido(txtProveedorDireccionFiscal, "Dirección Fiscal")) return;
+        if (!campoEsValido(txtProveedorCpFiscal, "Código Postal Fiscal")) return;
+        if (!campoEsValido(txtProveedorCiudadFiscal, "Ciudad Fiscal")) return;
+        if (!campoEsValido(txtProveedorPaisFiscal, "País Fiscal")) return;
         
         String nif = txtProveedorNif.getText().trim().toUpperCase();
         String telefono = txtProveedorTelefono.getText().trim();
+        String email = txtProveedorCorreo.getText().trim();
+        String cpFiscal = txtProveedorCpFiscal.getText().trim();
+        
+        if (!validarNIF(nif)) {
+            mostrarError("NIF/NIE incorrecto.\n\nDebe tener 5-20 caracteres alfanuméricos.\nEjemplos:\n• 12345678Z\n• DE123456789");
+            return;
+        }
 
-        if (!validarNIF(nif)) { mostrarError("El NIF debe tener 7 números y 1 letra."); return; }
-        if (!validarTelefono(telefono)) { mostrarError("El teléfono debe tener 9 dígitos."); return; }
-        if (!validarEmail(txtProveedorCorreo.getText().trim())) { mostrarError("Email incorrecto."); return; }
+        if (!validarTelefono(telefono)) {
+            mostrarError("Teléfono inválido.\nDebe tener 6-15 dígitos, opcional '+' al inicio.\nEjemplos:\n• 612345678\n• +34612345678");
+            return;
+        }
+
+        if (!validarEmail(email)) {
+            mostrarError("Correo electrónico inválido.\nEjemplo correcto: cliente@dominio.com");
+            return;
+        }
+
+        if (!validarCP(cpFiscal)) {
+            mostrarError("Código Postal inválido.\n\n3-10 caracteres alfanuméricos.\nEjemplos:\n• 28001\n• SW1A 1AA");
+            return;
+        }
 
         // 3. Validar duplicados (EXCLUYENDO al propio proveedor que editamos)
         if (existeNifDuplicado(empresa.getId(), nif, sel.getId())) { 
@@ -666,26 +817,52 @@ public class GestionEmpresaController {
         // 1. Validaciones de campos
         if (!campoEsValido(txtProductoCodigo, "Código")) return;
         if (!campoEsValido(txtProductoDescripcion, "Descripción")) return;
+        if (!campoEsValido(txtProductoPrecioVenta, "Precio de venta")) return;
+        if (!campoEsValido(txtProductoStock, "Stock inicial")) return;
         
         String codigoNuevo = txtProductoCodigo.getText().trim();
+        String descripcion = txtProductoDescripcion.getText().trim();
+        String precioStr = txtProductoPrecioVenta.getText().trim();
+        String stockStr = txtProductoStock.getText().trim();
+    
+        if (!validarCodigoProducto(codigoNuevo)) {
+            mostrarError("Código de producto inválido.\n\nMáximo 13 caracteres alfanuméricos.\nEjemplos válidos:\n• ABC123\n• PROD-001\n• LAPTOP2025");
+            return;
+        }
+        
         if (existeProductoConCodigo(codigoNuevo)) {
             mostrarError("Ya existe un producto con el código '" + codigoNuevo + "'.\nPor favor, usa otro código.");
             return;
         }
-
+        
         if (comboProductoProveedor.getValue() == null) {
             mostrarError("Debes seleccionar un Proveedor de la lista.");
             return;
         }
 
-        if (!esDecimalValido(txtProductoPrecioVenta, "Precio Venta")) return;
-        if (!esDecimalValido(txtProductoStock, "Stock Inicial")) return;
+        double precio = 0;
+        try {
+            precio = Double.parseDouble(precioStr.replace(",", "."));
+            if (!validarPrecio(precio)) {
+                mostrarError("El precio debe ser mayor que 0.\nEjemplo: 99.99");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            mostrarError("Precio inválido. Usa formato numérico.\nEjemplos: 150, 99.95");
+            return;
+        }
 
-        double precio = parseDoubleSafe(txtProductoPrecioVenta, 0.0);
-        double stock = parseDoubleSafe(txtProductoStock, 0.0);
-
-        if (precio < 0) { mostrarError("El precio de venta no puede ser negativo."); return; }
-        if (stock < 0) { mostrarError("El stock inicial no puede ser negativo."); return; }
+        double stock = 0;
+        try {
+            stock = Double.parseDouble(stockStr);
+            if (!validarStock(stock)) {
+                mostrarError("El stock debe ser un número entero positivo o cero.\nEjemplo: 25");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            mostrarError("Stock inválido. Debe ser un número entero.\nEjemplo: 10");
+            return;
+        }
 
         try {
             Producto p = new Producto();
@@ -693,11 +870,11 @@ public class GestionEmpresaController {
             p.setCodigo(codigoNuevo);
             p.setDescripcion(txtProductoDescripcion.getText().trim());
             p.setProveedorId(comboProductoProveedor.getValue().getId());
-            
             p.setPrecioVenta(precio);
             p.setStock(stock);
 
             productoController.añadir(p, empresa.getId());
+            
             refrescarProductos();
             limpiarProducto();
             mostrarInfo("Producto añadido correctamente.");
@@ -710,22 +887,60 @@ public class GestionEmpresaController {
         Producto sel = tablaProductos.getSelectionModel().getSelectedItem();
         if(sel == null) { mostrarError("Selecciona un producto de la tabla."); return; }
 
-        if (!campoEsValido(txtProductoDescripcion, "Descripción")) return;
-
-        if (comboProductoProveedor.getValue() == null) {
-            mostrarError("Debes seleccionar un Proveedor de la lista.");
+        if (!campoEsValido(txtProductoDescripcion, "Descripción")) {
+            return;
+        }
+        if (!campoEsValido(txtProductoPrecioVenta, "Precio de venta")) {
+            return;
+        }
+        if (!campoEsValido(txtProductoStock, "Stock")) {
+            return;
+        }
+        if (comboProductoProveedor.getSelectionModel().getSelectedItem() == null) {
+            mostrarError("Debes seleccionar un proveedor.");
             return;
         }
 
-        if (!esDecimalValido(txtProductoPrecioVenta, "Precio Venta")) return;
+        String codigo = txtProductoCodigo.getText().trim().toUpperCase();
+        String descripcion = txtProductoDescripcion.getText().trim();
+        String precioStr = txtProductoPrecioVenta.getText().trim();
+        String stockStr = txtProductoStock.getText().trim();
 
-        double precio = parseDoubleSafe(txtProductoPrecioVenta, 0.0);
-        if (precio < 0) { mostrarError("El precio de venta no puede ser negativo."); return; }
+        // El código no se puede modificar (o si quieres permitirlo, valida duplicado excluyéndolo)
+        if (!codigo.equals(sel.getCodigo())) {
+            if (!validarCodigoProducto(codigo)) {
+                mostrarError("Código inválido (máx. 13 caracteres alfanuméricos).");
+                return;
+            }
+            if (existeProductoConCodigo(codigo)) {
+                mostrarError("El código '" + codigo + "' ya está en uso por otro producto.");
+                return;
+            }
+        }
 
-        // Asignar valores
-        sel.setDescripcion(safe(txtProductoDescripcion));
-        sel.setProveedorId(comboProductoProveedor.getValue().getId());
-        sel.setPrecioVenta(precio);
+        double precio = 0;
+        try {
+            precio = Double.parseDouble(precioStr.replace(",", "."));
+            if (!validarPrecio(precio)) {
+                mostrarError("El precio debe ser mayor que 0.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            mostrarError("Precio inválido. Usa formato numérico (ej: 150.99)");
+            return;
+        }
+
+        double stock = 0;
+        try {
+            stock = Double.parseDouble(stockStr);
+            if (!validarStock(stock)) {
+                mostrarError("El stock debe ser un número entero >= 0.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            mostrarError("Stock inválido. Debe ser número entero.");
+            return;
+        }
         
         // NOTA: El stock NO se modifica aquí para proteger la integridad.
         // El stock solo debe cambiar a través de facturas de compra/venta.
@@ -753,122 +968,212 @@ public class GestionEmpresaController {
     // ========================================================================
 
     private void añadirFactura() {
-        if (empresa == null) { mostrarError("Error de empresa."); return; }
-        if (lineasTemporales.isEmpty()) { mostrarError("La factura está vacía."); return; }
-
-        Entidad entidadSeleccionada = comboFacturaEntidad.getValue();
-        if (entidadSeleccionada == null) { mostrarError("Selecciona un Cliente/Proveedor."); return; }
-        if (!validarCampoObligatorio(txtFacturaNumero, "Número")) return;
-        
-        String numeroNuevo = txtFacturaNumero.getText().trim();
-        if (existeNumeroFactura(numeroNuevo)) {
-            mostrarError("Ya existe una factura con el número '" + numeroNuevo + "'.");
+        if (empresa == null) {
+            mostrarError("No hay empresa activa.");
             return;
         }
 
+        // Validaciones obligatorias
+        if (comboFacturaTipo.getValue() == null) {
+            mostrarError("Debes seleccionar el tipo de factura (Venta o Compra).");
+            return;
+        }
+        if (comboFacturaEntidad.getValue() == null) {
+            mostrarError("Debes seleccionar un Cliente o Proveedor.");
+            return;
+        }
+        if (!validarCampoObligatorio(txtFacturaNumero, "Número de factura")) {
+            return;
+        }
+        if (datePickerFacturaFecha.getValue() == null) {
+            mostrarError("La fecha de emisión es obligatoria.");
+            return;
+        }
+        if (datePickerFacturaFecha.getValue().isAfter(java.time.LocalDate.now())) {
+            mostrarError("La fecha no puede ser futura.");
+            return;
+        }
+        if (comboFacturaEstado.getValue() == null) {
+            mostrarError("Debes seleccionar un estado.");
+            return;
+        }
+        if (lineasTemporales.isEmpty()) {
+            mostrarError("Debes añadir al menos una línea de producto.");
+            return;
+        }
+
+        String numeroFactura = txtFacturaNumero.getText().trim();
+        if (existeNumeroFactura(numeroFactura)) {
+            mostrarError("Ya existe una factura con el número '" + numeroFactura + "'.");
+            return;
+        }
+
+        // === CÁLCULO SEGURO DE TOTALES (descuento vacío = 0%) ===
+        double baseImponible = 0.0;
+
+        for (LineaFactura linea : lineasTemporales) {
+            if (linea.getCantidad() <= 0) {
+                mostrarError("La cantidad debe ser mayor que 0 en todas las líneas.");
+                return;
+            }
+            if (linea.getPrecioUnitario() < 0) {
+                mostrarError("El precio unitario no puede ser negativo.");
+                return;
+            }
+
+            // Si descuento está vacío o no es número → tratar como 0%
+            double descuento = 0.0;
+            try {
+                String descTexto = linea.getDescuento() + "".trim();
+                if (!descTexto.isEmpty()) {
+                    descuento = Double.parseDouble(descTexto);
+                }
+            } catch (Exception e) {
+                descuento = 0.0; // Si hay error → 0%
+            }
+
+            if (descuento < 0 || descuento > 100) {
+                mostrarError("El descuento debe estar entre 0 y 100.");
+                return;
+            }
+
+            linea.setDescuento(descuento); // Aseguramos valor correcto
+            baseImponible += linea.getTotalLinea();
+        }
+
+        double ivaTotal = baseImponible * 0.21;
+        double totalFactura = baseImponible + ivaTotal;
+
+        // === GUARDAR FACTURA ===
         Factura f = new Factura();
         f.setEmpresaId(empresa.getId());
-        f.setEntidadId(entidadSeleccionada.getId());
-
-        String tipoString = comboFacturaTipo.getValue();
-        f.setTipo(tipoString != null ? mapTipoFactura(tipoString) : 'V');
-
-        f.setNumero(numeroNuevo);
-        try { f.setFechaEmision(Date.valueOf(txtFacturaFecha.getText().trim())); } 
-        catch (Exception e) { mostrarError("Fecha inválida (YYYY-MM-DD)."); return; }
-
+        f.setEntidadId(comboFacturaEntidad.getValue().getId());
+        f.setTipo(mapTipoFactura(comboFacturaTipo.getValue()));
+        f.setNumero(numeroFactura);
+        f.setFechaEmision(java.sql.Date.valueOf(datePickerFacturaFecha.getValue()));
         f.setConcepto(txtFacturaConcepto.getText().trim());
-
-        double baseCalculada = 0.0;
-        for (LineaFactura lf : lineasTemporales) {
-            baseCalculada += lf.getTotalLinea();
-        }
-        double ivaCalculado = baseCalculada * 0.21;
-        double totalCalculado = baseCalculada + ivaCalculado;
-
-        f.setBaseImponible(baseCalculada);
-        f.setIvaTotal(ivaCalculado);
-        f.setTotalFactura(totalCalculado);
-
         f.setEstado(comboFacturaEstado.getValue());
         f.setObservaciones(safe(txtFacturaObservaciones));
+        f.setBaseImponible(baseImponible);
+        f.setIvaTotal(ivaTotal);
+        f.setTotalFactura(totalFactura);
 
         try {
             facturaController.añadir(f, new ArrayList<>(lineasTemporales));
             actualizarStockProductos(f.getTipo(), lineasTemporales);
-
             refrescarFacturas();
             refrescarProductos();
             limpiarFactura();
-            mostrarInfo("Factura guardada correctamente.\nTotal: " + String.format("%.2f", totalCalculado) + "€");
-        } catch (Exception e) { mostrarError("Error: " + e.getMessage()); }
+            mostrarInfo("Factura guardada correctamente.\nTotal: " + String.format("%.2f €", totalFactura));
+        } catch (Exception e) {
+            mostrarError("Error al guardar factura: " + e.getMessage());
+        }
     }
     
     private void modificarFactura() {
         Factura sel = tablaFacturas.getSelectionModel().getSelectedItem();
-        if (sel == null) { mostrarError("Selecciona una factura de la tabla para modificar."); return; }
-
-        if (lineasTemporales.isEmpty()) { mostrarError("La factura no puede quedarse sin líneas."); return; }
-
-        Entidad entidadSeleccionada = comboFacturaEntidad.getValue();
-        if (entidadSeleccionada == null) { mostrarError("Selecciona un Cliente/Proveedor."); return; }
-        if (!validarCampoObligatorio(txtFacturaNumero, "Número")) return;
-
-        // Actualizar datos del objeto
-        sel.setEntidadId(entidadSeleccionada.getId());
-        String tipoString = comboFacturaTipo.getValue();
-        char tipoFactura = (tipoString != null) ? mapTipoFactura(tipoString) : 'V';
-        sel.setTipo(tipoFactura);
-
-        sel.setNumero(txtFacturaNumero.getText().trim());
-        try { sel.setFechaEmision(Date.valueOf(txtFacturaFecha.getText().trim())); } 
-        catch (Exception e) { mostrarError("Fecha inválida (YYYY-MM-DD)."); return; }
-
-        sel.setConcepto(txtFacturaConcepto.getText().trim());
-
-        // Recálculo de totales
-        double baseCalculada = 0.0;
-        for (LineaFactura lf : lineasTemporales) {
-            baseCalculada += lf.getTotalLinea();
+        if (sel == null) {
+            mostrarError("Selecciona una factura para modificar.");
+            return;
         }
-        double ivaCalculado = baseCalculada * 0.21;
-        double totalCalculado = baseCalculada + ivaCalculado;
 
-        sel.setBaseImponible(baseCalculada);
-        sel.setIvaTotal(ivaCalculado);
-        sel.setTotalFactura(totalCalculado);
+        // Mismas validaciones que añadir
+        if (comboFacturaTipo.getValue() == null) {
+            mostrarError("Debes seleccionar el tipo de factura.");
+            return;
+        }
+        if (comboFacturaEntidad.getValue() == null) {
+            mostrarError("Debes seleccionar un Cliente o Proveedor.");
+            return;
+        }
+        if (!validarCampoObligatorio(txtFacturaNumero, "Número de factura")) {
+            return;
+        }
+        if (datePickerFacturaFecha.getValue() == null) {
+            mostrarError("La fecha de emisión es obligatoria.");
+            return;
+        }
+        if (datePickerFacturaFecha.getValue().isAfter(java.time.LocalDate.now())) {
+            mostrarError("La fecha no puede ser futura.");
+            return;
+        }
+        if (comboFacturaEstado.getValue() == null) {
+            mostrarError("Debes seleccionar un estado.");
+            return;
+        }
+        if (lineasTemporales.isEmpty()) {
+            mostrarError("La factura debe tener al menos una línea.");
+            return;
+        }
 
+        String numeroNuevo = txtFacturaNumero.getText().trim();
+        if (!numeroNuevo.equals(sel.getNumero()) && existeNumeroFactura(numeroNuevo)) {
+            mostrarError("El número '" + numeroNuevo + "' ya está en uso.");
+            return;
+        }
+
+        // === REVERTIR STOCK ANTIGUO ===
+        List<LineaFactura> lineasAntiguas = lineaFacturaController.consultarPorFacturaId(sel.getId());
+        char tipoInverso = (sel.getTipo() == 'V') ? 'C' : 'V';
+        actualizarStockProductos(tipoInverso, lineasAntiguas);
+
+        // === RECÁLCULO SEGURO CON DESCUENTO 0% SI VACÍO ===
+        double baseImponible = 0.0;
+        for (LineaFactura linea : lineasTemporales) {
+            if (linea.getCantidad() <= 0 || linea.getPrecioUnitario() < 0) {
+                mostrarError("Cantidad y precio deben ser positivos.");
+                return;
+            }
+
+            double descuento = 0.0;
+            try {
+                String desc = linea.getDescuento() + "".trim();
+                if (!desc.isEmpty()) {
+                    descuento = Double.parseDouble(desc);
+                }
+            } catch (Exception ignored) {
+            }
+            if (descuento < 0 || descuento > 100) {
+                mostrarError("Descuento debe estar entre 0 y 100.");
+                return;
+            }
+
+            linea.setDescuento(descuento);
+            baseImponible += linea.getTotalLinea();
+        }
+
+        double ivaTotal = baseImponible * 0.21;
+        double totalFactura = baseImponible + ivaTotal;
+
+        // === ACTUALIZAR FACTURA ===
+        sel.setEntidadId(comboFacturaEntidad.getValue().getId());
+        sel.setTipo(mapTipoFactura(comboFacturaTipo.getValue()));
+        sel.setNumero(numeroNuevo);
+        sel.setFechaEmision(java.sql.Date.valueOf(datePickerFacturaFecha.getValue()));
+        sel.setConcepto(txtFacturaConcepto.getText().trim());
         sel.setEstado(comboFacturaEstado.getValue());
         sel.setObservaciones(safe(txtFacturaObservaciones));
+        sel.setBaseImponible(baseImponible);
+        sel.setIvaTotal(ivaTotal);
+        sel.setTotalFactura(totalFactura);
 
         try {
-            // --- GESTIÓN AVANZADA DE MODIFICACIÓN ---
-            // 1. Recuperar líneas viejas y deshacer su efecto en el stock
-            List<LineaFactura> lineasAntiguas = lineaFacturaController.consultarPorFacturaId(sel.getId());
-            char tipoParaRevertir = (sel.getTipo() == 'V') ? 'C' : 'V'; // Operación inversa
-            actualizarStockProductos(tipoParaRevertir, lineasAntiguas);
-
-            // 2. Actualizar cabecera
             facturaController.modificar(sel);
 
-            // 3. Reemplazar líneas (Borrar viejas -> Crear nuevas)
             lineaFacturaController.borrarPorFacturaId(sel.getId());
             for (LineaFactura lf : lineasTemporales) {
                 lf.setFacturaId(sel.getId());
                 lineaFacturaController.añadir(lf);
             }
 
-            // 4. Aplicar nuevo stock con las líneas actuales
-            actualizarStockProductos(sel.getTipo(), new ArrayList<>(lineasTemporales));
+            actualizarStockProductos(sel.getTipo(), lineasTemporales);
 
             refrescarFacturas();
-            refrescarProductos(); // Actualizar vista de stock
+            refrescarProductos();
             limpiarFactura();
             mostrarInfo("Factura modificada correctamente.");
-
-        } catch (Exception e) { 
-            e.printStackTrace();
-            mostrarError("Error al modificar la factura: " + e.getMessage()); 
+        } catch (Exception e) {
+            mostrarError("Error al modificar: " + e.getMessage());
         }
     }
 
@@ -1011,9 +1316,9 @@ public class GestionEmpresaController {
         txtFacturaNumero.setText(f.getNumero());
         
         if (f.getFechaEmision() != null) {
-            txtFacturaFecha.setText(f.getFechaEmision().toString());
+            datePickerFacturaFecha.setValue(f.getFechaEmision().toLocalDate());
         } else {
-            txtFacturaFecha.setText("");
+            datePickerFacturaFecha.setValue(null);
         }
         
         txtFacturaConcepto.setText(f.getConcepto());
@@ -1152,17 +1457,18 @@ public class GestionEmpresaController {
     private void limpiarProducto() {
         txtProductoCodigo.clear(); 
         txtProductoDescripcion.clear(); 
-        txtProductoReferencia.clear();
         comboProductoProveedor.getSelectionModel().clearSelection();
         txtProductoPrecioVenta.clear(); 
         txtProductoStock.clear();
 
         // AL CREAR: Habilitamos el stock para que se pueda poner el inventario inicial
         txtProductoStock.setDisable(false); 
+        comboProductoProveedor.getSelectionModel().clearSelection();
+        consultarProductosConFiltro();
     }
 
     private void limpiarFactura() {
-        txtFacturaNumero.clear(); txtFacturaFecha.clear(); comboFacturaEntidad.getSelectionModel().clearSelection();
+        txtFacturaNumero.clear(); datePickerFacturaFecha.setValue(null);; comboFacturaEntidad.getSelectionModel().clearSelection();
         txtFacturaConcepto.clear(); txtFacturaObservaciones.clear(); comboFacturaEstado.getSelectionModel().clearSelection();
         txtFacturaCantidad.clear(); txtFacturaDescuento.clear(); comboFacturaProducto.getSelectionModel().clearSelection();
         lineasTemporales.clear();
@@ -1172,10 +1478,10 @@ public class GestionEmpresaController {
     // 11. VALIDACIONES Y HELPERS (UTILIDADES)
     // ========================================================================
 
-    private boolean validarNIF(String nif) { return nif != null && nif.trim().matches("^[0-9]{7}[A-Za-z]$"); }
-    private boolean validarTelefono(String tel) { return tel.matches("\\d{9}"); }
-    private boolean validarEmail(String email) { return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"); }
-    private boolean validarCP(String cp) { return cp.matches("\\d{5}"); }
+    private boolean validarNIF(String nif) {return nif.matches("^[A-Z0-9\\-\\s\\.]{5,20}$");}
+    private boolean validarTelefono(String tel) { return tel.matches("^\\+?[0-9]{6,15}$"); }
+    private boolean validarEmail(String email) { return email.matches("^[\\w._%+-]+@[\\w.-]+\\.[A-Za-z]{2,6}$"); }
+    private boolean validarCP(String cp) { return cp.matches("^[A-Z0-9\\-\\s]{3,10}$"); }
 
     private boolean campoEsValido(TextField campo, String nombre) {
         if (campo.getText() == null || campo.getText().trim().isEmpty()) {
@@ -1189,6 +1495,10 @@ public class GestionEmpresaController {
         try { Double.parseDouble(campo.getText().trim().replace(",", ".")); return true; } 
         catch (NumberFormatException e) { mostrarError("Campo '" + nombre + "' debe ser numérico."); return false; }
     }
+    
+    private boolean validarCodigoProducto(String codigo) {return codigo.trim().toUpperCase().matches("^[A-Z0-9\\-_]{1,13}$"); }
+    private boolean validarPrecio(double precio) { return precio > 0; }
+    private boolean validarStock(double stock) { return stock >= 0 && stock == Math.floor(stock); }
     
     private boolean validarCampoObligatorio(TextField tf, String nombre) { return campoEsValido(tf, nombre); }
 
