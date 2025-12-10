@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
+import javafx.scene.image.Image;
 
 /**
  * Controlador para la vista "Abrir Empresa". Muestra todas las empresas
@@ -123,7 +124,8 @@ public class AbrirEmpresaController {
 
                 // Crear nueva ventana para mostrar los datos
                 Stage detalleStage = new Stage();
-                detalleStage.setTitle("Factura Clientes - " + seleccionada.getNombre());
+                detalleStage.getIcons().add(new Image(getClass().getResourceAsStream("/icono.png")));
+                detalleStage.setTitle("Facturas - " + seleccionada.getNombre());
                 detalleStage.setScene(new Scene(root, 1450, 700));
                 detalleStage.show();
 
@@ -155,6 +157,7 @@ public class AbrirEmpresaController {
 
                 // Crear nueva ventana para editar
                 Stage editarStage = new Stage();
+                editarStage.getIcons().add(new Image(getClass().getResourceAsStream("/icono.png")));
                 editarStage.setTitle("Modificar Empresa - " + seleccionada.getNombre());
                 editarStage.setScene(new Scene(root, 450, 550));
                 editarStage.show();
@@ -189,6 +192,7 @@ public class AbrirEmpresaController {
             Parent root = loader.load();
 
             Stage principalStage = new Stage();
+            principalStage.getIcons().add(new Image(getClass().getResourceAsStream("/icono.png")));
             principalStage.setTitle("Gestor de Facturas - Empresa");
             principalStage.setScene(new Scene(root, 600, 400));
             principalStage.centerOnScreen();

@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import javafx.scene.image.Image;
 
 /**
  * Clase principal de la aplicación JavaFX "Gestor de Facturas Empresa". Carga
@@ -15,6 +16,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
+            primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icono.png")));
             // Carga el archivo FXML desde la carpeta de recursos
             FXMLLoader loader = new FXMLLoader(getClass().getResource("inicio.fxml"));
 

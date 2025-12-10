@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -48,6 +49,7 @@ public class InicioController {
         btnSalir.setOnAction(e -> {
             // Obtiene la Stage (ventana) actual desde el botón y la cierra
             Stage stage = (Stage) btnSalir.getScene().getWindow();
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/icono.png")));
             stage.close();
         });
 
@@ -138,6 +140,7 @@ public class InicioController {
         Parent root = loader.load();
 
         Stage stage = new Stage();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/icono.png")));
         stage.setTitle(titulo);
         stage.setScene(new Scene(root, width, height));
         stage.setMinWidth(width);

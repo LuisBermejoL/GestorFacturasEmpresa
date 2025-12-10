@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
@@ -92,6 +93,7 @@ public class NuevaEmpresaController {
 
             // 2. Crear nueva ventana (Stage)
             Stage principalStage = new Stage();
+            principalStage.getIcons().add(new Image(getClass().getResourceAsStream("/icono.png")));
             principalStage.setTitle("Gestor de Facturas - Empresa");
             principalStage.setScene(new Scene(root, 600, 400));
             principalStage.setMinWidth(600);
@@ -241,6 +243,7 @@ public class NuevaEmpresaController {
 
             // 2. Crear nueva ventana (Stage)
             Stage listaStage = new Stage();
+            listaStage.getIcons().add(new Image(getClass().getResourceAsStream("/icono.png")));
             listaStage.setTitle("Lista de Empresas");
             listaStage.setScene(new Scene(root, 650, 450));
             listaStage.setMinWidth(600);
