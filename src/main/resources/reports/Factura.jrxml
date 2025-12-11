@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
 <jasperReport name="Factura" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="40c5054d-9133-4a11-8255-086389234856">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="BDGFE"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="BDGestorFacturasEmpresa"/>
 	<parameter name="P_FACTURA_ID" class="java.lang.Long"/>
 	<parameter name="P_EMPRESA_ID" class="java.lang.Long"/>
 	<parameter name="SUBREPORT_OBJECT" class="net.sf.jasperreports.engine.JasperReport"/>
@@ -15,13 +15,18 @@
 	f.total_factura,
 	f.estado,
 	f.observaciones,
-	-- Datos Cliente
+	-- Datos Cliente Generales
 	e.nombre AS entidad_nombre,
 	e.nif AS entidad_nif,
 	e.email AS entidad_email,
-	d.direccion AS direccion_cliente,
-	d.ciudad AS ciudad_cliente,
-	d.cp AS cp_cliente,
+	-- Dirección FISCAL
+	d_fis.direccion AS dir_fiscal,
+	d_fis.ciudad AS ciu_fiscal,
+	d_fis.cp AS cp_fiscal,
+	-- Dirección ENVIO
+	d_env.direccion AS dir_envio,
+	d_env.ciudad AS ciu_envio,
+	d_env.cp AS cp_envio,
 	-- Datos Empresa (Emisor)
 	em.nombre AS emp_nombre,
 	em.nif AS emp_nif,
@@ -34,102 +39,227 @@ FROM
 	factura f
 JOIN
 	entidad e ON f.entidad_id = e.id
+-- JOIN para Dirección FISCAL
 LEFT JOIN
-	direccion d ON f.entidad_id = d.entidad_id
+	direccion d_fis ON f.entidad_id = d_fis.entidad_id AND d_fis.etiqueta = 'Fiscal'
+-- JOIN para Dirección ENVIO
+LEFT JOIN
+	direccion d_env ON f.entidad_id = d_env.entidad_id AND d_env.etiqueta = 'Envio'
 JOIN
 	empresa em ON f.empresa_id = em.id
 WHERE
 	f.id = $P{P_FACTURA_ID}
 AND f.empresa_id = $P{P_EMPRESA_ID}
 LIMIT 1]]></query>
-	<field name="id" class="java.lang.Long"/>
-	<field name="numero_factura" class="java.lang.String"/>
-	<field name="fecha_emision" class="java.sql.Date"/>
-	<field name="concepto" class="java.lang.String"/>
-	<field name="base_imponible" class="java.math.BigDecimal"/>
-	<field name="iva_total" class="java.math.BigDecimal"/>
-	<field name="total_factura" class="java.math.BigDecimal"/>
-	<field name="estado" class="java.lang.String"/>
-	<field name="observaciones" class="java.lang.String"/>
-	<field name="entidad_nombre" class="java.lang.String"/>
-	<field name="entidad_nif" class="java.lang.String"/>
-	<field name="entidad_email" class="java.lang.String"/>
-	<field name="direccion_cliente" class="java.lang.String"/>
-	<field name="ciudad_cliente" class="java.lang.String"/>
-	<field name="cp_cliente" class="java.lang.String"/>
-	<field name="emp_nombre" class="java.lang.String"/>
-	<field name="emp_nif" class="java.lang.String"/>
-	<field name="emp_direccion" class="java.lang.String"/>
-	<field name="emp_ciudad" class="java.lang.String"/>
-	<field name="emp_cp" class="java.lang.String"/>
-	<field name="emp_telefono" class="java.lang.String"/>
-	<field name="emp_email" class="java.lang.String"/>
+	<field name="id" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="id"/>
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
+	</field>
+	<field name="numero_factura" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="numero"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_factura"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
+	</field>
+	<field name="fecha_emision" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_emision"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_emision"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
+	</field>
+	<field name="concepto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="concepto"/>
+		<property name="com.jaspersoft.studio.field.label" value="concepto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
+	</field>
+	<field name="base_imponible" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="base_imponible"/>
+		<property name="com.jaspersoft.studio.field.label" value="base_imponible"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
+	</field>
+	<field name="iva_total" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="iva_total"/>
+		<property name="com.jaspersoft.studio.field.label" value="iva_total"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
+	</field>
+	<field name="total_factura" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="total_factura"/>
+		<property name="com.jaspersoft.studio.field.label" value="total_factura"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
+	</field>
+	<field name="estado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="estado"/>
+		<property name="com.jaspersoft.studio.field.label" value="estado"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
+	</field>
+	<field name="observaciones" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="observaciones"/>
+		<property name="com.jaspersoft.studio.field.label" value="observaciones"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
+	</field>
+	<field name="entidad_nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="entidad_nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="entidad"/>
+	</field>
+	<field name="entidad_nif" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nif"/>
+		<property name="com.jaspersoft.studio.field.label" value="entidad_nif"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="entidad"/>
+	</field>
+	<field name="entidad_email" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="email"/>
+		<property name="com.jaspersoft.studio.field.label" value="entidad_email"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="entidad"/>
+	</field>
+	<field name="dir_fiscal" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="direccion"/>
+		<property name="com.jaspersoft.studio.field.label" value="dir_fiscal"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="direccion"/>
+	</field>
+	<field name="ciu_fiscal" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ciudad"/>
+		<property name="com.jaspersoft.studio.field.label" value="ciu_fiscal"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="direccion"/>
+	</field>
+	<field name="cp_fiscal" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="cp"/>
+		<property name="com.jaspersoft.studio.field.label" value="cp_fiscal"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="direccion"/>
+	</field>
+	<field name="dir_envio" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="direccion"/>
+		<property name="com.jaspersoft.studio.field.label" value="dir_envio"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="direccion"/>
+	</field>
+	<field name="ciu_envio" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ciudad"/>
+		<property name="com.jaspersoft.studio.field.label" value="ciu_envio"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="direccion"/>
+	</field>
+	<field name="cp_envio" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="cp"/>
+		<property name="com.jaspersoft.studio.field.label" value="cp_envio"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="direccion"/>
+	</field>
+	<field name="emp_nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="emp_nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="empresa"/>
+	</field>
+	<field name="emp_nif" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nif"/>
+		<property name="com.jaspersoft.studio.field.label" value="emp_nif"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="empresa"/>
+	</field>
+	<field name="emp_direccion" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="direccion"/>
+		<property name="com.jaspersoft.studio.field.label" value="emp_direccion"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="empresa"/>
+	</field>
+	<field name="emp_ciudad" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ciudad"/>
+		<property name="com.jaspersoft.studio.field.label" value="emp_ciudad"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="empresa"/>
+	</field>
+	<field name="emp_cp" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="cp"/>
+		<property name="com.jaspersoft.studio.field.label" value="emp_cp"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="empresa"/>
+	</field>
+	<field name="emp_telefono" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="telefono"/>
+		<property name="com.jaspersoft.studio.field.label" value="emp_telefono"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="empresa"/>
+	</field>
+	<field name="emp_email" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="email"/>
+		<property name="com.jaspersoft.studio.field.label" value="emp_email"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="empresa"/>
+	</field>
 	<background splitType="Stretch"/>
-	<title height="220" splitType="Stretch">
-		<element kind="textField" uuid="a8421832-1234-4567-89ab-123456789012" x="0" y="0" width="300" height="25" fontSize="18.0" bold="true">
+	<title height="230" splitType="Stretch">
+		<element kind="textField" uuid="a1234567-1234-1234-1234-123456789001" x="0" y="0" width="300" height="25" fontSize="18.0" bold="true">
 			<expression><![CDATA[$F{emp_nombre}]]></expression>
 		</element>
-		<element kind="textField" uuid="b9532943-2345-5678-90bc-234567890123" x="0" y="25" width="300" height="15" forecolor="#555555">
+		<element kind="textField" uuid="a1234567-1234-1234-1234-123456789002" x="0" y="25" width="300" height="15" forecolor="#555555">
 			<expression><![CDATA["NIF: " + $F{emp_nif}]]></expression>
 		</element>
-		<element kind="textField" uuid="c0643054-3456-6789-01cd-345678901234" x="0" y="40" width="300" height="15" forecolor="#555555">
+		<element kind="textField" uuid="a1234567-1234-1234-1234-123456789003" x="0" y="40" width="300" height="15" forecolor="#555555">
 			<expression><![CDATA[$F{emp_direccion}]]></expression>
 		</element>
-		<element kind="textField" uuid="d1754165-4567-7890-12de-456789012345" x="0" y="55" width="300" height="15" forecolor="#555555">
+		<element kind="textField" uuid="a1234567-1234-1234-1234-123456789004" x="0" y="55" width="300" height="15" forecolor="#555555">
 			<expression><![CDATA[$F{emp_cp} + " " + $F{emp_ciudad}]]></expression>
 		</element>
-		<element kind="textField" uuid="e2865276-5678-8901-23ef-567890123456" x="0" y="70" width="300" height="15" forecolor="#555555">
+		<element kind="textField" uuid="a1234567-1234-1234-1234-123456789005" x="0" y="70" width="300" height="15" forecolor="#555555">
 			<expression><![CDATA["Tlf: " + $F{emp_telefono} + " | " + $F{emp_email}]]></expression>
 		</element>
-		<element kind="staticText" uuid="f3976387-6789-9012-34f0-678901234567" x="355" y="0" width="200" height="30" forecolor="#000000" fontSize="22.0" bold="true" hTextAlign="Right">
+		<element kind="staticText" uuid="b1234567-1234-1234-1234-123456789001" x="355" y="0" width="200" height="30" forecolor="#000000" fontSize="22.0" bold="true" hTextAlign="Right">
 			<text><![CDATA[FACTURA]]></text>
 		</element>
-		<element kind="staticText" uuid="04087498-7890-0123-45a1-789012345678" x="355" y="35" width="80" height="20" forecolor="#666666" bold="true" hTextAlign="Right">
+		<element kind="staticText" uuid="b1234567-1234-1234-1234-123456789002" x="355" y="35" width="80" height="20" forecolor="#666666" bold="true" hTextAlign="Right">
 			<text><![CDATA[NÚMERO:]]></text>
 		</element>
-		<element kind="textField" uuid="15198509-8901-1234-56b2-890123456789" x="445" y="35" width="110" height="20" hTextAlign="Right">
+		<element kind="textField" uuid="b1234567-1234-1234-1234-123456789003" x="445" y="35" width="110" height="20" hTextAlign="Right">
 			<expression><![CDATA[$F{numero_factura}]]></expression>
 		</element>
-		<element kind="staticText" uuid="26209610-9012-2345-67c3-901234567890" x="355" y="55" width="80" height="20" forecolor="#666666" bold="true" hTextAlign="Right">
+		<element kind="staticText" uuid="b1234567-1234-1234-1234-123456789004" x="355" y="55" width="80" height="20" forecolor="#666666" bold="true" hTextAlign="Right">
 			<text><![CDATA[FECHA:]]></text>
 		</element>
-		<element kind="textField" uuid="37310721-0123-3456-78d4-012345678901" x="445" y="55" width="110" height="20" pattern="dd/MM/yyyy" hTextAlign="Right">
+		<element kind="textField" uuid="b1234567-1234-1234-1234-123456789005" x="445" y="55" width="110" height="20" pattern="dd/MM/yyyy" hTextAlign="Right">
 			<expression><![CDATA[$F{fecha_emision}]]></expression>
 		</element>
-		<element kind="textField" uuid="48421832-1234-4567-89e5-123456789012" mode="Opaque" x="455" y="80" width="100" height="20" backcolor="#E0E0E0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+		<element kind="textField" uuid="b1234567-1234-1234-1234-123456789006" mode="Opaque" x="455" y="80" width="100" height="20" backcolor="#E0E0E0" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<expression><![CDATA[$F{estado}]]></expression>
 		</element>
-		<element kind="line" uuid="59532943-2345-5678-90f6-234567890123" x="0" y="105" width="555" height="1" forecolor="#CCCCCC"/>
-		<element kind="rectangle" uuid="60643054-3456-6789-01a7-345678901234" x="0" y="115" width="280" height="95" backcolor="#F9F9F9">
+		<element kind="line" uuid="c1234567-1234-1234-1234-123456789001" x="0" y="105" width="555" height="1" forecolor="#CCCCCC"/>
+		<element kind="rectangle" uuid="d1234567-1234-1234-1234-123456789001" x="0" y="115" width="270" height="105" backcolor="#F9F9F9">
 			<pen lineWidth="0.0"/>
 		</element>
-		<element kind="staticText" uuid="71754165-4567-7890-12b8-456789012345" x="10" y="120" width="200" height="15" forecolor="#999999" fontSize="8.0" bold="true">
-			<text><![CDATA[FACTURAR A:]]></text>
+		<element kind="staticText" uuid="d1234567-1234-1234-1234-123456789002" x="10" y="120" width="200" height="15" forecolor="#999999" fontSize="8.0" bold="true">
+			<text><![CDATA[FACTURAR A (Dirección Fiscal):]]></text>
 		</element>
-		<element kind="textField" uuid="82865276-5678-8901-23c9-567890123456" x="10" y="135" width="260" height="20" fontSize="11.0" bold="true">
+		<element kind="textField" uuid="d1234567-1234-1234-1234-123456789003" x="10" y="135" width="250" height="20" fontSize="11.0" bold="true">
 			<expression><![CDATA[$F{entidad_nombre}]]></expression>
 		</element>
-		<element kind="textField" uuid="93976387-6789-9012-34d0-678901234567" x="10" y="155" width="260" height="15">
+		<element kind="textField" uuid="d1234567-1234-1234-1234-123456789004" x="10" y="155" width="250" height="15">
 			<expression><![CDATA["NIF: " + $F{entidad_nif}]]></expression>
 		</element>
-		<element kind="textField" uuid="a4087498-7890-0123-45e1-789012345678" x="10" y="170" width="260" height="15">
-			<expression><![CDATA[$F{direccion_cliente}]]></expression>
+		<element kind="textField" uuid="d1234567-1234-1234-1234-123456789005" x="10" y="170" width="250" height="15">
+			<expression><![CDATA[$F{dir_fiscal} != null ? $F{dir_fiscal} : ""]]></expression>
 		</element>
-		<element kind="textField" uuid="b5198509-8901-1234-56f2-890123456789" x="10" y="185" width="260" height="15">
-			<expression><![CDATA[$F{cp_cliente} + " " + $F{ciudad_cliente}]]></expression>
+		<element kind="textField" uuid="d1234567-1234-1234-1234-123456789006" x="10" y="185" width="250" height="15">
+			<expression><![CDATA[($F{cp_fiscal}!=null?$F{cp_fiscal}:"") + " " + ($F{ciu_fiscal}!=null?$F{ciu_fiscal}:"")]]></expression>
+		</element>
+		<element kind="rectangle" uuid="e1234567-1234-1234-1234-123456789001" x="285" y="115" width="270" height="105" backcolor="#F9F9F9">
+			<pen lineWidth="0.0"/>
+		</element>
+		<element kind="staticText" uuid="e1234567-1234-1234-1234-123456789002" x="295" y="120" width="200" height="15" forecolor="#999999" fontSize="8.0" bold="true">
+			<text><![CDATA[ENVIAR A (Dirección de Envío):]]></text>
+		</element>
+		<element kind="textField" uuid="e1234567-1234-1234-1234-123456789003" x="295" y="135" width="250" height="20" fontSize="11.0" bold="true">
+			<expression><![CDATA[$F{entidad_nombre}]]></expression>
+		</element>
+		<element kind="textField" uuid="e1234567-1234-1234-1234-123456789004" x="295" y="170" width="250" height="15">
+			<expression><![CDATA[$F{dir_envio} != null ? $F{dir_envio} : "Misma dirección fiscal"]]></expression>
+		</element>
+		<element kind="textField" uuid="e1234567-1234-1234-1234-123456789005" x="295" y="185" width="250" height="15">
+			<expression><![CDATA[$F{dir_envio} != null ? (($F{cp_envio}!=null?$F{cp_envio}:"") + " " + ($F{ciu_envio}!=null?$F{ciu_envio}:"")) : ""]]></expression>
+		</element>
+		<element kind="textField" uuid="24e80ff1-44ca-461b-a34a-3f7b84f517e0" x="295" y="155" width="250" height="15">
+			<expression><![CDATA["NIF: " + $F{entidad_nif}]]></expression>
 		</element>
 	</title>
 	<columnHeader height="30" splitType="Stretch">
-		<element kind="staticText" uuid="c6209610-9012-2345-67a3-901234567890" x="0" y="0" width="100" height="15" forecolor="#666666" fontSize="8.0">
+		<element kind="staticText" uuid="f1234567-1234-1234-1234-123456789001" x="0" y="0" width="100" height="15" forecolor="#666666" fontSize="8.0">
 			<text><![CDATA[ASUNTO / PROYECTO]]></text>
 		</element>
-		<element kind="textField" uuid="d7310721-0123-3456-78b4-012345678901" x="0" y="10" width="555" height="20" fontSize="10.0" bold="true">
+		<element kind="textField" uuid="f1234567-1234-1234-1234-123456789002" x="0" y="10" width="555" height="20" fontSize="10.0" bold="true">
 			<expression><![CDATA[$F{concepto}]]></expression>
 		</element>
 	</columnHeader>
 	<detail>
 		<band height="60" splitType="Stretch">
-			<element kind="subreport" uuid="e8421832-1234-4567-89c5-123456789012" x="0" y="10" width="555" height="50">
+			<element kind="subreport" uuid="a1b2c3d4-1234-1234-1234-123456789099" x="0" y="10" width="555" height="50">
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<expression><![CDATA[$P{SUBREPORT_OBJECT}]]></expression>
 				<parameter name="P_FACTURA_ID_SUB">
@@ -139,32 +269,32 @@ LIMIT 1]]></query>
 		</band>
 	</detail>
 	<columnFooter height="150" splitType="Stretch">
-		<element kind="line" uuid="f9532943-2345-5678-90d6-234567890123" x="0" y="5" width="555" height="1" forecolor="#DDDDDD"/>
-		<element kind="staticText" uuid="00643054-3456-6789-01e7-345678901234" x="0" y="15" width="200" height="15" bold="true">
+		<element kind="line" uuid="01234567-1234-1234-1234-123456789001" x="0" y="5" width="555" height="1" forecolor="#DDDDDD"/>
+		<element kind="staticText" uuid="01234567-1234-1234-1234-123456789002" x="0" y="15" width="200" height="15" bold="true">
 			<text><![CDATA[Notas / Observaciones:]]></text>
 		</element>
-		<element kind="textField" uuid="11754165-4567-7890-12f8-456789012345" x="0" y="30" width="280" height="60" forecolor="#555555" fontSize="9.0">
+		<element kind="textField" uuid="01234567-1234-1234-1234-123456789003" x="0" y="30" width="280" height="60" forecolor="#555555" fontSize="9.0">
 			<expression><![CDATA[$F{observaciones}]]></expression>
 		</element>
-		<element kind="staticText" uuid="22865276-5678-8901-23a9-567890123456" x="330" y="15" width="100" height="20" hTextAlign="Right">
+		<element kind="staticText" uuid="01234567-1234-1234-1234-123456789004" x="330" y="15" width="100" height="20" hTextAlign="Right">
 			<text><![CDATA[Base Imponible:]]></text>
 		</element>
-		<element kind="textField" uuid="33976387-6789-9012-34b0-678901234567" x="440" y="15" width="115" height="20" pattern="#,##0.00 ¤" hTextAlign="Right">
+		<element kind="textField" uuid="01234567-1234-1234-1234-123456789005" x="440" y="15" width="115" height="20" pattern="#,##0.00 ¤" hTextAlign="Right">
 			<expression><![CDATA[$F{base_imponible}]]></expression>
 		</element>
-		<element kind="staticText" uuid="44087498-7890-0123-45c1-789012345678" x="330" y="35" width="100" height="20" hTextAlign="Right">
+		<element kind="staticText" uuid="01234567-1234-1234-1234-123456789006" x="330" y="35" width="100" height="20" hTextAlign="Right">
 			<text><![CDATA[IVA (21%):]]></text>
 		</element>
-		<element kind="textField" uuid="55198509-8901-1234-56d2-890123456789" x="440" y="35" width="115" height="20" pattern="#,##0.00 ¤" hTextAlign="Right">
+		<element kind="textField" uuid="01234567-1234-1234-1234-123456789007" x="440" y="35" width="115" height="20" pattern="#,##0.00 ¤" hTextAlign="Right">
 			<expression><![CDATA[$F{iva_total}]]></expression>
 		</element>
-		<element kind="rectangle" uuid="66209610-9012-2345-67e3-901234567890" x="330" y="65" width="225" height="30" backcolor="#F0F0F0">
+		<element kind="rectangle" uuid="01234567-1234-1234-1234-123456789008" x="330" y="65" width="225" height="30" backcolor="#F0F0F0">
 			<pen lineWidth="0.0"/>
 		</element>
-		<element kind="staticText" uuid="77310721-0123-3456-78f4-012345678901" x="340" y="65" width="100" height="30" fontSize="14.0" bold="true" vTextAlign="Middle">
+		<element kind="staticText" uuid="01234567-1234-1234-1234-123456789009" x="340" y="65" width="100" height="30" fontSize="14.0" bold="true" vTextAlign="Middle">
 			<text><![CDATA[TOTAL:]]></text>
 		</element>
-		<element kind="textField" uuid="88421832-1234-4567-8905-123456789012" x="440" y="65" width="110" height="30" fontSize="16.0" pattern="#,##0.00 ¤" bold="true" hTextAlign="Right" vTextAlign="Middle">
+		<element kind="textField" uuid="01234567-1234-1234-1234-123456789010" x="440" y="65" width="110" height="30" fontSize="16.0" pattern="#,##0.00 ¤" bold="true" hTextAlign="Right" vTextAlign="Middle">
 			<expression><![CDATA[$F{total_factura}]]></expression>
 		</element>
 	</columnFooter>
