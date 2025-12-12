@@ -20,6 +20,7 @@ public class ProveedorController {
      *
      * @param p         Objeto Proveedor con los datos a insertar
      * @param empresaId ID de la empresa a la que pertenece el proveedor
+     * @return 
      */
     public long añadir(Proveedor p, long empresaId) {
         return proveedorDAO.añadir(p, empresaId);

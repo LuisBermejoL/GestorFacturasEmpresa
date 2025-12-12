@@ -68,27 +68,100 @@ public class Direccion {
 
     // Getters y setters para todos los atributos
 
+    /**
+     *
+     * @return
+     */
+
     public long getId() { return id; }
+
+    /**
+     *
+     * @param id
+     */
     public void setId(long id) { this.id = id; }
 
+    /**
+     *
+     * @return
+     */
     public long getEntidadId() { return entidadId; }
+
+    /**
+     *
+     * @param entidadId
+     */
     public void setEntidadId(long entidadId) { this.entidadId = entidadId; }
 
+    /**
+     *
+     * @return
+     */
     public String getEtiqueta() { return etiqueta; }
+
+    /**
+     *
+     * @param etiqueta
+     */
     public void setEtiqueta(String etiqueta) { this.etiqueta = etiqueta; }
 
+    /**
+     *
+     * @return
+     */
     public String getDireccion() { return direccion; }
+
+    /**
+     *
+     * @param direccion
+     */
     public void setDireccion(String direccion) { this.direccion = direccion; }
 
+    /**
+     *
+     * @return
+     */
     public String getCp() { return cp; }
+
+    /**
+     *
+     * @param cp
+     */
     public void setCp(String cp) { this.cp = cp; }
 
+    /**
+     *
+     * @return
+     */
     public String getCiudad() { return ciudad; }
+
+    /**
+     *
+     * @param ciudad
+     */
     public void setCiudad(String ciudad) { this.ciudad = ciudad; }
 
+    /**
+     *
+     * @return
+     */
     public String getProvincia() { return provincia; }
+
+    /**
+     *
+     * @param provincia
+     */
     public void setProvincia(String provincia) { this.provincia = provincia; }
 
+    /**
+     *
+     * @return
+     */
     public String getPais() { return pais; }
+
+    /**
+     *
+     * @param pais
+     */
     public void setPais(String pais) { this.pais = pais; }
 }

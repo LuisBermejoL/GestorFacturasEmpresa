@@ -57,50 +57,99 @@ public class Entidad {
 
     // === Getters y setters para todos los atributos ===
 
+    /**
+     *
+     * @return
+     */
+
     public long getId() {
         return id;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setId(long id) {
         this.id = id;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getEmpresaId() {
         return empresaId;
     }
 
+    /**
+     *
+     * @param empresaId
+     */
     public void setEmpresaId(long empresaId) {
         this.empresaId = empresaId;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     *
+     * @param nombre
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNif() {
         return nif;
     }
 
+    /**
+     *
+     * @param nif
+     */
     public void setNif(String nif) {
         this.nif = nif;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     *
+     * @param email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTelefono() {
         return telefono;
     }
 
+    /**
+     *
+     * @param telefono
+     */
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }

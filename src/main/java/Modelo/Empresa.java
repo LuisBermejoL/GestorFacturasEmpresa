@@ -92,42 +92,160 @@ public class Empresa {
 
     // Getters y setters para todos los atributos
 
+    /**
+     *
+     * @return
+     */
+
     public long getId() { return id; }
+
+    /**
+     *
+     * @param id
+     */
     public void setId(long id) { this.id = id; }
 
+    /**
+     *
+     * @return
+     */
     public String getNombre() { return nombre; }
+
+    /**
+     *
+     * @param nombre
+     */
     public void setNombre(String nombre) { this.nombre = nombre; }
 
+    /**
+     *
+     * @return
+     */
     public String getNif() { return nif; }
+
+    /**
+     *
+     * @param nif
+     */
     public void setNif(String nif) { this.nif = nif; }
 
+    /**
+     *
+     * @return
+     */
     public String getDireccion() { return direccion; }
+
+    /**
+     *
+     * @param direccion
+     */
     public void setDireccion(String direccion) { this.direccion = direccion; }
 
+    /**
+     *
+     * @return
+     */
     public String getCp() { return cp; }
+
+    /**
+     *
+     * @param cp
+     */
     public void setCp(String cp) { this.cp = cp; }
 
+    /**
+     *
+     * @return
+     */
     public String getCiudad() { return ciudad; }
+
+    /**
+     *
+     * @param ciudad
+     */
     public void setCiudad(String ciudad) { this.ciudad = ciudad; }
 
+    /**
+     *
+     * @return
+     */
     public String getProvincia() { return provincia; }
+
+    /**
+     *
+     * @param provincia
+     */
     public void setProvincia(String provincia) { this.provincia = provincia; }
 
+    /**
+     *
+     * @return
+     */
     public String getPais() { return pais; }
+
+    /**
+     *
+     * @param pais
+     */
     public void setPais(String pais) { this.pais = pais; }
 
+    /**
+     *
+     * @return
+     */
     public String getTelefono() { return telefono; }
+
+    /**
+     *
+     * @param telefono
+     */
     public void setTelefono(String telefono) { this.telefono = telefono; }
 
+    /**
+     *
+     * @return
+     */
     public String getEmail() { return email; }
+
+    /**
+     *
+     * @param email
+     */
     public void setEmail(String email) { this.email = email; }
 
+    /**
+     *
+     * @return
+     */
     public String getWeb() { return web; }
+
+    /**
+     *
+     * @param web
+     */
     public void setWeb(String web) { this.web = web; }
 
+    /**
+     *
+     * @return
+     */
     public String getDomicilioFiscal() { return domicilioFiscal; }
+
+    /**
+     *
+     * @param domicilioFiscal
+     */
     public void setDomicilioFiscal(String domicilioFiscal) { this.domicilioFiscal = domicilioFiscal; }
 
+    /**
+     *
+     * @return
+     */
     public String getContacto() { return contacto; }
+
+    /**
+     *
+     * @param contacto
+     */
     public void setContacto(String contacto) { this.contacto = contacto; }
 }

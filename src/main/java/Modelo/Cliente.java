@@ -32,10 +32,19 @@ public class Cliente extends Entidad {
 
     // Getter y setter del código
 
+    /**
+     *
+     * @return
+     */
+
     public int getCodigo() {
         return codigo;
     }
 
+    /**
+     *
+     * @param codigo
+     */
     public void setCodigo(int codigo) {
         this.codigo = codigo;
     }

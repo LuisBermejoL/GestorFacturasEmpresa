@@ -91,40 +91,149 @@ public class Factura {
 
     // Getters y setters para todos los atributos
 
+    /**
+     *
+     * @return
+     */
+
     public long getId() { return id; }
+
+    /**
+     *
+     * @param id
+     */
     public void setId(long id) { this.id = id; }
     
+    /**
+     *
+     * @return
+     */
     public long getEmpresaId() { return empresaId; }
+
+    /**
+     *
+     * @param empresaId
+     */
     public void setEmpresaId(long empresaId) { this.empresaId = empresaId; }
     
+    /**
+     *
+     * @return
+     */
     public char getTipo() { return tipo; }
+
+    /**
+     *
+     * @param tipo
+     */
     public void setTipo(char tipo) { this.tipo = tipo; }
 
+    /**
+     *
+     * @return
+     */
     public String getNumero() { return numero; }
+
+    /**
+     *
+     * @param numero
+     */
     public void setNumero(String numero) { this.numero = numero; }
 
+    /**
+     *
+     * @return
+     */
     public Date getFechaEmision() { return fechaEmision; }
+
+    /**
+     *
+     * @param fechaEmision
+     */
     public void setFechaEmision(Date fechaEmision) { this.fechaEmision = fechaEmision; }
 
+    /**
+     *
+     * @return
+     */
     public long getEntidadId() { return entidadId; }
+
+    /**
+     *
+     * @param entidadId
+     */
     public void setEntidadId(long entidadId) { this.entidadId = entidadId; }
 
+    /**
+     *
+     * @return
+     */
     public String getConcepto() { return concepto; }
+
+    /**
+     *
+     * @param concepto
+     */
     public void setConcepto(String concepto) { this.concepto = concepto; }
 
+    /**
+     *
+     * @return
+     */
     public double getBaseImponible() { return baseImponible; }
+
+    /**
+     *
+     * @param baseImponible
+     */
     public void setBaseImponible(double baseImponible) { this.baseImponible = baseImponible; }
 
+    /**
+     *
+     * @return
+     */
     public double getIvaTotal() { return ivaTotal; }
+
+    /**
+     *
+     * @param ivaTotal
+     */
     public void setIvaTotal(double ivaTotal) { this.ivaTotal = ivaTotal; }
 
+    /**
+     *
+     * @return
+     */
     public double getTotalFactura() { return totalFactura; }
+
+    /**
+     *
+     * @param totalFactura
+     */
     public void setTotalFactura(double totalFactura) { this.totalFactura = totalFactura; }
 
+    /**
+     *
+     * @return
+     */
     public String getEstado() { return estado; }
+
+    /**
+     *
+     * @param estado
+     */
     public void setEstado(String estado) { this.estado = estado; }
 
+    /**
+     *
+     * @return
+     */
     public String getObservaciones() { return observaciones; }
+
+    /**
+     *
+     * @param observaciones
+     */
     public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
 
     /**

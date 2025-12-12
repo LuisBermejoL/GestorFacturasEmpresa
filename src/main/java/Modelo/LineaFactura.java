@@ -57,50 +57,99 @@ public class LineaFactura {
 
     // Getters y setters para todos los atributos
 
+    /**
+     *
+     * @return
+     */
+
     public long getId() {
         return id;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setId(long id) {
         this.id = id;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getFacturaId() {
         return facturaId;
     }
 
+    /**
+     *
+     * @param facturaId
+     */
     public void setFacturaId(long facturaId) {
         this.facturaId = facturaId;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getProductoId() {
         return productoId;
     }
 
+    /**
+     *
+     * @param productoId
+     */
     public void setProductoId(long productoId) {
         this.productoId = productoId;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getCantidad() {
         return cantidad;
     }
 
+    /**
+     *
+     * @param cantidad
+     */
     public void setCantidad(double cantidad) {
         this.cantidad = cantidad;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getPrecioUnitario() {
         return precioUnitario;
     }
 
+    /**
+     *
+     * @param precioUnitario
+     */
     public void setPrecioUnitario(double precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getDescuento() {
         return descuento;
     }
 
+    /**
+     *
+     * @param descuento
+     */
     public void setDescuento(double descuento) {
         this.descuento = descuento;
     }

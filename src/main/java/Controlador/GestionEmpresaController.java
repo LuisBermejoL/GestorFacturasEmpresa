@@ -194,6 +194,7 @@ public class GestionEmpresaController {
     /**
      * Recibe el objeto Empresa desde la ventana anterior.
      * Carga los datos iniciales de la base de datos.
+     * @param empresa
      */
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
@@ -504,14 +505,14 @@ public class GestionEmpresaController {
         String cpFiscal = txtClienteCpFiscal.getText().trim();
         String cpEnvio = txtClienteCpEnvio.getText().trim();
 
-        // === VALIDACIONES DE FORMATO ===
+        // Validaciones y control de duplicados (excluyendo al propio cliente)
         if (!validarNIF(nif)) {
-            mostrarError("NIF/NIE incorrecto.\n\nDebe tener 5-20 caracteres alfanuméricos.\nEjemplos:\n• 12345678Z\n• DE123456789");
+            mostrarError("NIF incorrecto.\n\nDebe tener 8 caracteres numéricos y una letra.\nEjemplos:\n• 12345678Z");
             return;
         }
 
         if (!validarTelefono(telefono)) {
-            mostrarError("Teléfono inválido.\nDebe tener 6-15 dígitos, opcional '+' al inicio.\nEjemplos:\n• 612345678\n• +34612345678");
+            mostrarError("Teléfono inválido.\nDebe tener 9-15 dígitos, ignora el '+', espacios y guiones.\nEjemplos:\n• 612345678\n• 612 345 678\n• +34 612 345 678\n• 612-345-678");
             return;
         }
 
@@ -587,12 +588,12 @@ public class GestionEmpresaController {
 
         // Validaciones y control de duplicados (excluyendo al propio cliente)
         if (!validarNIF(nif)) {
-            mostrarError("NIF/NIE incorrecto.\n\nDebe tener 5-20 caracteres alfanuméricos.\nEjemplos:\n• 12345678Z\n• DE123456789");
+            mostrarError("NIF incorrecto.\n\nDebe tener 8 caracteres numéricos y una letra.\nEjemplos:\n• 12345678Z");
             return;
         }
 
         if (!validarTelefono(telefono)) {
-            mostrarError("Teléfono inválido.\nDebe tener 6-15 dígitos, opcional '+' al inicio.\nEjemplos:\n• 612345678\n• +34612345678");
+            mostrarError("Teléfono inválido.\nDebe tener 9-15 dígitos, ignora el '+', espacios y guiones.\nEjemplos:\n• 612345678\n• 612 345 678\n• +34 612 345 678\n• 612-345-678");
             return;
         }
 
@@ -673,14 +674,15 @@ public class GestionEmpresaController {
         String telefono = txtProveedorTelefono.getText().trim();
         String email = txtProveedorCorreo.getText().trim();
         String cpFiscal = txtProveedorCpFiscal.getText().trim();
-
+        
+        // Validaciones y control de duplicados (excluyendo al propio proveedor)
         if (!validarNIF(nif)) {
-            mostrarError("NIF/NIE incorrecto.\n\nDebe tener 5-20 caracteres alfanuméricos.\nEjemplos:\n• 12345678Z\n• DE123456789");
+            mostrarError("NIF incorrecto.\n\nDebe tener 8 caracteres numéricos y una letra.\nEjemplos:\n• 12345678Z");
             return;
         }
 
         if (!validarTelefono(telefono)) {
-            mostrarError("Teléfono inválido.\nDebe tener 6-15 dígitos, opcional '+' al inicio.\nEjemplos:\n• 612345678\n• +34612345678");
+            mostrarError("Teléfono inválido.\nDebe tener 9-15 dígitos, ignora el '+', espacios y guiones.\nEjemplos:\n• 612345678\n• 612 345 678\n• +34 612 345 678\n• 612-345-678");
             return;
         }
 
@@ -743,13 +745,14 @@ public class GestionEmpresaController {
         String email = txtProveedorCorreo.getText().trim();
         String cpFiscal = txtProveedorCpFiscal.getText().trim();
         
+        // Validaciones y control de duplicados (excluyendo al propio proveedor)
         if (!validarNIF(nif)) {
-            mostrarError("NIF/NIE incorrecto.\n\nDebe tener 5-20 caracteres alfanuméricos.\nEjemplos:\n• 12345678Z\n• DE123456789");
+            mostrarError("NIF incorrecto.\n\nDebe tener 8 caracteres numéricos y una letra.\nEjemplos:\n• 12345678Z");
             return;
         }
 
         if (!validarTelefono(telefono)) {
-            mostrarError("Teléfono inválido.\nDebe tener 6-15 dígitos, opcional '+' al inicio.\nEjemplos:\n• 612345678\n• +34612345678");
+            mostrarError("Teléfono inválido.\nDebe tener 9-15 dígitos, ignora el '+', espacios y guiones.\nEjemplos:\n• 612345678\n• 612 345 678\n• +34 612 345 678\n• 612-345-678");
             return;
         }
 
@@ -1510,8 +1513,37 @@ public class GestionEmpresaController {
     // 11. VALIDACIONES Y HELPERS (UTILIDADES)
     // ========================================================================
 
-    private boolean validarNIF(String nif) {return nif.matches("^[A-Z0-9\\-\\s\\.]{5,20}$");}
-    private boolean validarTelefono(String tel) { return tel.matches("^\\+?[0-9]{6,15}$"); }
+    /**
+     * Valida únicamente el formato: 8 números y 1 letra.
+     * No comprueba si la letra es matemáticamente correcta.
+     * Admite guiones o espacios (los ignora).
+     */
+    private boolean validarNIF(String nif) {
+        if (nif == null) return false;
+
+        // 1. Limpiar: Quitamos espacios, puntos y guiones para quedarnos solo con el contenido
+        String limpio = nif.trim().replaceAll("[^a-zA-Z0-9]", "");
+
+        // 2. Validar: Debe tener exactamente 8 dígitos seguidos de 1 letra (mayúscula o minúscula)
+        return limpio.matches("^[0-9]{8}[A-Za-z]$");
+    }
+    /**
+     * Valida el teléfono permitiendo formatos flexibles.
+     * Admite espacios, guiones, puntos o prefijos con '+'.
+     * Solo comprueba que, al quitar los adornos, queden entre 9 y 15 dígitos.
+     */
+    private boolean validarTelefono(String tel) {
+        if (tel == null) return false;
+
+        // 1. Limpiar: Quitamos todo lo que NO sea un número (0-9)
+        // Esto elimina espacios, guiones, el símbolo +, paréntesis, etc.
+        String soloNumeros = tel.replaceAll("[^0-9]", "");
+
+        // 2. Validar longitud:
+        // 9 es el estándar en España (ej: 666111222).
+        // 15 es el máximo internacional estándar.
+        return soloNumeros.length() >= 9 && soloNumeros.length() <= 15;
+    }
     private boolean validarEmail(String email) { return email.matches("^[\\w._%+-]+@[\\w.-]+\\.[A-Za-z]{2,6}$"); }
     private boolean validarCP(String cp) { return cp.matches("^[A-Z0-9\\-\\s]{3,10}$"); }
 

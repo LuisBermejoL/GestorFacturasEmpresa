@@ -15,6 +15,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ *
+ * @author luisb
+ */
 public class InicioController {
 
     // Paneles de contenido

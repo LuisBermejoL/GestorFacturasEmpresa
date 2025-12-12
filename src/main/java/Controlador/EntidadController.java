@@ -13,6 +13,11 @@ import java.util.List;
 public class EntidadController {
     private final EntidadDAO entidadDAO = new EntidadDAO();
 
+    /**
+     *
+     * @param empresaId
+     * @return
+     */
     public List<Entidad> consultarTodos(long empresaId) {
         return entidadDAO.consultarTodos(empresaId);
     }

@@ -14,6 +14,12 @@ import java.util.List;
 public class ProductoDAO {
 
     // === CREAR ===
+
+    /**
+     *
+     * @param producto
+     * @param empresaId
+     */
     public void añadir(Producto producto, long empresaId) {
         String sql = "INSERT INTO producto (empresa_id, codigo, descripcion, proveedor_id, precio_venta, stock) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";
@@ -41,6 +47,12 @@ public class ProductoDAO {
     }
 
     // === LEER TODOS ===
+
+    /**
+     *
+     * @param empresaId
+     * @return
+     */
     public List<Producto> consultarTodos(long empresaId) {
         List<Producto> lista = new ArrayList<>();
         String sql = "SELECT * FROM producto WHERE empresa_id=?";
@@ -74,6 +86,13 @@ public class ProductoDAO {
     }
 
     // === LEER UNO ===
+
+    /**
+     *
+     * @param empresaId
+     * @param busquedaCodigo
+     * @return
+     */
     public List<Producto> consultarProductos(long empresaId, String busquedaCodigo) {
         List<Producto> lista = new ArrayList<>();
         String sql = "SELECT * FROM producto WHERE empresa_id=? AND codigo LIKE ?";
@@ -103,6 +122,11 @@ public class ProductoDAO {
     }
 
     // === ACTUALIZAR ===
+
+    /**
+     *
+     * @param producto
+     */
     public void modificar(Producto producto) {
         String sql = "UPDATE producto SET descripcion=?, proveedor_id=?, precio_venta=?, stock=? " +
                      "WHERE codigo=? AND empresa_id=?";
@@ -132,6 +156,12 @@ public class ProductoDAO {
     }
 
     // === BORRAR ===
+
+    /**
+     *
+     * @param empresaId
+     * @param codigo
+     */
     public void borrarPorCodigo(long empresaId, String codigo) {
         String sql = "DELETE FROM producto WHERE codigo=? AND empresa_id=?";
         try (Connection conn = ConexionBD.get();

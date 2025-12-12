@@ -13,6 +13,10 @@ import javafx.scene.image.Image;
  */
 public class App extends Application {
 
+    /**
+     *
+     * @param primaryStage
+     */
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -35,6 +39,10 @@ public class App extends Application {
         }
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }

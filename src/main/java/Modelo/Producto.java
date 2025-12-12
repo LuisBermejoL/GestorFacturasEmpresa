@@ -61,58 +61,115 @@ public class Producto {
 
     // === Getters y setters para todos los atributos ===
 
+    /**
+     *
+     * @return
+     */
+
     public long getId() {
         return id;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setId(long id) {
         this.id = id;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getEmpresaId() {
         return empresaId;
     }
 
+    /**
+     *
+     * @param empresaId
+     */
     public void setEmpresaId(long empresaId) {
         this.empresaId = empresaId;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCodigo() {
         return codigo;
     }
 
+    /**
+     *
+     * @param codigo
+     */
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDescripcion() {
         return descripcion;
     }
 
+    /**
+     *
+     * @param descripcion
+     */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 
+    /**
+     *
+     * @return
+     */
     public Long getProveedorId() {
         return proveedorId;
     }
 
+    /**
+     *
+     * @param proveedorId
+     */
     public void setProveedorId(long proveedorId) {
         this.proveedorId = proveedorId;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getPrecioVenta() {
         return precioVenta;
     }
 
+    /**
+     *
+     * @param precioVenta
+     */
     public void setPrecioVenta(double precioVenta) {
         this.precioVenta = precioVenta;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getStock() {
         return stock;
     }
 
+    /**
+     *
+     * @param stock
+     */
     public void setStock(double stock) {
         this.stock = stock;
     }

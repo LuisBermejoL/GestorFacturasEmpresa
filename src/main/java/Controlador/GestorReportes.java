@@ -8,8 +8,18 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ * @author luisb
+ */
 public class GestorReportes {
 
+    /**
+     *
+     * @param facturaId
+     * @param empresaId
+     * @param rutaDestino
+     */
     public void generarFacturaPdf(long facturaId, long empresaId, String rutaDestino) {
         Connection conn = null;
         try {
