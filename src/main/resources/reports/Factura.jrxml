@@ -185,10 +185,10 @@ LIMIT 1]]></query>
 			<expression><![CDATA["NIF: " + $F{emp_nif}]]></expression>
 		</element>
 		<element kind="textField" uuid="a1234567-1234-1234-1234-123456789003" x="0" y="40" width="300" height="15" forecolor="#555555">
-			<expression><![CDATA[$F{emp_direccion}]]></expression>
+			<expression><![CDATA["Calle: " + $F{emp_direccion}]]></expression>
 		</element>
 		<element kind="textField" uuid="a1234567-1234-1234-1234-123456789004" x="0" y="55" width="300" height="15" forecolor="#555555">
-			<expression><![CDATA[$F{emp_cp} + " " + $F{emp_ciudad}]]></expression>
+			<expression><![CDATA["CP y Ciudad: " + $F{emp_cp} + ", " + $F{emp_ciudad}]]></expression>
 		</element>
 		<element kind="textField" uuid="a1234567-1234-1234-1234-123456789005" x="0" y="70" width="300" height="15" forecolor="#555555">
 			<expression><![CDATA["Tlf: " + $F{emp_telefono} + " | " + $F{emp_email}]]></expression>
@@ -212,40 +212,40 @@ LIMIT 1]]></query>
 			<expression><![CDATA[$F{estado}]]></expression>
 		</element>
 		<element kind="line" uuid="c1234567-1234-1234-1234-123456789001" x="0" y="105" width="555" height="1" forecolor="#CCCCCC"/>
-		<element kind="rectangle" uuid="d1234567-1234-1234-1234-123456789001" x="0" y="115" width="270" height="105" backcolor="#F9F9F9">
+		<element kind="rectangle" uuid="d1234567-1234-1234-1234-123456789001" x="0" y="120" width="270" height="100" backcolor="#F9F9F9">
 			<pen lineWidth="0.0"/>
 		</element>
-		<element kind="staticText" uuid="d1234567-1234-1234-1234-123456789002" x="10" y="120" width="200" height="15" forecolor="#999999" fontSize="8.0" bold="true">
+		<element kind="staticText" uuid="d1234567-1234-1234-1234-123456789002" x="10" y="130" width="200" height="15" forecolor="#999999" fontSize="8.0" bold="true">
 			<text><![CDATA[FACTURAR A (Dirección Fiscal):]]></text>
 		</element>
-		<element kind="textField" uuid="d1234567-1234-1234-1234-123456789003" x="10" y="135" width="250" height="20" fontSize="11.0" bold="true">
-			<expression><![CDATA[$F{entidad_nombre}]]></expression>
+		<element kind="textField" uuid="d1234567-1234-1234-1234-123456789003" x="10" y="145" width="250" height="20" fontSize="11.0" bold="true">
+			<expression><![CDATA["Nombre: " + $F{entidad_nombre}]]></expression>
 		</element>
-		<element kind="textField" uuid="d1234567-1234-1234-1234-123456789004" x="10" y="155" width="250" height="15">
+		<element kind="textField" uuid="d1234567-1234-1234-1234-123456789004" x="10" y="165" width="250" height="15">
 			<expression><![CDATA["NIF: " + $F{entidad_nif}]]></expression>
 		</element>
-		<element kind="textField" uuid="d1234567-1234-1234-1234-123456789005" x="10" y="170" width="250" height="15">
-			<expression><![CDATA[$F{dir_fiscal} != null ? $F{dir_fiscal} : ""]]></expression>
+		<element kind="textField" uuid="d1234567-1234-1234-1234-123456789005" x="10" y="180" width="250" height="15">
+			<expression><![CDATA["Calle: " + $F{dir_fiscal}]]></expression>
 		</element>
-		<element kind="textField" uuid="d1234567-1234-1234-1234-123456789006" x="10" y="185" width="250" height="15">
-			<expression><![CDATA[($F{cp_fiscal}!=null?$F{cp_fiscal}:"") + " " + ($F{ciu_fiscal}!=null?$F{ciu_fiscal}:"")]]></expression>
+		<element kind="textField" uuid="d1234567-1234-1234-1234-123456789006" x="10" y="195" width="250" height="15">
+			<expression><![CDATA["CP y Ciudad: " + ($F{cp_fiscal}!=null?$F{cp_fiscal}:"") + ", " + ($F{ciu_fiscal}!=null?$F{ciu_fiscal}:"")]]></expression>
 		</element>
-		<element kind="rectangle" uuid="e1234567-1234-1234-1234-123456789001" x="285" y="115" width="270" height="105" backcolor="#F9F9F9">
+		<element kind="rectangle" uuid="e1234567-1234-1234-1234-123456789001" x="285" y="120" width="270" height="100" backcolor="#F9F9F9">
 			<pen lineWidth="0.0"/>
 		</element>
-		<element kind="staticText" uuid="e1234567-1234-1234-1234-123456789002" x="295" y="120" width="200" height="15" forecolor="#999999" fontSize="8.0" bold="true">
+		<element kind="staticText" uuid="e1234567-1234-1234-1234-123456789002" x="295" y="130" width="200" height="15" forecolor="#999999" fontSize="8.0" bold="true">
 			<text><![CDATA[ENVIAR A (Dirección de Envío):]]></text>
 		</element>
-		<element kind="textField" uuid="e1234567-1234-1234-1234-123456789003" x="295" y="135" width="250" height="20" fontSize="11.0" bold="true">
-			<expression><![CDATA[$F{entidad_nombre}]]></expression>
+		<element kind="textField" uuid="e1234567-1234-1234-1234-123456789004" x="295" y="180" width="250" height="15">
+			<expression><![CDATA["Calle: " + $F{dir_envio}]]></expression>
 		</element>
-		<element kind="textField" uuid="e1234567-1234-1234-1234-123456789004" x="295" y="170" width="250" height="15">
-			<expression><![CDATA[$F{dir_envio} != null ? $F{dir_envio} : "Misma dirección fiscal"]]></expression>
+		<element kind="textField" uuid="e1234567-1234-1234-1234-123456789005" x="295" y="195" width="250" height="15">
+			<expression><![CDATA["CP y Ciudad: " + ($F{dir_envio} != null ? (($F{cp_envio}!=null?$F{cp_envio}:"") + ", " + ($F{ciu_envio}!=null?$F{ciu_envio}:"")):"")]]></expression>
 		</element>
-		<element kind="textField" uuid="e1234567-1234-1234-1234-123456789005" x="295" y="185" width="250" height="15">
-			<expression><![CDATA[$F{dir_envio} != null ? (($F{cp_envio}!=null?$F{cp_envio}:"") + " " + ($F{ciu_envio}!=null?$F{ciu_envio}:"")) : ""]]></expression>
+		<element kind="textField" uuid="62693409-4a5c-48d4-addd-33277217ddae" x="295" y="145" width="250" height="20" fontSize="11.0" bold="true">
+			<expression><![CDATA["Nombre: " + $F{entidad_nombre}]]></expression>
 		</element>
-		<element kind="textField" uuid="24e80ff1-44ca-461b-a34a-3f7b84f517e0" x="295" y="155" width="250" height="15">
+		<element kind="textField" uuid="a2200e74-cc36-459e-b325-392b7d386cb1" x="295" y="165" width="250" height="15">
 			<expression><![CDATA["NIF: " + $F{entidad_nif}]]></expression>
 		</element>
 	</title>
@@ -258,8 +258,8 @@ LIMIT 1]]></query>
 		</element>
 	</columnHeader>
 	<detail>
-		<band height="60" splitType="Stretch">
-			<element kind="subreport" uuid="a1b2c3d4-1234-1234-1234-123456789099" x="0" y="10" width="555" height="50">
+		<band height="124" splitType="Stretch">
+			<element kind="subreport" uuid="1bf93707-c054-4590-a7d1-38544f3a8f53" x="0" y="0" width="555" height="121">
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<expression><![CDATA[$P{SUBREPORT_OBJECT}]]></expression>
 				<parameter name="P_FACTURA_ID_SUB">

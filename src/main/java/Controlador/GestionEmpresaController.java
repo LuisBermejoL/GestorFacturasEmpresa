@@ -116,7 +116,7 @@ public class GestionEmpresaController {
 
     @FXML private ComboBox<Entidad> comboFacturaEntidad; // Selector inteligente: Carga Clientes si es Venta, Proveedores si es Compra
     @FXML private TextField txtFacturaNumero, txtFacturaConcepto, txtFacturaObservaciones;
-    @FXML private ComboBox<String> comboFacturaTipo, comboFacturaEstado;
+    @FXML private ComboBox<String> comboFacturaTipo, comboFacturaIva, comboFacturaEstado;
     @FXML private DatePicker datePickerFacturaFecha;
 
     // --- PESTAÑA FACTURAS (LÍNEAS/DETALLES) ---
@@ -153,9 +153,8 @@ public class GestionEmpresaController {
         // 1. Configuración de elementos estáticos (Listas fijas)
         if(comboFacturaTipo != null) comboFacturaTipo.setItems(FXCollections.observableArrayList("Venta", "Compra"));
         if(comboFacturaEstado != null) comboFacturaEstado.setItems(FXCollections.observableArrayList("PENDIENTE", "PAGADA", "ANULADA"));
+        if(comboFacturaIva != null) comboFacturaIva.setItems(FXCollections.observableArrayList("4%", "10%", "21%"));
         
-        // NOTA: Se han eliminado los combos de dirección porque ahora son campos fijos (Fiscal/Envío)
-
         // Asignamos la acción a los botones especiales
         if (btnImprimirFactura != null) btnImprimirFactura.setOnAction(e -> handleImprimirFactura());
         if (btnLimpiar != null) btnLimpiar.setOnAction(e -> handleLimpiar());
@@ -1041,8 +1040,8 @@ public class GestionEmpresaController {
             linea.setDescuento(descuento); // Aseguramos valor correcto
             baseImponible += linea.getTotalLinea();
         }
-
-        double ivaTotal = baseImponible * 0.21;
+        
+        double ivaTotal = baseImponible * obtenerTasaIvaSeleccionada();
         double totalFactura = baseImponible + ivaTotal;
 
         // === GUARDAR FACTURA ===
@@ -1143,7 +1142,7 @@ public class GestionEmpresaController {
             baseImponible += linea.getTotalLinea();
         }
 
-        double ivaTotal = baseImponible * 0.21;
+        double ivaTotal = baseImponible * obtenerTasaIvaSeleccionada();
         double totalFactura = baseImponible + ivaTotal;
 
         // === ACTUALIZAR FACTURA ===
@@ -1183,6 +1182,20 @@ public class GestionEmpresaController {
         if(sel != null && confirmar("¿Eliminar factura?")) {
             facturaController.borrarPorId(empresa.getId(), sel.getId());
             refrescarFacturas();
+        }
+    }
+    
+    // Convierte "21%" -> 0.21, "10%" -> 0.10, "4%" -> 0.04.
+    private double obtenerTasaIvaSeleccionada() {
+        String seleccion = comboFacturaIva.getValue();
+        if (seleccion == null || seleccion.isEmpty()) return 0.0;
+        
+        try {
+            // Quitamos el símbolo % y espacios, convertimos a double y dividimos por 100
+            String numeroStr = seleccion.replace("%", "").trim();
+            return Double.parseDouble(numeroStr) / 100.0;
+        } catch (Exception e) {
+            return 0.0;
         }
     }
 
@@ -1329,7 +1342,17 @@ public class GestionEmpresaController {
         String tipoEtiqueta = (f.getTipo() == 'V') ? "Venta" : "Compra";
         comboFacturaTipo.setValue(tipoEtiqueta);
         comboFacturaEstado.setValue(f.getEstado());
-
+        
+        // --- CALCULAR Y SELECCIONAR EL IVA ---
+        // Si hay base imponible, calculamos el porcentaje inverso
+        if (f.getBaseImponible() > 0) {
+            double ratio = f.getIvaTotal() / f.getBaseImponible(); // Ej: 0.21
+            long porcentaje = Math.round(ratio * 100); // Ej: 21
+            comboFacturaIva.setValue(porcentaje + "%");
+        } else {
+            comboFacturaIva.setValue("21%"); // Por defecto si es 0
+        }
+        
         // FORZAR RECARGA DE ENTIDADES: Necesario para que el combo tenga datos si el tipo no cambia
         cargarEntidadesEnFactura(tipoEtiqueta); 
         
@@ -1469,9 +1492,17 @@ public class GestionEmpresaController {
     }
 
     private void limpiarFactura() {
-        txtFacturaNumero.clear(); datePickerFacturaFecha.setValue(null);; comboFacturaEntidad.getSelectionModel().clearSelection();
-        txtFacturaConcepto.clear(); txtFacturaObservaciones.clear(); comboFacturaEstado.getSelectionModel().clearSelection();
-        txtFacturaCantidad.clear(); txtFacturaDescuento.clear(); comboFacturaProducto.getSelectionModel().clearSelection();
+        txtFacturaNumero.clear(); 
+        datePickerFacturaFecha.setValue(java.time.LocalDate.now()); // Pone la fecha de hoy por comodidad
+        comboFacturaEntidad.getSelectionModel().clearSelection();
+        txtFacturaConcepto.clear(); 
+        txtFacturaObservaciones.clear(); 
+        comboFacturaEstado.getSelectionModel().clearSelection();
+        comboFacturaIva.getSelectionModel().select("21%"); // Resetear al 21% por defecto
+        
+        txtFacturaCantidad.clear(); 
+        txtFacturaDescuento.clear(); 
+        comboFacturaProducto.getSelectionModel().clearSelection();
         lineasTemporales.clear();
     }
 

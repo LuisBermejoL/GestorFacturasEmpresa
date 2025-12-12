@@ -119,7 +119,7 @@
                                                         </Label>
                                                         <TextField fx:id="txtEmpresaContacto" prefWidth="320.0">
                                              <tooltip>
-                                                <Tooltip text="Código Postal (obligatorio). 3-10 caracteres alfanuméricos (guiones y espacios permitidos)" />
+                                                <Tooltip text="Nombre de la persona de contacto habitual o representante." />
                                              </tooltip></TextField>
                                                     </children>
                                                 </HBox>

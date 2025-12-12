@@ -817,6 +817,19 @@
                                                                             <Insets left="20.0" />
                                                                         </VBox.margin>
                                                                     </HBox>
+                                                   <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                      <children>
+                                                         <Label prefWidth="120.0" text="Tipo IVA*" />
+                                                         <ComboBox fx:id="comboFacturaIva" promptText="Seleccione IVA">
+                                                            <tooltip>
+                                                               <Tooltip text="IVA aplicable (4%, 10%, 21%)" />
+                                                            </tooltip>
+                                                         </ComboBox>
+                                                      </children>
+                                                      <VBox.margin>
+                                                         <Insets left="20.0" />
+                                                      </VBox.margin>
+                                                   </HBox>
                                                                     <VBox spacing="10.0">
                                                                         <VBox.margin>
                                                                             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
